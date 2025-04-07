@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import PostForm from '@/components/PostForm';
-import Post from '@/components/Post';
+import PostForm from '@/app/components/PostForm';
+import Post from '@/app/components/Post';
 
 // This would normally come from a database/API
 type PostData = {
