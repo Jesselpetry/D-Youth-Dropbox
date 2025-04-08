@@ -8,6 +8,7 @@ import Image from 'next/image'
 export default function LoginPage() {
   const [loginError, setLoginError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [showCredits, setShowCredits] = useState<boolean>(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -64,6 +65,11 @@ export default function LoginPage() {
       />
     </svg>
   )
+
+  // Toggle credits popup
+  const toggleCredits = () => {
+    setShowCredits(!showCredits)
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-10">
@@ -130,8 +136,48 @@ export default function LoginPage() {
               <p className="text-white text-center">{loginError}</p>
             </div>
           )}
+          
+          {/* Credits link */}
+          <div className="text-center mt-4">
+            <button 
+              onClick={toggleCredits}
+              className="text-white/70 hover:text-white text-sm underline transition-colors"
+            >
+              ผู้พัฒนา
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Credits Popup */}
+      {showCredits && (
+        <div className="fixed inset-0 flex items-center justify-center z-20">
+          <div 
+            className="fixed inset-0 bg-black/50 z-0"
+            onClick={toggleCredits}
+          />
+            <div className="w-[70%] p-5 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light">
+            <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">Credits</h3>
+            <div className="space-y-3 text-gray-600 dark:text-gray-300">
+                <p><strong>D-Youth DropBox</strong></p>
+                <p><strong>Developed by :</strong></p>
+                <p>เจส - ยุวชน 68 จ.หนองคาย</p>
+                <p>วิน - ว่าที่ยุวชน 69 จ.กรุงเทพ</p>
+                <p><strong>Last updated :</strong> 2025-04-08</p>
+                <p><strong>Version :</strong> 1.0.0</p>
+              <div className="mt-4">
+                <p className="text-sm">Special thanks to everyone who contributed to this project.</p>
+              </div>
+            </div>
+            <button 
+              onClick={toggleCredits}
+              className="mt-6 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors w-full"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

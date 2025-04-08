@@ -127,7 +127,9 @@ export default function SetupProfile() {
         console.error("Error saving profile:", error);
         alert("บันทึกโปรไฟล์ไม่สำเร็จ: " + error.message);
       } else {
-        router.push("/profile"); // ไปหน้า profile
+        console.log("Profile saved successfully, attempting redirect...");
+        router.push("/profile");
+        console.log("Redirect call completed"); // Check if this log appears
       }
     } catch (err) {
       console.error("Exception during profile save:", err);
@@ -158,6 +160,12 @@ export default function SetupProfile() {
     }
   };
 
+  // ------------------------------------------- HERE ------------------------------------
+  const handleExitButton = () => {
+    router.push("/login");
+  };
+  // ------------------------------------------- HERE ------------------------------------
+
   return (
     <div className="max-h-screen p-4 flex flex-col relative overflow-y-auto pb-10">
       {/* Background with gradient */}
@@ -168,6 +176,30 @@ export default function SetupProfile() {
 
       {/* Content */}
       <div className="relative z-10 flex-1">
+        {/* Exit Button */}         
+        <div className="absolute top-2 left-2">
+          <button
+            onClick={handleExitButton}
+            className="bg-white/10 hover:bg-white/20 text-white p-2 rounded-full transition-colors"
+            aria-label="Exit to login page"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+          </button>
+        </div>
+
         <div className="text-center my-6">
           <h1 className="text-3xl font-bold text-white">สร้างบัญชี</h1>
           <h2 className="text-xl font-light text-white mt-2 opacity-60">
@@ -224,7 +256,7 @@ export default function SetupProfile() {
                     setPreviewUrl(null);
                     setProfileImg(null);
                   }}
-                  className="mt-2 text-white/80 hover:text-white text-sm font-light"
+                  className="mt-2 text-white/80 hover:text-white text-sm"
                 >
                   เปลี่ยนรูป
                 </button>
