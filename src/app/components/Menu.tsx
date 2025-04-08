@@ -38,7 +38,7 @@ export default function Menu() {
     
     return (
         <div className="fixed bottom-5 left-0 right-0 w-full flex justify-center px-4 pb-2 z-10 max-w-screen mx-auto">
-            <div className="w-full max-w-xl p-5 rounded-3xl bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light shadow-lg shadow-black/20">
+            <div className="w-full max-w-md p-5 rounded-3xl bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light shadow-lg shadow-black/20">
             <div className="flex items-center justify-between w-full">
                 {navItems.map((item, index) => {
                 const isActive = pathname === `/${item.path}`;
