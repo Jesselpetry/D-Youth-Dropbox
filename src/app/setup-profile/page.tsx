@@ -224,7 +224,7 @@ export default function SetupProfile() {
                     setPreviewUrl(null);
                     setProfileImg(null);
                   }}
-                  className="mt-2 text-white/80 hover:text-white text-sm"
+                  className="mt-2 text-white/80 hover:text-white text-sm font-light"
                 >
                   เปลี่ยนรูป
                 </button>

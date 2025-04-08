@@ -22,7 +22,7 @@ const ProvinceSelector: React.FC<ProvinceSelectorProps> = ({
         options={provinces}
         value={selected}
         onChange={(option) => setProvince(option?.value || '')}
-        placeholder="เลือกจังหวัด"
+        placeholder="จังหวัด"
         isSearchable
         className="w-full rounded-lg backdrop-blur-sm border border-white/30 text-white text-lg font-light z-10"
         styles={{
@@ -30,7 +30,7 @@ const ProvinceSelector: React.FC<ProvinceSelectorProps> = ({
             ...base,
             backgroundColor: 'rgba(0, 0, 0, 0.25)',
             backdropFilter: 'blur(4px)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
+            border: '1px solid rgba(255, 255, 255, 0.25)',
             color: 'white',
             padding: '0.6rem',
           }),

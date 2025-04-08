@@ -29,7 +29,7 @@ const YearSelector: React.FC<YearSelectorProps> = ({
             ...base,
             backgroundColor: 'rgba(0, 0, 0, 0.25)',
             backdropFilter: 'blur(4px)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
+            border: '1px solid rgba(255, 255, 255, 0.25)',
             color: 'white',
             padding: '0.6rem',
           }),
