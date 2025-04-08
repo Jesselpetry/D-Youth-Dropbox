@@ -9,17 +9,6 @@ export default function Navbar() {
   const router = useRouter()
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-
-      if (user) {
-        setUser(user)
-      } else {
-        router.push('/login') // ถ้าไม่ได้ login, จะไปหน้า login
-      }
-    }
-
-    fetchUser()
 
     // Subscribe to auth changes
     const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
