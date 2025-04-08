@@ -6,25 +6,25 @@ import Link from 'next/link';
 
 const navItems = [
     {
-        icon: <FaIcons.FaUsers size={36} />,
+        icon: <FaIcons.FaUsers size={32} />,
         label: 'ครอบครัว',
         sublabel: 'Family',
         path: 'family',
     },
     {
-        icon: <FaMessage size={36} />,
+        icon: <FaMessage size={32} />,
         label: 'ข้อความ',
         sublabel: 'Message',
         path: 'message',
     },
     {
-        icon: <BsFillGrid3X3GapFill size={36} />,
+        icon: <BsFillGrid3X3GapFill size={32} />,
         label: 'กำแพง',
         sublabel: 'Walls',
         path: 'path',
     },
     {
-        icon: <FaIcons.FaUser size={36} />,
+        icon: <FaIcons.FaUser size={32} />,
         label: 'โปรไฟล์',
         sublabel: 'Profile',
         path: 'profile',
@@ -39,9 +39,13 @@ export default function Menu() {
                     {navItems.map((item, index) => (
                         <div key={index} className="flex flex-col items-center">
                             <Link href={`/${item.path}`} className='flex flex-col items-center justify-center'>
-                            <div className="text-xl"> {item.icon}</div>
-                            <div className="text-l font-medium text-white mt-2 opacity-100">{item.label}</div>
-                            <div className="text-xs font-light text-white mt-1 opacity-60">{item.sublabel}</div>
+                                <div className="text-xl flex justify-center">
+                                    {item.icon}
+                                </div>
+                                <div className="mt-3 text-center">
+                                    <div className="text-l font-medium text-white opacity-100 leading-none">{item.label}</div>
+                                    <div className="text-xs font-light text-white opacity-60 mt-0.5">{item.sublabel}</div>
+                                </div>
                             </Link>
                         </div>
                     ))}
