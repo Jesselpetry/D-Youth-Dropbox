@@ -16,7 +16,7 @@ export default function Navbar() {
     })
 
     return () => {
-      listener?.unsubscribe()
+      listener?.subscription.unsubscribe()
     }
   }, [router])
 
