@@ -44,21 +44,18 @@ export default function Menu() {
                 const isActive = pathname === `/${item.path}`;
                 
                 return (
-                    <div key={index} className="flex flex-col items-center">
-                    <Link href={`/${item.path}`} className='flex flex-col items-center justify-center transition-all duration-200 hover:scale-110'>
-                        <div className={`text-xl flex justify-center ${isActive ? '' : 'opacity-50'} transition-opacity duration-200 hover:opacity-100`}>
-                        {item.icon}
-                        </div>
-                        <div className="mt-3 text-center">
-                        <div className={`text-l font-medium text-white ${isActive ? '' : 'opacity-50'} hover:opacity-100 leading-none transition-opacity duration-200`}>
-                            {item.label}
-                        </div>
-                        <div className="text-xs font-light text-white opacity-60 mt-0.5 hover:opacity-80 transition-opacity duration-200">
-                            {item.sublabel}
-                        </div>
+                    <Link 
+                        key={index} 
+                        href={`/${item.path}`} 
+                        className='flex flex-col items-center transition-all duration-200 hover:scale-110 group'
+                    >
+                        <div className={`text-l flex flex-col items-center justify-center text-center ${isActive ? 'drop-shadow-lg' : 'opacity-50'} transition-all duration-200 group-hover:opacity-100 group-hover:drop-shadow-md space-y-2`}>
+                            <div className="drop-shadow-md">
+                                {item.icon}
+                            </div>
+                            <span className="drop-shadow-sm">{item.label}</span>
                         </div>
                     </Link>
-                    </div>
                 );
                 })}
             </div>
