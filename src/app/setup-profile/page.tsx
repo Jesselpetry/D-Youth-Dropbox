@@ -87,7 +87,7 @@ export default function SetupProfile() {
   }
 
   return (
-    <div className="min-h-screen p-4 flex flex-col relative overflow-hidden">
+    <div className="max-h-screen p-4 flex flex-col relative overflow-hidden">
       {/* Background with gradient */}
       <div className="fixed top-0 left-0 w-full h-full bg-gradient-to-br from-[#0E653B] to-[#0C2A20] z-0"></div>
       
