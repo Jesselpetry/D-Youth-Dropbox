@@ -47,7 +47,7 @@ export default function ProfilePage() {
         <img
           src={userData?.profile_img || '/default-profile.png'}
           alt="Profile"
-          className="w-24 h-24 rounded-full mx-auto mb-4"
+          className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
         />
         <h2 className="text-xl font-semibold">{userData?.user_name}</h2>
         <p className="text-gray-600">{userData?.year} | {userData?.province}</p>

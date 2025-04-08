@@ -8,7 +8,7 @@ import Image from 'next/image'
 export default function SetupProfile() {
   const [userId, setUserId] = useState<string | null>(null)
   const [userName, setUserName] = useState('')
-  const [nickname, setNickname] = useState('') // Added state for nickname
+
   const [year, setYear] = useState<number | null>(null)
   const [province, setProvince] = useState('')
   const [profileImg, setProfileImg] = useState<File | null>(null)
@@ -118,11 +118,9 @@ export default function SetupProfile() {
       const { error } = await supabase.from('profiles').upsert({
         id: userId,
         user_name: userName,
-        nickname: nickname, // Save nickname to database
         year,
         province,
         profile_img: imageUrl,
-        updated_at: new Date().toISOString()
       })
 
       if (error) {
@@ -187,16 +185,7 @@ export default function SetupProfile() {
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-white text-xl mb-2 block">ชื่อเล่น</label>
-            <input
-              type="text"
-              placeholder="ชื่อเล่น"
-              className="w-full p-4 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-            />
-          </div>
+    
 
           <div className="flex space-x-4">
             <div className="flex-1 space-y-1">
