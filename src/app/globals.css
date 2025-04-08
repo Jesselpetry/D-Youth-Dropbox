@@ -31,13 +31,6 @@ body {
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
 }
 
-/* Additional styles for gradient text */
-.gradient-text {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 @layer utilities {
   .bg-grid-pattern {
     background-size: 4rem 4rem;
@@ -47,10 +40,7 @@ body {
   }
 }
 
-/*
-Font Name: Anakotmai
-Weights: 300, 500, 700
-*/
+
 @font-face {
   font-family: "Anakotmai";
   src: url("/fonts/anakotmai-light.woff2") format("woff2");
@@ -70,8 +60,3 @@ Weights: 300, 500, 700
   font-style: normal;
 }
 
-.indie-flower-regular {
-  font-family: "Indie Flower", cursive;
-  font-weight: 400;
-  font-style: normal;
-  }  

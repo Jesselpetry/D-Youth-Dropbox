@@ -157,16 +157,23 @@ export default function LoginPage() {
             onClick={toggleCredits}
           />
             <div className="w-[70%] p-5 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light">
-            <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">Credits</h3>
-            <div className="space-y-3 text-gray-600 dark:text-gray-300">
-                <p><strong>D-Youth DropBox</strong></p>
-                <p><strong>Developed by :</strong></p>
-                <p>เจส - ยุวชน 68 จ.หนองคาย</p>
-                <p>วิน - ว่าที่ยุวชน 69 จ.กรุงเทพ</p>
-                <p><strong>Last updated :</strong> 2025-04-08</p>
-                <p><strong>Version :</strong> 1.0.0</p>
+            <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white text-center">Credits</h3>
+            <div className="space-y-3 text-gray-600 dark:text-gray-300 flex flex-col items-center">
+              <Image
+              src="/logo.png"
+              alt="Logo"
+              width={250}
+              height={250}
+              priority
+              className="mb-4"
+              />
+              <p><strong>พัฒนาโดย :</strong></p>
+              <p>เจส - ยุวชน 68 จ.หนองคาย</p>
+              <p>วิน - ว่าที่ยุวชน 69 จ.กรุงเทพ</p>
+              <p><strong>อัพเดทล่าสุด :</strong> 2025-04-08</p>
+              <p><strong>เวอร์ชั่น :</strong> 1.0.0</p>
               <div className="mt-4">
-                <p className="text-sm">Special thanks to everyone who contributed to this project.</p>
+              <p className="text-sm">Special thanks to everyone who contributed to this project.</p>
               </div>
             </div>
             <button 
