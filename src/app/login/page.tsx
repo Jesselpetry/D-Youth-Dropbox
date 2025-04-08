@@ -170,7 +170,7 @@ export default function LoginPage() {
               <p><strong>พัฒนาโดย :</strong></p>
            
               <a href="https://www.instagram.com/chatann_/" target="_blank" className='underline'>เจส - ยุวชน 68 จ.หนองคาย</a>
-              <a href="vinniel.in.th"  target="_blank" className='underline'>วิน - ว่าที่ยุวชน 69 จ.กรุงเทพ</a>
+              <a href="https://vinniel.in.th"  target="_blank" className='underline'>วิน - ว่าที่ยุวชน 69 จ.กรุงเทพ</a>
               <p><strong>อัพเดทล่าสุด :</strong> 2025-04-08</p>
               <p><strong>เวอร์ชั่น :</strong> 1.0.0</p>
               <div className="mt-4">
