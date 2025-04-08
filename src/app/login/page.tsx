@@ -93,7 +93,7 @@ export default function LoginPage() {
           <button
             onClick={handleGoogleLogin}
             disabled={isLoading}
-            className="w-full bg-white hover:bg-gray-100 text-gray-800 font-bold py-4 px-4 rounded-lg flex items-center justify-center space-x-3 transition-colors"
+            className="w-full bg-white hover:bg-gray-100 text-gray-800 font-bold py-4 px-4 rounded-lg flex items-center justify-center space-x-3 transition-colors cursor-pointer"
           >
             {isLoading ? (
               <span className="flex items-center justify-center">
@@ -141,7 +141,7 @@ export default function LoginPage() {
           <div className="text-center mt-4">
             <button 
               onClick={toggleCredits}
-              className="text-white/70 hover:text-white text-sm underline transition-colors"
+              className="text-white/70 hover:text-white text-sm underline transition-colors cursor-pointer"
             >
               ผู้พัฒนา
             </button>
@@ -157,8 +157,8 @@ export default function LoginPage() {
             onClick={toggleCredits}
           />
             <div className="w-[70%] p-5 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light">
-            <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white text-center">Credits</h3>
-            <div className="space-y-3 text-gray-600 dark:text-gray-300 flex flex-col items-center">
+            <h3 className="text-xl font-bold mb-4 text-white-800 dark:text-white text-center">Credits</h3>
+            <div className="space-y-3 text-white-600 dark:text-gray-300 flex flex-col items-center">
               <Image
               src="/logo.png"
               alt="Logo"
@@ -168,8 +168,9 @@ export default function LoginPage() {
               className="mb-4"
               />
               <p><strong>พัฒนาโดย :</strong></p>
-              <p>เจส - ยุวชน 68 จ.หนองคาย</p>
-              <p>วิน - ว่าที่ยุวชน 69 จ.กรุงเทพ</p>
+           
+              <a href="https://www.instagram.com/chatann_/" target="_blank" className='underline'>เจส - ยุวชน 68 จ.หนองคาย</a>
+              <a href="vinniel.in.th"  target="_blank" className='underline'>วิน - ว่าที่ยุวชน 69 จ.กรุงเทพ</a>
               <p><strong>อัพเดทล่าสุด :</strong> 2025-04-08</p>
               <p><strong>เวอร์ชั่น :</strong> 1.0.0</p>
               <div className="mt-4">
