@@ -1,181 +1,185 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabaseClient'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabaseClient";
+import { useRouter } from "next/navigation";
+import ProvinceSelector from "./components/provinceSelector";
+import YearSelector from "./components/yearSelector";
+import Image from "next/image";
 
 export default function SetupProfile() {
-  const [userId, setUserId] = useState<string | null>(null)
-  const [userName, setUserName] = useState('')
+  const [userId, setUserId] = useState<string | null>(null);
+  const [userName, setUserName] = useState("");
 
-  const [year, setYear] = useState<number | null>(null)
-  const [province, setProvince] = useState('')
-  const [profileImg, setProfileImg] = useState<File | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null) // Add preview state
-  const [uploading, setUploading] = useState(false)
-  
+  const [year, setYear] = useState("");
+  const [province, setProvince] = useState("");
+  const [profileImg, setProfileImg] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null); // Add preview state
+  const [uploading, setUploading] = useState(false);
+
   // Create an array of Buddhist Era years from 2545 to 2568 (current year 2025 + 543)
-  const currentBuddhistYear = 2568
+  const currentBuddhistYear = 2568;
   const buddhistYears = Array.from(
-    { length: currentBuddhistYear - 2545 + 1 }, 
+    { length: currentBuddhistYear - 2545 + 1 },
     (_, i) => currentBuddhistYear - i
-  )
+  );
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
-        setUserId(user.id)
+        setUserId(user.id);
       } else {
-        router.push('/login') // หากไม่ได้ล็อกอินจะรีไดเรคไปหน้าแรก
+        router.push("/login"); // หากไม่ได้ล็อกอินจะรีไดเรคไปหน้าแรก
       }
-    })
-  }, [])
+    });
+  }, []);
 
   // Preview image when selected
   useEffect(() => {
     if (profileImg) {
-      const objectUrl = URL.createObjectURL(profileImg)
-      setPreviewUrl(objectUrl)
-      
+      const objectUrl = URL.createObjectURL(profileImg);
+      setPreviewUrl(objectUrl);
+
       // Free memory when component unmounts
-      return () => URL.revokeObjectURL(objectUrl)
+      return () => URL.revokeObjectURL(objectUrl);
     }
-  }, [profileImg])
+  }, [profileImg]);
 
   const uploadProfileImage = async (file: File, userId: string) => {
-    if (!file) return null
-    
+    if (!file) return null;
+
     try {
       // Get file extension
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${userId}.${fileExt}`
-      const filePath = `avatars/${fileName}`
-    
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${userId}.${fileExt}`;
+      const filePath = `avatars/${fileName}`;
+
       // Log upload attempt
-      console.log('Attempting to upload file:', {
+      console.log("Attempting to upload file:", {
         fileName,
         filePath,
         fileSize: file.size,
-        fileType: file.type
-      })
-    
+        fileType: file.type,
+      });
+
       // Upload the file to Supabase Storage
       const { error } = await supabase.storage
-        .from('avatars')
-        .upload(filePath, file, { 
+        .from("avatars")
+        .upload(filePath, file, {
           upsert: true,
-          contentType: file.type // Explicitly set content type
-        })
-    
+          contentType: file.type, // Explicitly set content type
+        });
+
       if (error) {
-        console.error('Error uploading image:', error)
-        return null
+        console.error("Error uploading image:", error);
+        return null;
       }
-    
+
       // Get the public URL
-      const { data } = supabase.storage
-        .from('avatars')
-        .getPublicUrl(filePath)
-      
-      console.log('Upload successful, public URL:', data.publicUrl)
-      return data.publicUrl
+      const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+
+      console.log("Upload successful, public URL:", data.publicUrl);
+      return data.publicUrl;
     } catch (err) {
-      console.error('Exception during upload:', err)
-      return null
+      console.error("Exception during upload:", err);
+      return null;
     }
-  }
-  
+  };
+
   const handleSubmit = async () => {
     if (!userId || !userName || !year || !province) {
-      alert('กรุณากรอกข้อมูลให้ครบ')
-      return
+      alert("กรุณากรอกข้อมูลให้ครบ");
+      return;
     }
 
-    let imageUrl = null
+    let imageUrl = null;
 
     if (profileImg) {
-      setUploading(true)
+      setUploading(true);
       try {
-        imageUrl = await uploadProfileImage(profileImg, userId)
-        
+        imageUrl = await uploadProfileImage(profileImg, userId);
+
         if (!imageUrl) {
-          alert('อัปโหลดรูปไม่สำเร็จ กรุณาลองอีกครั้ง')
-          setUploading(false)
-          return
+          alert("อัปโหลดรูปไม่สำเร็จ กรุณาลองอีกครั้ง");
+          setUploading(false);
+          return;
         }
       } catch (err) {
-        console.error('Error in upload process:', err)
-        alert('เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ')
-        setUploading(false)
-        return
+        console.error("Error in upload process:", err);
+        alert("เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ");
+        setUploading(false);
+        return;
       }
     }
 
     try {
-      const { error } = await supabase.from('profiles').upsert({
+      const { error } = await supabase.from("profiles").upsert({
         id: userId,
         user_name: userName,
         year,
         province,
         profile_img: imageUrl,
-      })
+      });
 
       if (error) {
-        console.error('Error saving profile:', error)
-        alert('บันทึกโปรไฟล์ไม่สำเร็จ: ' + error.message)
+        console.error("Error saving profile:", error);
+        alert("บันทึกโปรไฟล์ไม่สำเร็จ: " + error.message);
       } else {
-        router.push('/profile') // ไปหน้า profile
+        router.push("/profile"); // ไปหน้า profile
       }
     } catch (err) {
-      console.error('Exception during profile save:', err)
-      alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล')
+      console.error("Exception during profile save:", err);
+      alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
     } finally {
-      setUploading(false)
+      setUploading(false);
     }
-  }
+  };
 
   // Helper function to handle file selection
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0]
-      
+      const file = e.target.files[0];
+
       // Validate file type
-      if (!file.type.startsWith('image/')) {
-        alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น')
-        return
+      if (!file.type.startsWith("image/")) {
+        alert("กรุณาเลือกไฟล์รูปภาพเท่านั้น");
+        return;
       }
-      
+
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        alert('ขนาดไฟล์ต้องไม่เกิน 5MB')
-        return
+        alert("ขนาดไฟล์ต้องไม่เกิน 5MB");
+        return;
       }
-      
-      setProfileImg(file)
+
+      setProfileImg(file);
     }
-  }
+  };
 
   return (
     <div className="max-h-screen p-4 flex flex-col relative overflow-y-auto pb-10">
       {/* Background with gradient */}
       <div className="fixed top-0 left-0 w-full h-full bg-gradient-to-br from-[#0E653B] to-[#0C2A20] z-0"></div>
-      
+
       {/* Grid overlay with 25% opacity */}
       <div className="fixed top-0 left-0 w-full h-full bg-grid-pattern opacity-25 z-0"></div>
-      
+
       {/* Content */}
       <div className="relative z-10 flex-1">
         <div className="text-center my-6">
           <h1 className="text-3xl font-bold text-white">สร้างบัญชี</h1>
-          <h2 className="text-xl font-light text-white mt-2 opacity-60">Creating an account</h2>
+          <h2 className="text-xl font-light text-white mt-2 opacity-60">
+            Creating an account
+          </h2>
         </div>
 
         <div className="space-y-6 mt-2">
           <div className="space-y-2">
-            <label className="text-white text-xl mb-2 block font-medium">ชื่อผู้ใช้</label>
+            <label className="text-white text-xl mb-2 block font-medium">
+              ชื่อผู้ใช้
+            </label>
             <input
               type="text"
               placeholder="ชื่อผู้ใช้"
@@ -185,55 +189,40 @@ export default function SetupProfile() {
             />
           </div>
 
-    
-
           <div className="flex space-x-4">
             <div className="flex-1 space-y-1">
               <label className="text-white text-xl mb-2 block">ยุวชน ปี</label>
-              <select
-                className="w-full p-4 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light"
-                value={year || ''}
-                onChange={(e) => setYear(parseInt(e.target.value))}
-              >
-                <option value="">เลือกปี</option>
-                {buddhistYears.map((y) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
-                ))}
-              </select>
+              <YearSelector year={year} setYear={setYear} />
             </div>
 
             <div className="flex-1 space-y-1">
-              <label className="text-white text-xl mb-2 block">จังหวัด</label>
-              <select
-                className="w-full p-4 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light"
-                value={province}
-                onChange={(e) => setProvince(e.target.value)}
-              >
-                <option value="">เลือกจังหวัด</option>
-                <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
-                {/* Thai provinces list */}
-                {/* ...include all other provinces... */}
-              </select>
+            <label className="text-white text-xl mb-2 block">จังหวัด</label>
+              <ProvinceSelector province={province} setProvince={setProvince} />
             </div>
           </div>
 
           <div className="space-y-1">
             <label className="text-white text-xl mb-2 block">
-              รูปโปรไฟล์ <span className="text-sm font-light">*แนะนำให้ใช้รูปขนาด 1:1</span>
+              รูปโปรไฟล์{" "}
+              <span className="text-sm font-light">
+                *แนะนำให้ใช้รูปขนาด 1:1
+              </span>
             </label>
-            
+
             {/* Image preview area */}
             {previewUrl ? (
               <div className="mb-4 flex flex-col items-center">
                 <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-white/50">
-                  <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <button 
+                <button
                   onClick={() => {
-                    setPreviewUrl(null)
-                    setProfileImg(null)
+                    setPreviewUrl(null);
+                    setProfileImg(null);
                   }}
                   className="mt-2 text-white/80 hover:text-white text-sm"
                 >
@@ -241,15 +230,28 @@ export default function SetupProfile() {
                 </button>
               </div>
             ) : (
-              <div 
+              <div
                 className="w-full p-8 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light cursor-pointer"
-                onClick={() => document.getElementById('file-upload')?.click()}
+                onClick={() => document.getElementById("file-upload")?.click()}
               >
                 <div className="flex flex-col items-center">
-                  <svg className="w-12 h-12 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                  <svg
+                    className="w-12 h-12 text-white/70"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    ></path>
                   </svg>
-                  <span className="mt-2 text-white/70">คลิกเพื่อเลือกรูปภาพ</span>
+                  <span className="mt-2 text-white/70">
+                    คลิกเพื่อเลือกรูปภาพ
+                  </span>
                 </div>
                 <input
                   id="file-upload"
@@ -270,17 +272,35 @@ export default function SetupProfile() {
             >
               {uploading ? (
                 <span className="flex items-center justify-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
                   กำลังสร้างบัญชี...
                 </span>
-              ) : 'สร้างบัญชี'}
+              ) : (
+                "สร้างบัญชี"
+              )}
             </button>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
