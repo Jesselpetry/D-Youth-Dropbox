@@ -146,61 +146,66 @@ export default function ProfilePage() {
 
             {/* Image preview area */}
             {previewUrl ? (
-  <div className="mb-4 flex flex-col items-center">
-    <button
-      onClick={() => document.getElementById("file-upload")?.click()} // เปิด dialog เพื่อเลือกรูปใหม่
-      className="mt-2 text-white/80 hover:text-white text-sm cursor-pointer"
-    >
-      <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-white/50">
-        <img
-          src={previewUrl}
-          alt="Preview"
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <input
-      id="file-upload"
-      type="file"
-      accept="image/*"
-      className="hidden"
-      onChange={handleFileChange}
-    />
-    </button>
-  </div>
-) : (
-  <div
-    className="w-full p-8 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light cursor-pointer"
-    onClick={() => document.getElementById("file-upload")?.click()} // เปิด dialog เพื่อเลือกรูปใหม่
-  >
-    <div className="flex flex-col items-center">
-      <svg
-        className="w-12 h-12 text-white/70"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-        ></path>
-      </svg>
-      <span className="mt-2 text-white/70">
-        คลิกเพื่อเลือกรูปภาพ
-      </span>
-    </div>
-    <input
-      id="file-upload"
-      type="file"
-      accept="image/*"
-      className="hidden"
-      onChange={handleFileChange}
-    />
-  </div>
-)}
-        </div>
+              <div className="mb-4 flex flex-col items-center">
+                  <button
+                  onClick={() => {
+                    setPreviewUrl(null);
+                    setProfileImg(null);
+                  }}
+                  className="mt-2 text-white/80 hover:text-white text-sm cursor-pointer"
+                >
+                <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-white/50">
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
+                   <input
+                  id="file-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+                </div>
+              
+               
+                </button>
+              </div>
+            ) : (
+              <div
+                className="w-full p-8 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light cursor-pointer"
+                onClick={() => document.getElementById("file-upload")?.click()}
+              >
+                <div className="flex flex-col items-center">
+                  <svg
+                    className="w-12 h-12 text-white/70"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    ></path>
+                  </svg>
+                  <span className="mt-2 text-white/70">
+                    คลิกเพื่อเลือกรูปภาพ
+                  </span>
+                </div>
+                <input
+                  id="file-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </div>
+            )}
+          </div>
 
       
 
