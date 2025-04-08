@@ -6,25 +6,25 @@ import Link from 'next/link';
 
 const navItems = [
     {
-        icon: <FaIcons.FaUsers size={42} />,
+        icon: <FaIcons.FaUsers size={36} />,
         label: 'ครอบครัว',
         sublabel: 'Family',
         path: 'family',
     },
     {
-        icon: <FaMessage size={41} />,
+        icon: <FaMessage size={36} />,
         label: 'ข้อความ',
         sublabel: 'Message',
         path: 'message',
     },
     {
-        icon: <BsFillGrid3X3GapFill size={42} />,
+        icon: <BsFillGrid3X3GapFill size={36} />,
         label: 'กำแพง',
         sublabel: 'Walls',
         path: 'path',
     },
     {
-        icon: <FaIcons.FaUser size={42} />,
+        icon: <FaIcons.FaUser size={36} />,
         label: 'โปรไฟล์',
         sublabel: 'Profile',
         path: 'profile',

@@ -209,30 +209,35 @@ export default function ProfilePage() {
 
       
 
-      <div>
-        <label className="block font-medium">ชื่อผู้ใช้</label>
-        <input
-          type="text"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          className="w-full p-2 border rounded"
-        />
+      <div className="space-y-6 mt-2">
+        <div className="space-y-2">
+          <label className="text-white text-xl mb-2 block font-medium">
+        ชื่อผู้ใช้
+          </label>
+          <input
+        type="text"
+        placeholder="ชื่อผู้ใช้"
+        className="w-full p-4 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light"
+        value={userName}
+        onChange={(e) => setUserName(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className="flex gap-4">
         <div className="flex-1">
-          <label className="block font-medium">ปี</label>
+          <label className="text-white text-xl mb-2 block">ปี</label>
           <YearSelector year={year} setYear={setYear} />
         </div>
         <div className="flex-1">
-          <label className="block font-medium">จังหวัด</label>
+          <label className="text-white text-xl mb-2 block">จังหวัด</label>
           <ProvinceSelector province={province} setProvince={setProvince} />
         </div>
       </div>
 
       <button
         onClick={handleSubmit}
-        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full"
+        className="w-full bg-green-700 hover:bg-green-600 text-white text-xl py-4 rounded-lg font-medium transition-colors"
       >
         บันทึกการเปลี่ยนแปลง
       </button>
