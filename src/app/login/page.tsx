@@ -9,15 +9,8 @@ export default function LoginPage() {
   const [loginError, setLoginError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [showCredits, setShowCredits] = useState<boolean>(false)
-  const router = useRouter()
 
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        router.push('/profile')
-      }
-    })
-  }, [router])
+
 
   const handleGoogleLogin = async () => {
     setIsLoading(true)

@@ -1,84 +1,96 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabaseClient'
-import { useRouter } from 'next/navigation'
-import ProvinceSelector from './components/provinceSelector'
-import YearSelector from './components/yearSelector'
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabaseClient";
+import { useRouter } from "next/navigation";
+import ProvinceSelector from "./components/provinceSelector";
+import YearSelector from "./components/yearSelector";
 
 export default function ProfilePage() {
-  const [userId, setUserId] = useState<string | null>(null)
-  const [userName, setUserName] = useState('')
-  const [year, setYear] = useState('')
-  const [province, setProvince] = useState('')
-  const [profileImg, setProfileImg] = useState<File | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [userId, setUserId] = useState<string | null>(null);
+  const [userName, setUserName] = useState("");
+  const [year, setYear] = useState("");
+  const [province, setProvince] = useState("");
+  const [profileImg, setProfileImg] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
 
       if (authError || !user) {
-        console.error('Auth error:', authError)
-        router.push('/login')
-        return
+        console.error("Auth error:", authError);
+        router.push("/login");
+        return;
       }
 
-      setUserId(user.id)
+      setUserId(user.id);
 
       const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single()
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
 
       if (error) {
-        console.error('Profile fetch error:', error)
-        return
+        console.error("Profile fetch error:", error);
+        return;
       }
 
-      setUserName(data.user_name || '')
-      setYear(data.year || '')
-      setProvince(data.province || '')
-      setPreviewUrl(data.profile_img || null)
-      setLoading(false)
-    }
+      setUserName(data.user_name || "");
+      setYear(data.year || "");
+      setProvince(data.province || "");
+      setPreviewUrl(data.profile_img || null);
+      setLoading(false);
+    };
 
-    fetchProfile()
-  }, [])
+    fetchProfile();
+  }, []);
 
   useEffect(() => {
     if (profileImg) {
-      const objectUrl = URL.createObjectURL(profileImg)
-      setPreviewUrl(objectUrl)
+      const objectUrl = URL.createObjectURL(profileImg);
+      setPreviewUrl(objectUrl);
 
-      return () => URL.revokeObjectURL(objectUrl)
+      return () => URL.revokeObjectURL(objectUrl);
     }
-  }, [profileImg])
+  }, [profileImg]);
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      alert("ไม่สามารถออกจากระบบได้: " + error.message);
+    } else {
+      router.push("/login"); // ไปที่หน้า Login หลัง logout
+    }
+  };
 
   const uploadProfileImage = async (file: File, userId: string) => {
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${userId}.${fileExt}`
-    const filePath = `avatars/${fileName}`
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${userId}.${fileExt}`;
+    const filePath = `avatars/${fileName}`;
 
     const { error } = await supabase.storage
-      .from('avatars')
+      .from("avatars")
       .upload(filePath, file, {
         upsert: true,
         contentType: file.type,
-      })
+      });
 
     if (error) {
-      console.error('Error uploading image:', error)
-      return null
+      console.error("Error uploading image:", error);
+      return null;
     }
 
-    const { data } = supabase.storage.from('avatars').getPublicUrl(filePath)
-    return data.publicUrl
-  }
+    const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+    return data.publicUrl;
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -100,102 +112,62 @@ export default function ProfilePage() {
     }
   };
 
-
   const handleSubmit = async () => {
     if (!userId || !userName || !year || !province || !previewUrl) {
-      alert('กรุณากรอกข้อมูลให้ครบ')
-      return
+      alert("กรุณากรอกข้อมูลให้ครบ");
+      return;
     }
 
-    let imageUrl = previewUrl
+    let imageUrl = previewUrl;
 
     if (profileImg) {
-      const uploadedUrl = await uploadProfileImage(profileImg, userId)
+      const uploadedUrl = await uploadProfileImage(profileImg, userId);
       if (!uploadedUrl) {
-        alert('อัปโหลดรูปไม่สำเร็จ')
-        return
+        alert("อัปโหลดรูปไม่สำเร็จ");
+        return;
       }
-      imageUrl = uploadedUrl
+      imageUrl = uploadedUrl;
     }
 
-    const { error } = await supabase.from('profiles').upsert({
+    const { error } = await supabase.from("profiles").upsert({
       id: userId,
       user_name: userName,
       year,
       province,
       profile_img: imageUrl,
-    })
+    });
 
     if (error) {
-      console.error('Update error:', error)
-      alert('ไม่สามารถบันทึกได้')
+      console.error("Update error:", error);
+      alert("ไม่สามารถบันทึกได้");
     } else {
-      alert('บันทึกข้อมูลเรียบร้อยแล้ว')
+      alert("บันทึกข้อมูลเรียบร้อยแล้ว");
     }
-  }
+  };
 
-  if (loading) return <div className="p-4">กำลังโหลดโปรไฟล์...</div>
+  if (loading) return <div className="p-4">กำลังโหลดโปรไฟล์...</div>;
 
   return (
     <div className="max-w-md mx-auto p-4 space-y-6">
       <h1 className="text-2xl font-bold text-center">แก้ไขโปรไฟล์</h1>
 
-
       <div className="space-y-1">
-          
-
-            {/* Image preview area */}
-            {previewUrl ? (
-              <div className="mb-4 flex flex-col items-center">
-                  <button
-                  onClick={() => {
-                    setPreviewUrl(null);
-                    setProfileImg(null);
-                  }}
-                  className="mt-2 text-white/80 hover:text-white text-sm cursor-pointer"
-                >
-                <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-white/50">
-                  <img
-                    src={previewUrl}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                  />
-                   <input
-                  id="file-upload"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleFileChange}
+        {/* Image preview area */}
+        {previewUrl ? (
+          <div className="mb-4 flex flex-col items-center">
+            <button
+              onClick={() => {
+                setPreviewUrl(null);
+                setProfileImg(null);
+              }}
+              className="mt-2 text-white/80 hover:text-white text-sm cursor-pointer"
+            >
+              <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-white/50">
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
                 />
-                </div>
-              
-               
-                </button>
-              </div>
-            ) : (
-              <div
-                className="w-full p-8 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light cursor-pointer"
-                onClick={() => document.getElementById("file-upload")?.click()}
-              >
-                <div className="flex flex-col items-center">
-                  <svg
-                    className="w-12 h-12 text-white/70"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    ></path>
-                  </svg>
-                  <span className="mt-2 text-white/70">
-                    คลิกเพื่อเลือกรูปภาพ
-                  </span>
-                </div>
                 <input
                   id="file-upload"
                   type="file"
@@ -204,10 +176,40 @@ export default function ProfilePage() {
                   onChange={handleFileChange}
                 />
               </div>
-            )}
+            </button>
           </div>
-
-      
+        ) : (
+          <div
+            className="w-full p-8 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light cursor-pointer"
+            onClick={() => document.getElementById("file-upload")?.click()}
+          >
+            <div className="flex flex-col items-center">
+              <svg
+                className="w-12 h-12 text-white/70"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                ></path>
+              </svg>
+              <span className="mt-2 text-white/70">คลิกเพื่อเลือกรูปภาพ</span>
+            </div>
+            <input
+              id="file-upload"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+          </div>
+        )}
+      </div>
 
       <div className="space-y-6 mt-2">
         <div className="space-y-2">
@@ -241,6 +243,12 @@ export default function ProfilePage() {
       >
         บันทึกการเปลี่ยนแปลง
       </button>
+      <button
+        onClick={handleLogout}
+        className="bg-red-500 px-4 py-2 rounded text-white"
+      >
+        Logout
+      </button>
     </div>
-  )
+  );
 }

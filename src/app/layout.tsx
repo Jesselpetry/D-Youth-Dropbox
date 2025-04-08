@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="th" className="overflow-hidden h-full">
       <body className="bg-gray-50 text-gray-900 overflow-hidden h-full">
-        <Navbar />
+        {/* <Navbar /> */}
         <Menu />
         <main className="max-w-2xl mx-auto px-4 py-6">{children}</main>
         <div className="fixed inset-0 -z-20">
