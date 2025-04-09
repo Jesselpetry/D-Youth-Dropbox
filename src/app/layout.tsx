@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 import Menu from "@/app/components/Menu";
 
 export const metadata = {
-  title: "ข้อความ Dropbox",
+  title: "D-Youth Dropbox",
   description: "โพสต์และดูข้อความของคุณแบบง่าย ๆ",
 };
 
