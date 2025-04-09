@@ -14,6 +14,7 @@ interface FamilyMember {
 export default function FamilyPage() {
   const [familyData, setFamilyData] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState(''); // Add search term state
 
   useEffect(() => {
     const fetchFamilyData = async () => {
@@ -26,7 +27,6 @@ export default function FamilyPage() {
       if (error) {
         console.error('Error fetching family data:', error);
       } else {
-        // Set the fetched data
         setFamilyData(data || []);
       }
 
@@ -40,19 +40,21 @@ export default function FamilyPage() {
     return <div>Loading family data...</div>;
   }
 
-  // Group data by year
-  const groupedData = familyData.reduce((acc, member) => {
+  // Group and filter data by year
+  const filteredFamilyData = familyData.filter(member =>
+    member.user_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const groupedData = filteredFamilyData.reduce((acc, member) => {
     acc[member.year] = acc[member.year] || [];
     acc[member.year].push(member);
     return acc;
   }, {} as Record<string, FamilyMember[]>);
 
-  // Sort the years in descending order
   const sortedYears = Object.keys(groupedData).sort((a, b) => parseInt(b) - parseInt(a));
 
   return (
     <section className="pb-32">
-      {/* Header Section */}
       <header className="text-left py-6">
         <h1 className="text-3xl font-bold">ครอบครัวยุวชน</h1>
         <h2 className="text-xl font-light mt-2 opacity-60">Democratic Youth Family</h2>
@@ -62,21 +64,20 @@ export default function FamilyPage() {
       <div className="flex justify-center my-2">
         <input
           type="text"
-          placeholder="Search"
+          placeholder="ค้นหาโดย ชื่อเล่น"
+          value={searchTerm} // Bind to state
+          onChange={(e) => setSearchTerm(e.target.value)} // Update state
           className="w-full p-4 rounded-2xl bg-black/25 backdrop-blur-sm border border-white/25 text-white text-lg font-light"
         />
       </div>
 
-      {/* Render each year group */}
       {sortedYears.map((year) => (
         <div key={year}>
-          {/* Year Header */}
           <div className="flex items-center justify-between mt-6">
             <h3 className="text-2xl font-medium">ยุวชนปี {year}</h3>
             <div className="flex-grow h-px bg-white/25 ml-4"></div>
           </div>
 
-          {/* User Cards */}
           <div className="grid grid-cols-3 gap-2 mt-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {groupedData[year].map((member) => (
               <div
@@ -90,7 +91,7 @@ export default function FamilyPage() {
                 />
                 <h4 className="text-md font-medium">{member.user_name}</h4>
                 <p className="text-xs font-light opacity-80">{member.province}</p>
-                <button className="mt-2 px-4 py-1 bg-white text-green-900 rounded-lg">
+                <button className="font-medium text-sm mt-2 px-4 py-1 bg-white text-green-900 rounded-lg">
                   ปี {member.year}
                 </button>
               </div>
