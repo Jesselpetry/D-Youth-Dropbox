@@ -36,7 +36,7 @@ function FamilyPage() {
                 />
         
               <h4 className="text-lg font-medium">เจส</h4>
-              <p className="text-xs font-light opacity-80">พระนครศรีอยุธยา</p>
+              <p className="text-xs font-light opacity-80">หนองคาย</p>
               <button className="mt-2 px-4 py-1 bg-white text-green-900 rounded-lg">
                 ปี 68
               </button>
@@ -60,7 +60,7 @@ function FamilyPage() {
                 />
         
               <h4 className="text-lg font-medium">เจส</h4>
-              <p className="text-xs font-light opacity-80">พระนครศรีอยุธยา</p>
+              <p className="text-xs font-light opacity-80">หนองคาย</p>
               <button className="mt-2 px-4 py-1 bg-white text-green-900 rounded-lg">
                 ปี 68
               </button>
