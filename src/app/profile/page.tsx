@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import ProvinceSelector from "./components/provinceSelector";
 import YearSelector from "./components/yearSelector";
 import { RiLoaderFill } from "react-icons/ri";
+import { FiLogOut, FiSave, FiUser, FiCalendar, FiMapPin } from "react-icons/fi";
+
 export default function ProfilePage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [userName, setUserName] = useState("");
@@ -39,7 +41,6 @@ export default function ProfilePage() {
         .single();
 
       if (error) {
-
         router.push("/setup-profile"); // ไปที่หน้า Setup Profile ถ้าไม่มีโปรไฟล์
         return;
       }
@@ -147,55 +148,53 @@ export default function ProfilePage() {
   };
 
   if (loading) return (
-    <div className=" h-screen flex items-center justify-center">
-      <h1 className="text-2xl"><RiLoaderFill  size={48}/></h1>
+    <div className="h-screen flex items-center justify-center">
+      <RiLoaderFill className="animate-spin text-white" size={48}/>
     </div>
   );
   
-  
   return (
-    <div className="max-w-md mx-auto p-4 space-y-6">
-        <div className="text-center my-6">
+    <div className="min-h-screen ">
+      <div className="max-w-lg mx-auto bg-black/25 backdrop-blur-sm rounded-2xl p-8 border border-white/25 shadow-xl">
+        <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white">แก้ไขโปรไฟล์</h1>
-          <h2 className="text-xl font-light text-white mt-2 opacity-60">
+          <h2 className="text-lg font-light text-white/60 mt-1">
             Edit profile
           </h2>
         </div>
-      <div className="space-y-1">
-        {/* Image preview area */}
-        {previewUrl ? (
-          <div className="mb-4 flex flex-col items-center">
-            <button
-              onClick={() => {
-                setPreviewUrl(null);
-                setProfileImg(null);
-              }}
-              className="mt-2 text-white/80 hover:text-white text-sm cursor-pointer"
-            >
-              <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-white/50">
+        
+        {/* Profile Image Section */}
+        <div className="flex justify-center mb-8">
+          {previewUrl ? (
+            <div className="relative group">
+              <div className="w-36 h-36 rounded-full overflow-hidden border-2 border-white/20 hover:border-white/25 transition-all duration-300">
                 <img
                   src={previewUrl}
-                  alt="Preview"
+                  alt="Profile"
                   className="w-full h-full object-cover"
                 />
-                <input
-                  id="file-upload"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
               </div>
-            </button>
-          </div>
-        ) : (
-          <div
-            className="w-full p-8 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light cursor-pointer"
-            onClick={() => document.getElementById("file-upload")?.click()}
-          >
-            <div className="flex flex-col items-center">
+              <div 
+                className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300"
+                onClick={() => document.getElementById("file-upload")?.click()}
+              >
+                <span className="text-white text-sm">Change Photo</span>
+              </div>
+              <input
+                id="file-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+            </div>
+          ) : (
+            <div
+              className="w-36 h-36 rounded-full flex flex-col items-center justify-center bg-black/25 border-5 border-dashed border-white/25 cursor-pointer hover:border-white/50 transition-all duration-300"
+              onClick={() => document.getElementById("file-upload")?.click()}
+            >
               <svg
-                className="w-12 h-12 text-white/70"
+                className="w-10 h-10 text-white/70"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -208,57 +207,72 @@ export default function ProfilePage() {
                   d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 ></path>
               </svg>
-              <span className="mt-2 text-white/70">คลิกเพื่อเลือกรูปภาพ</span>
+              <span className="mt-2 text-white/70 text-sm">Add Photo</span>
+              <input
+                id="file-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Form Fields */}
+        <div className="space-y-6">
+          <div className="relative">
+            <div className="flex items-center mb-2">
+              <FiUser className="text-white/70 mr-2" />
+              <label className="text-white text-lg font-medium">
+                ชื่อผู้ใช้
+              </label>
             </div>
             <input
-              id="file-upload"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleFileChange}
+              type="text"
+              placeholder="Username"
+              className="w-full p-4 rounded-xl bg-black/25 backdrop-blur-sm border border-white/25 text-white text-lg font-light focus:border-white/50 focus:outline-none transition-colors"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
             />
           </div>
-        )}
-      </div>
 
-      <div className="space-y-6 mt-2">
-        <div className="space-y-2">
-          <label className="text-white text-xl mb-2 block font-medium">
-        ชื่อผู้ใช้
-          </label>
-          <input
-        type="text"
-        placeholder="ชื่อผู้ใช้"
-        className="w-full p-4 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light"
-        value={userName}
-        onChange={(e) => setUserName(e.target.value)}
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="relative">
+              <div className="flex items-center mb-2">
+                <FiCalendar className="text-white/70 mr-2" />
+                <label className="text-white text-lg font-medium">ปี</label>
+              </div>
+              <YearSelector year={year} setYear={setYear} />
+            </div>
+            <div className="relative">
+              <div className="flex items-center mb-2">
+                <FiMapPin className="text-white/70 mr-2" />
+                <label className="text-white text-lg font-medium">จังหวัด</label>
+              </div>
+              <ProvinceSelector province={province} setProvince={setProvince} />
+            </div>
+          </div>
+          
+          <div className="pt-6 space-y-4">
+            <button
+              onClick={handleSubmit}
+              className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white text-lg py-3 rounded-xl font-medium transition-colors flex items-center justify-center"
+            >
+              <FiSave className="mr-2" />
+              บันทึกการเปลี่ยนแปลง
+            </button>
+            
+            <button
+              onClick={handleLogout}
+              className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-lg py-3 rounded-xl font-medium transition-colors flex items-center justify-center"
+            >
+              <FiLogOut className="mr-2" />
+              ออกจากระบบ
+            </button>
+          </div>
         </div>
       </div>
-
-      <div className="flex gap-4">
-        <div className="flex-1">
-          <label className="text-white text-xl mb-2 block">ปี</label>
-          <YearSelector year={year} setYear={setYear} />
-        </div>
-        <div className="flex-1">
-          <label className="text-white text-xl mb-2 block">จังหวัด</label>
-          <ProvinceSelector province={province} setProvince={setProvince} />
-        </div>
-      </div>
-
-      <button
-        onClick={handleSubmit}
-        className="w-full bg-green-700 hover:bg-green-600 text-white text-xl py-4 rounded-lg font-medium transition-colors"
-      >
-        บันทึกการเปลี่ยนแปลง
-      </button>
-      <button
-        onClick={handleLogout}
-        className="bg-red-500 px-4 py-2 rounded text-white"
-      >
-        Logout
-      </button>
     </div>
   );
 }
