@@ -154,7 +154,7 @@ export default function ProfilePage() {
   );
 
   return (
-    <div className="max-w-2xl mx-auto py-6 pb-32">
+    <div className="max-w-2xl mx-auto py-6">
 
       <h1 className="text-3xl font-bold text-white">โปรไฟล์</h1>
       <h2 className="text-xl font-light text-white mt-2 opacity-60">

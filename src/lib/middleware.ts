@@ -44,20 +44,7 @@ export const updateSession = async (request: NextRequest) => {
             return NextResponse.redirect(new URL("/login", request.url));
         }
         
-        // if user is logged in and accessing /setup-profile
-        // if (request.nextUrl.pathname.startsWith("/setup-profile") && user) {
-        //     // Check if user_name exists
-        //     const { data, error: userError } = await supabase
-        //         .from("profiles") // <-- replace with your actual table name
-        //         .select("user_name")
-        //         .eq("id", user.id)
-        //         .single();
-
       
-        //         return NextResponse.redirect(new URL("/profile", request.url));
-          
-        // }
-
         return response;
     } catch (e) {
         // If you are here, a Supabase client could not be created!
