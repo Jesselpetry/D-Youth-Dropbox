@@ -35,6 +35,12 @@ const navItems = [
 
 export default function Menu() {
     const pathname = usePathname();
+
+
+    // ถ้า path เป็น /profile ให้ไม่ render เมนูเลย
+    if ((pathname === '/login') || (pathname === '/setup-profile') || (pathname === '/auth')) {
+        return null;
+    }
     
     return (
         <div className="fixed bottom-5 left-0 right-0 w-full flex justify-center px-4 pb-2 z-10 max-w-screen mx-auto">

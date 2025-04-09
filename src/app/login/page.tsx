@@ -65,7 +65,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-10">
+    <div className="fixed inset-0 flex items-center justify-center z-0">
       {/* Content */}
       <div className="relative w-full max-w-md flex flex-col items-center justify-center z-10 p-4">
         <div className="mb-8 flex justify-center">

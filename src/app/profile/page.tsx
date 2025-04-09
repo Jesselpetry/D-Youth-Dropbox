@@ -5,7 +5,7 @@ import { supabase } from "../../lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import ProvinceSelector from "./components/provinceSelector";
 import YearSelector from "./components/yearSelector";
-
+import { RiLoaderFill } from "react-icons/ri";
 export default function ProfilePage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [userName, setUserName] = useState("");
@@ -39,7 +39,8 @@ export default function ProfilePage() {
         .single();
 
       if (error) {
-        console.error("Profile fetch error:", error);
+
+        router.push("/setup-profile"); // ไปที่หน้า Setup Profile ถ้าไม่มีโปรไฟล์
         return;
       }
 
@@ -145,8 +146,13 @@ export default function ProfilePage() {
     }
   };
 
-  if (loading) return <div className="p-4">กำลังโหลดโปรไฟล์...</div>;
-
+  if (loading) return (
+    <div className=" h-screen flex items-center justify-center">
+      <h1 className="text-2xl"><RiLoaderFill  size={48}/></h1>
+    </div>
+  );
+  
+  
   return (
     <div className="max-w-md mx-auto p-4 space-y-6">
         <div className="text-center my-6">

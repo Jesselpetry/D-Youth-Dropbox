@@ -7,6 +7,8 @@ import ProvinceSelector from "./components/provinceSelector";
 import YearSelector from "./components/yearSelector";
 import Image from "next/image";
 
+
+
 export default function SetupProfile() {
   const [userId, setUserId] = useState<string | null>(null);
   const [userName, setUserName] = useState("");
@@ -161,18 +163,19 @@ export default function SetupProfile() {
   };
 
   // ------------------------------------------- HERE ------------------------------------
-  const handleExitButton = () => {
-    router.push("/login");
+  const handleExitButton = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      alert("ไม่สามารถออกจากระบบได้: " + error.message);
+    } else {
+      router.push("/login"); // ไปที่หน้า Login หลัง logout
+    }
   };
   // ------------------------------------------- HERE ------------------------------------
 
+ 
   return (
     <div className="max-h-screen p-4 flex flex-col relative overflow-y-auto pb-10">
-      {/* Background with gradient */}
-      <div className="fixed top-0 left-0 w-full h-full bg-gradient-to-br from-[#0E653B] to-[#0C2A20] z-0"></div>
-
-      {/* Grid overlay with 25% opacity */}
-      <div className="fixed top-0 left-0 w-full h-full bg-grid-pattern opacity-25 z-0"></div>
 
       {/* Content */}
       <div className="relative z-10 flex-1">
@@ -198,6 +201,7 @@ export default function SetupProfile() {
               />
             </svg>
           </button>
+       
         </div>
 
         <div className="text-center my-6">
@@ -208,6 +212,7 @@ export default function SetupProfile() {
         </div>
 
         <div className="space-y-6 mt-2">
+
           <div className="space-y-2">
             <label className="text-white text-xl mb-2 block font-medium">
               ชื่อผู้ใช้
