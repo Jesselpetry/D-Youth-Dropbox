@@ -154,7 +154,7 @@ export default function ProfilePage() {
   );
   
   return (
-    <div className="min-h-screen my-6 ">
+    <div className="pb-32">
       <div className="max-w-lg mx-auto">
         <div className="text-left mb-8">
           <h1 className="text-3xl font-bold text-white">แก้ไขโปรไฟล์</h1>
