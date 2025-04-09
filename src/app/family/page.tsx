@@ -61,14 +61,7 @@ export default function FamilyPage() {
   );
 
   const handleSendMessage = (memberId: number) => {
-    // Here you would typically navigate to a messaging page or open a messaging component
-    // For now, we'll just implement a placeholder that could be expanded later
-    const member = familyData.find(m => m.id === memberId);
-    if (member) {
-      alert(`Will implement messaging to ${member.user_name} soon!`);
-      // Future implementation could be:
-      // router.push(`/messages/new?recipient=${memberId}`);
-    }
+    router.push(`/message/${memberId}`);
   };
 
   return (

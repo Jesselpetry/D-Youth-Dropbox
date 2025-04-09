@@ -17,7 +17,7 @@ function MessageSender() {
     ];
 
     // Handle message input change
-    const handleMessageChange = (e) => {
+    const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         // Limit to 160 characters
         if (e.target.value.length <= 160) {
             setMessage(e.target.value);
@@ -25,7 +25,7 @@ function MessageSender() {
     };
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (message.trim()) {
             // Here you would typically send the message to an API
@@ -43,7 +43,7 @@ function MessageSender() {
     };
 
     // Handle paper color change
-    const handleColorChange = (e) => {
+    const handleColorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setPaperColor(e.target.value);
     };
 
@@ -91,7 +91,7 @@ function MessageSender() {
                         onChange={handleMessageChange}
                         placeholder="พิมพ์ข้อความของคุณที่นี่..."
                         className="w-full p-2 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                        rows="7"
+                        rows={7}
                     ></textarea>
                 </div>
 
