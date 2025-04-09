@@ -191,7 +191,7 @@ export default function SetupProfile() {
           </h2>
         </div>
 
-        <div className="w-full max-w-sm mx-auto p-5 rounded-3xl bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light shadow-lg shadow-black/20">
+        <div className="w-full max-w-lg mx-auto p-5 rounded-3xl bg-black/25 backdrop-blur-sm border border-white/25 text-white text-lg font-light shadow-lg shadow-black/20">
           <div className="space-y-6 mt-2">
             <div className="space-y-2">
               <div className="flex items-center mb-2">
