@@ -72,7 +72,7 @@ export default function FamilyPage() {
   };
 
   return (
-    <section className="pb-32">
+    <section className="">
       <header className="text-left py-6">
         <h1 className="text-3xl font-bold">ครอบครัวยุวชน</h1>
         <h2 className="text-xl font-light mt-2 opacity-60">

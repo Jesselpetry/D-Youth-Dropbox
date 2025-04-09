@@ -1,6 +1,6 @@
 import React from 'react'
 
-function page() {
+function wall() {
   return (
     <div className="text-left my-6">
     <h1 className="text-3xl font-bold text-white">กำแพง</h1>
@@ -11,4 +11,4 @@ function page() {
   )
 }
 
-export default page
+export default wall
