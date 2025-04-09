@@ -51,7 +51,7 @@ export default function FamilyPage() {
   const sortedYears = Object.keys(groupedData).sort((a, b) => parseInt(b) - parseInt(a));
 
   return (
-    <section className="">
+    <section className="pb-32">
       {/* Header Section */}
       <header className="text-left py-6">
         <h1 className="text-3xl font-bold">ครอบครัวยุวชน</h1>
