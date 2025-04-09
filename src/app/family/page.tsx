@@ -59,7 +59,7 @@ export default function FamilyPage() {
       </header>
 
       {/* Search Bar */}
-      <div className="flex justify-center my-4">
+      <div className="flex justify-center my-2">
         <input
           type="text"
           placeholder="Search"
