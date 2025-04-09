@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import { FaSearch } from "react-icons/fa";
-
+import Image from "next/image";
 interface FamilyMember {
   id: number;
   user_name: string;
@@ -13,20 +13,19 @@ interface FamilyMember {
 }
 
 export default function FamilyPage() {
+  const [imageError, setImageError] = useState<Record<number, boolean>>({});
   const [familyData, setFamilyData] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState(''); // Add search term state
+  const [searchTerm, setSearchTerm] = useState(""); // Add search term state
 
   useEffect(() => {
     const fetchFamilyData = async () => {
       setLoading(true);
 
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*');
+      const { data, error } = await supabase.from("profiles").select("*");
 
       if (error) {
-        console.error('Error fetching family data:', error);
+        console.error("Error fetching family data:", error);
       } else {
         setFamilyData(data || []);
       }
@@ -42,7 +41,7 @@ export default function FamilyPage() {
   }
 
   // Group and filter data by year
-  const filteredFamilyData = familyData.filter(member =>
+  const filteredFamilyData = familyData.filter((member) =>
     member.user_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -52,13 +51,17 @@ export default function FamilyPage() {
     return acc;
   }, {} as Record<string, FamilyMember[]>);
 
-  const sortedYears = Object.keys(groupedData).sort((a, b) => parseInt(b) - parseInt(a));
+  const sortedYears = Object.keys(groupedData).sort(
+    (a, b) => parseInt(b) - parseInt(a)
+  );
 
   return (
     <section className="pb-32">
       <header className="text-left py-6">
         <h1 className="text-3xl font-bold">ครอบครัวยุวชน</h1>
-        <h2 className="text-xl font-light mt-2 opacity-60">Democratic Youth Family</h2>
+        <h2 className="text-xl font-light mt-2 opacity-60">
+          Democratic Youth Family
+        </h2>
       </header>
 
       {/* Search Bar */}
@@ -85,13 +88,24 @@ export default function FamilyPage() {
                 key={member.id}
                 className="bg-black/25 backdrop-blur-sm border border-white/25 rounded-2xl text-center py-4"
               >
-                <img
-                  src={member.profile_img || '/path-to-image.jpg'}
+                <Image
+                  width={80}
+                  height={80}
+                  src={
+                    imageError[member.id]
+                      ? "/person.png"
+                      : member.profile_img || "/person.png"
+                  }
                   alt="PFP"
+                  onError={() =>
+                    setImageError((prev) => ({ ...prev, [member.id]: true }))
+                  }
                   className="w-20 h-20 mx-auto rounded-full aspect-square border border-white/25 mb-2 overflow-hidden object-cover"
                 />
                 <h4 className="text-md font-medium">{member.user_name}</h4>
-                <p className="text-xs font-light opacity-80">{member.province}</p>
+                <p className="text-xs font-light opacity-80">
+                  {member.province}
+                </p>
                 <button className="font-medium text-sm mt-2 px-4 py-1 bg-white text-green-900 rounded-lg">
                   ปี {member.year}
                 </button>
