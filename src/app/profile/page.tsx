@@ -154,17 +154,21 @@ export default function ProfilePage() {
   );
   
   return (
-    <div className="min-h-screen ">
-      <div className="max-w-lg mx-auto bg-black/25 backdrop-blur-sm rounded-2xl p-8 border border-white/25 shadow-xl">
-        <div className="text-center mb-8">
+    <div className="min-h-screen my-6 ">
+      <div className="max-w-lg mx-auto">
+        <div className="text-left mb-8">
           <h1 className="text-3xl font-bold text-white">แก้ไขโปรไฟล์</h1>
           <h2 className="text-lg font-light text-white/60 mt-1">
             Edit profile
           </h2>
         </div>
-        
+
+
+        {/* Form Fields */}
+        <div className="space-y-6 w-full p-4 rounded-2xl bg-black/25 backdrop-blur-sm border border-white/25 text-white text-lg font-light">
+
         {/* Profile Image Section */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mt-4">
           {previewUrl ? (
             <div className="relative group">
               <div className="w-36 h-36 rounded-full overflow-hidden border-2 border-white/20 hover:border-white/25 transition-all duration-300">
@@ -219,8 +223,6 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {/* Form Fields */}
-        <div className="space-y-6">
           <div className="relative">
             <div className="flex items-center mb-2">
               <FiUser className="text-white/70 mr-2" />
