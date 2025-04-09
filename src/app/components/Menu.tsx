@@ -45,7 +45,7 @@ export default function Menu() {
         const handleRedirect = async () => {
           const { data: sessionData } = await supabase.auth.getSession();
           const { data: userData } = await supabase.auth.getUser();
-    
+
           const user = userData?.user;
           if (!user) return;
     

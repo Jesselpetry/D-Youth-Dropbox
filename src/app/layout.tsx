@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="th">
       <body className="bg-gray-50 text-gray-900">
         <Menu /> 
-        <main className="max-w-2xl mx-auto px-4 py-6  pb-32">{children}</main>
+        <main className="max-w-2xl mx-auto px-4 py-6 pb-32">{children}</main>
         <div className="fixed inset-0 -z-20">
           <div className="absolute inset-0 bg-gradient-to-br from-[#0E653B] to-[#0C2A20]" />
           <div className="absolute inset-0 bg-grid-pattern opacity-25" />
