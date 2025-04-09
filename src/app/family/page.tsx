@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import { FaSearch } from "react-icons/fa";
 
 interface FamilyMember {
   id: number;
@@ -64,7 +65,7 @@ export default function FamilyPage() {
       <div className="flex justify-center my-2">
         <input
           type="text"
-          placeholder="ค้นหาโดย ชื่อเล่น"
+          placeholder="🔎 ค้นหาโดย ชื่อเล่น"
           value={searchTerm} // Bind to state
           onChange={(e) => setSearchTerm(e.target.value)} // Update state
           className="w-full p-4 rounded-2xl bg-black/25 backdrop-blur-sm border border-white/25 text-white text-lg font-light"
