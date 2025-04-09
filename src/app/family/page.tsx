@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { FaSearch } from "react-icons/fa";
 import Image from "next/image";
+import ProfileModal from "../components/ProfileModal";
+import { useRouter } from "next/navigation";
+
 interface FamilyMember {
   id: number;
   user_name: string;
@@ -16,7 +19,9 @@ export default function FamilyPage() {
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
   const [familyData, setFamilyData] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState(""); // Add search term state
+  const [searchTerm, setSearchTerm] = useState(""); 
+  const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchFamilyData = async () => {
@@ -55,6 +60,17 @@ export default function FamilyPage() {
     (a, b) => parseInt(b) - parseInt(a)
   );
 
+  const handleSendMessage = (memberId: number) => {
+    // Here you would typically navigate to a messaging page or open a messaging component
+    // For now, we'll just implement a placeholder that could be expanded later
+    const member = familyData.find(m => m.id === memberId);
+    if (member) {
+      alert(`Will implement messaging to ${member.user_name} soon!`);
+      // Future implementation could be:
+      // router.push(`/messages/new?recipient=${memberId}`);
+    }
+  };
+
   return (
     <section className="">
       <header className="text-left py-6">
@@ -69,8 +85,8 @@ export default function FamilyPage() {
         <input
           type="text"
           placeholder="🔎 ค้นหาโดย ชื่อเล่น"
-          value={searchTerm} // Bind to state
-          onChange={(e) => setSearchTerm(e.target.value)} // Update state
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full p-4 rounded-2xl bg-black/25 backdrop-blur-sm border border-white/25 text-white text-lg font-light"
         />
       </div>
@@ -86,7 +102,8 @@ export default function FamilyPage() {
             {groupedData[year].map((member) => (
               <div
                 key={member.id}
-                className="bg-black/25 backdrop-blur-sm border border-white/25 rounded-2xl text-center py-4"
+                className="bg-black/25 backdrop-blur-sm border border-white/25 rounded-2xl text-center py-4 cursor-pointer transition-all hover:scale-[1.02] hover:border-white/50"
+                onClick={() => setSelectedMember(member)}
               >
                 <Image
                   width={80}
@@ -114,6 +131,16 @@ export default function FamilyPage() {
           </div>
         </div>
       ))}
+
+      {/* Profile Modal */}
+      {selectedMember && (
+        <ProfileModal 
+          member={selectedMember}
+          onClose={() => setSelectedMember(null)}
+          onSendMessage={handleSendMessage}
+        />
+      )}
     </section>
   );
 }
+
