@@ -149,8 +149,12 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-md mx-auto p-4 space-y-6">
-      <h1 className="text-2xl font-bold text-center">แก้ไขโปรไฟล์</h1>
-
+        <div className="text-center my-6">
+          <h1 className="text-3xl font-bold text-white">แก้ไขโปรไฟล์</h1>
+          <h2 className="text-xl font-light text-white mt-2 opacity-60">
+            Edit profile
+          </h2>
+        </div>
       <div className="space-y-1">
         {/* Image preview area */}
         {previewUrl ? (

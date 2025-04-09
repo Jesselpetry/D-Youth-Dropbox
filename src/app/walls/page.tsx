@@ -1,22 +1,14 @@
-'use client';
-import React from 'react';
-import Image from 'next/image';
+import React from 'react'
 
-function Page() {
+function page() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh]">
-      <div className="text-center">
-        <Image 
-          src="/logo.png" // Replace with your actual image path
-          alt="Centered image"
-          width={300}
-          height={300}
-          className="mx-auto rounded-lg shadow-lg"
-        />
-        <p className="mt-4 text-lg">message</p>
-      </div>
-    </div>
-  );
+    <div className="text-left my-6">
+    <h1 className="text-3xl font-bold text-white">กำแพง</h1>
+    <h2 className="text-xl font-light text-white mt-2 opacity-60">
+      Walls
+    </h2>
+  </div>
+  )
 }
 
-export default Page;
+export default page
