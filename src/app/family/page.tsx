@@ -19,14 +19,14 @@ export default function FamilyPage() {
     const fetchFamilyData = async () => {
       setLoading(true);
 
-      // Fetch family data from the 'profiles' table
       const { data, error } = await supabase
-        .from('profiles') // Replace with your actual table name if different
+        .from('profiles')
         .select('*');
 
       if (error) {
         console.error('Error fetching family data:', error);
       } else {
+        // Set the fetched data
         setFamilyData(data || []);
       }
 
@@ -39,6 +39,16 @@ export default function FamilyPage() {
   if (loading) {
     return <div>Loading family data...</div>;
   }
+
+  // Group data by year
+  const groupedData = familyData.reduce((acc, member) => {
+    acc[member.year] = acc[member.year] || [];
+    acc[member.year].push(member);
+    return acc;
+  }, {} as Record<string, FamilyMember[]>);
+
+  // Sort the years in descending order
+  const sortedYears = Object.keys(groupedData).sort((a, b) => parseInt(b) - parseInt(a));
 
   return (
     <section className="">
@@ -57,34 +67,37 @@ export default function FamilyPage() {
         />
       </div>
 
-      {/* User Cards Section */}
-      <div className="flex items-center justify-between mt-6">
-        <h3 className="text-2xl font-medium">สมาชิกทั้งหมด</h3>
-        <div className="flex-grow h-px bg-white/25 ml-4"></div>
-      </div>
-
-      <div className="grid grid-cols-3 gap-2 mt-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        
-        {familyData.map((member) => (
-          <div
-            key={member.id}
-            className="bg-black/25 backdrop-blur-sm border border-white/25 rounded-2xl text-center py-4"
-          >
-            <img
-              src={member.profile_img || '/path-to-image.jpg'}
-              alt="PFP"
-              className="w-20 h-20 mx-auto rounded-full aspect-square border border-white/25 mb-2 overflow-hidden object-cover"
-            />
-            <h4 className="text-md font-medium">{member.user_name}</h4>
-            <p className="text-xs font-light opacity-80">{member.province}</p>
-            <button className="mt-2 px-4 py-1 bg-white text-green-900 rounded-lg">
-              ปี {member.year}
-            </button>
+      {/* Render each year group */}
+      {sortedYears.map((year) => (
+        <div key={year}>
+          {/* Year Header */}
+          <div className="flex items-center justify-between mt-6">
+            <h3 className="text-2xl font-medium">ยุวชนปี {year}</h3>
+            <div className="flex-grow h-px bg-white/25 ml-4"></div>
           </div>
-        ))}
 
-      </div>
+          {/* User Cards */}
+          <div className="grid grid-cols-3 gap-2 mt-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {groupedData[year].map((member) => (
+              <div
+                key={member.id}
+                className="bg-black/25 backdrop-blur-sm border border-white/25 rounded-2xl text-center py-4"
+              >
+                <img
+                  src={member.profile_img || '/path-to-image.jpg'}
+                  alt="PFP"
+                  className="w-20 h-20 mx-auto rounded-full aspect-square border border-white/25 mb-2 overflow-hidden object-cover"
+                />
+                <h4 className="text-md font-medium">{member.user_name}</h4>
+                <p className="text-xs font-light opacity-80">{member.province}</p>
+                <button className="mt-2 px-4 py-1 bg-white text-green-900 rounded-lg">
+                  ปี {member.year}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </section>
   );
 }
-
