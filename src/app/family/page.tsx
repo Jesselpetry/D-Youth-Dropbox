@@ -26,7 +26,7 @@ function FamilyPage() {
           {Array(4).fill(null).map((_, index) => (
             <div
               key={index}
-              className="bg-black/25 backdrop-blur-sm border border-white/25 rounded-xl text-center py-4"
+              className="bg-black/25 backdrop-blur-sm border border-white/25 rounded-2xl text-center py-4"
             >
 
                 <img
