@@ -149,79 +149,77 @@ export default function ProfilePage() {
 
   if (loading) return (
     <div className="h-screen flex items-center justify-center">
-      <RiLoaderFill className="animate-spin text-white" size={48}/>
+      <RiLoaderFill className="animate-spin text-white" size={48} />
     </div>
   );
-  
+
   return (
-    <div className="pb-32">
-      <div className="max-w-lg mx-auto">
-        <div className="text-left mb-8">
-          <h1 className="text-3xl font-bold text-white">แก้ไขโปรไฟล์</h1>
-          <h2 className="text-lg font-light text-white/60 mt-1">
-            Edit profile
-          </h2>
-        </div>
+    <div className="max-w-2xl mx-auto py-6 pb-32">
 
+      <h1 className="text-3xl font-bold text-white">โปรไฟล์</h1>
+      <h2 className="text-xl font-light text-white mt-2 opacity-60">
+        Profile
+      </h2>
 
+      <div className="mt-6 max-w-2xl mx-auto">
         {/* Form Fields */}
         <div className="space-y-6 w-full p-4 rounded-2xl bg-black/25 backdrop-blur-sm border border-white/25 text-white text-lg font-light">
 
-        {/* Profile Image Section */}
-        <div className="flex justify-center mt-4">
-          {previewUrl ? (
-            <div className="relative group">
-              <div className="w-36 h-36 rounded-full overflow-hidden border-2 border-white/20 hover:border-white/25 transition-all duration-300">
-                <img
-                  src={previewUrl}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
+          {/* Profile Image Section */}
+          <div className="flex justify-center mt-4">
+            {previewUrl ? (
+              <div className="relative group">
+                <div className="w-36 h-36 rounded-full overflow-hidden border-2 border-white/20 hover:border-white/25 transition-all duration-300">
+                  <img
+                    src={previewUrl}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div
+                  className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300"
+                  onClick={() => document.getElementById("file-upload")?.click()}
+                >
+                  <span className="text-white text-sm">Change Photo</span>
+                </div>
+                <input
+                  id="file-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
                 />
               </div>
-              <div 
-                className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300"
+            ) : (
+              <div
+                className="w-36 h-36 rounded-full flex flex-col items-center justify-center bg-black/25 border-5 border-dashed border-white/25 cursor-pointer hover:border-white/50 transition-all duration-300"
                 onClick={() => document.getElementById("file-upload")?.click()}
               >
-                <span className="text-white text-sm">Change Photo</span>
+                <svg
+                  className="w-10 h-10 text-white/70"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  ></path>
+                </svg>
+                <span className="mt-2 text-white/70 text-sm">Add Photo</span>
+                <input
+                  id="file-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
               </div>
-              <input
-                id="file-upload"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-            </div>
-          ) : (
-            <div
-              className="w-36 h-36 rounded-full flex flex-col items-center justify-center bg-black/25 border-5 border-dashed border-white/25 cursor-pointer hover:border-white/50 transition-all duration-300"
-              onClick={() => document.getElementById("file-upload")?.click()}
-            >
-              <svg
-                className="w-10 h-10 text-white/70"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                ></path>
-              </svg>
-              <span className="mt-2 text-white/70 text-sm">Add Photo</span>
-              <input
-                id="file-upload"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
           <div className="relative">
             <div className="flex items-center mb-2">
@@ -255,7 +253,7 @@ export default function ProfilePage() {
               <ProvinceSelector province={province} setProvince={setProvince} />
             </div>
           </div>
-          
+
           <div className="pt-6 space-y-4">
             <button
               onClick={handleSubmit}
@@ -264,7 +262,7 @@ export default function ProfilePage() {
               <FiSave className="mr-2" />
               บันทึกการเปลี่ยนแปลง
             </button>
-            
+
             <button
               onClick={handleLogout}
               className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-lg py-3 rounded-xl font-medium transition-colors flex items-center justify-center"
