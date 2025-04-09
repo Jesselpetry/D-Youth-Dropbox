@@ -71,7 +71,7 @@ export default function ProfileModal({ member, onClose, onSendMessage }: Profile
           </button>
 
           <button 
-            onClick={() => onSendMessage(member.id)}
+            onClick={() => window.location.href = `/send-message/${member.id}`}
             className="w-full flex items-center justify-center space-x-2 bg-green-600 hover:bg-green-500 text-white py-3 px-4 rounded-lg transition-colors"
           >
             <IoMdSend size={20} />
