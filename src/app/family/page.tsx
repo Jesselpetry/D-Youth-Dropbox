@@ -22,21 +22,21 @@ function FamilyPage() {
       <section className="">
         {/* Year Group 68 */}
         <h3 className="text-2xl font-medium mt-6">ยุวชนปี 68</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
           {Array(4).fill(null).map((_, index) => (
             <div
               key={index}
-              className="bg-green-800 rounded-lg text-center p-4"
+              className="bg-green-800 rounded-lg text-center py-4"
             >
-              <div className="w-24 h-24 mx-auto rounded-full bg-white mb-4 overflow-hidden">
+
                 <img
                   src="/path-to-image.jpg"
                   alt="Member"
-                  className="w-full h-full object-cover"
+                  className="w-auto h-auto rounded-full aspect-square mx-4  bg-white mb-4 overflow-hidden object-cover"
                 />
-              </div>
+        
               <h4 className="text-lg font-medium">เจส</h4>
-              <p className="text-sm opacity-80">จ.พระนครศรีอยุธยา</p>
+              <p className="text-xs opacity-80">พระนครศรีอยุธยา</p>
               <button className="mt-2 px-4 py-1 bg-white text-green-900 rounded-lg">
                 ปี 68
               </button>
@@ -50,17 +50,18 @@ function FamilyPage() {
           {Array(4).fill(null).map((_, index) => (
             <div
               key={index}
-              className="bg-green-800 rounded-lg text-center p-4"
+              className="bg-green-800 rounded-lg text-center py-4"
             >
-              <div className="w-24 h-24 mx-auto rounded-full bg-white mb-4 overflow-hidden">
-                <img
+          
+              <img
                   src="/path-to-image.jpg"
                   alt="Member"
-                  className="w-full h-full object-cover"
+                  className="w-auto h-auto rounded-full aspect-square mx-4  bg-white mb-4 overflow-hidden object-cover"
                 />
-              </div>
+              
+          
               <h4 className="text-lg font-medium">ซุปเปอร์จูเนีย</h4>
-              <p className="text-sm opacity-80">จ.พระนครศรีอยุธยา</p>
+              <p className="text-sm opacity-80">พระนครศรีอยุธยา</p>
               <button className="mt-2 px-4 py-1 bg-white text-green-900 rounded-lg">
                 ปี 67
               </button>
