@@ -22,7 +22,7 @@ function FamilyPage() {
       <section className="">
         {/* Year Group 68 */}
         <h3 className="text-2xl font-medium mt-6">ยุวชนปี 68</h3>
-        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-2 mt-4">
           {Array(4).fill(null).map((_, index) => (
             <div
               key={index}
@@ -31,35 +31,11 @@ function FamilyPage() {
 
                 <img
                   src="/path-to-image.jpg"
-                  alt="Member"
-                  className="w-auto h-auto w-max-xs h-max-xs rounded-full aspect-square mx-4  bg-white mb-2 overflow-hidden object-cover"
+                  alt="PFP"
+                  className="w-auto h-auto w-max-xs h-max-xs rounded-full aspect-square mx-4 border border-white/25 mb-2 overflow-hidden object-cover"
                 />
         
-              <h4 className="text-lg font-medium">เจส</h4>
-              <p className="text-xs font-light opacity-80">หนองคาย</p>
-              <button className="mt-2 px-4 py-1 bg-white text-green-900 rounded-lg">
-                ปี 68
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {/* Year Group 68 */}
-        <h3 className="text-2xl font-medium mt-6">ยุวชนปี 67</h3>
-        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
-          {Array(4).fill(null).map((_, index) => (
-            <div
-              key={index}
-              className="bg-black/25 backdrop-blur-sm border border-white/25 rounded-xl text-center py-4"
-            >
-
-                <img
-                  src="/path-to-image.jpg"
-                  alt="Member"
-                  className="w-auto h-auto w-max-xs h-max-xs rounded-full aspect-square mx-4  bg-white mb-2 overflow-hidden object-cover"
-                />
-        
-              <h4 className="text-lg font-medium">เจส</h4>
+              <h4 className="text-md font-medium">ซุปเปอร์จูเนีย</h4>
               <p className="text-xs font-light opacity-80">หนองคาย</p>
               <button className="mt-2 px-4 py-1 bg-white text-green-900 rounded-lg">
                 ปี 68
