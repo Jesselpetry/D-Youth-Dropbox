@@ -1,19 +1,18 @@
 // ✅ app/layout.tsx
-import './globals.css'
-import { ReactNode } from 'react'
+import "./globals.css";
+import { ReactNode } from "react";
 
-import Menu from '@/app/components/Menu'
+import Menu from "@/app/components/Menu";
 
 export const metadata = {
-  title: 'ข้อความ Dropbox',
-  description: 'โพสต์และดูข้อความของคุณแบบง่าย ๆ',
-}
+  title: "ข้อความ Dropbox",
+  description: "โพสต์และดูข้อความของคุณแบบง่าย ๆ",
+};
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="th" className="overflow-hidden h-full">
-      <body className="bg-gray-50 text-gray-900 overflow-hidden h-full">
-
+      <body className="bg-gray-50 text-gray-900 overflow-hidden  h-full ">
         <Menu /> {/* Menu จะถูกแสดงในทุกหน้าปกติ */}
         <main className="max-w-2xl mx-auto px-4 py-6">{children}</main>
         <div className="fixed inset-0 -z-20">
@@ -22,5 +21,5 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </div>
       </body>
     </html>
-  )
+  );
 }

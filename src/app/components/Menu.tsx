@@ -5,6 +5,10 @@ import { FaMessage } from "react-icons/fa6";
 import { BsFillGrid3X3GapFill } from "react-icons/bs";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
+import { use } from 'react';
 
 const navItems = [
     {
@@ -35,8 +39,31 @@ const navItems = [
 
 export default function Menu() {
     const pathname = usePathname();
+    const router = useRouter();
 
-
+    useEffect(() => {
+        const handleRedirect = async () => {
+          const { data: sessionData } = await supabase.auth.getSession();
+          const { data: userData } = await supabase.auth.getUser();
+    
+          const user = userData?.user;
+          if (!user) return;
+    
+          // ดึงข้อมูลจาก table profiles (หรือชื่อที่คุณใช้จริง)
+          const { data: profile, error } = await supabase
+            .from("profiles") // 👈 เปลี่ยนถ้า table ไม่ชื่อ profiles
+            .select("user_name")
+            .eq("id", user.id)
+            .single();
+    
+          if (user && !profile?.user_name) {
+            router.push("/setup-profile");
+          } 
+        };
+    
+        handleRedirect();
+      }, [router]);
+ 
     // ถ้า path เป็น /profile ให้ไม่ render เมนูเลย
     if ((pathname === '/login') || (pathname === '/setup-profile') || (pathname === '/auth')) {
         return null;

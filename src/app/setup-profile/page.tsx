@@ -128,7 +128,7 @@ export default function SetupProfile() {
         alert("บันทึกโปรไฟล์ไม่สำเร็จ: " + error.message);
       } else {
         console.log("Profile saved successfully, attempting redirect...");
-        router.push("/profile");
+        router.push("/");
         console.log("Redirect call completed"); // Check if this log appears
       }
     } catch (err) {
