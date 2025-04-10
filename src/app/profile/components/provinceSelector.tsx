@@ -2,7 +2,7 @@
 // ProvinceSelector.tsx
 import React from 'react';
 import Select from 'react-select';
-import provinces, { ProvinceOption } from './provinces';
+import provinces from './provinces';
 
 type ProvinceSelectorProps = {
   province: string;

@@ -2,7 +2,7 @@
 // YearSelector.tsx
 import React from 'react';
 import Select from 'react-select';
-import years, { YearOption } from './years';
+import years from './years';
 
 type YearSelectorProps = {
   year: string;

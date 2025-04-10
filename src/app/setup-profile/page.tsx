@@ -17,9 +17,6 @@ export default function SetupProfile() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null); // Add preview state
   const [uploading, setUploading] = useState(false);
 
-  // Create an array of Buddhist Era years from 2545 to 2568 (current year 2025 + 543)
-  const currentBuddhistYear = 2568;
-
   const router = useRouter();
 
   useEffect(() => {
