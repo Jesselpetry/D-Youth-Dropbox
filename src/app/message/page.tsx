@@ -24,6 +24,17 @@ interface Message {
   profiles: Profile | null
 }
 
+// Define a separate interface for raw data from Supabase
+interface RawMessage {
+  id: number
+  content: string
+  created_at: string
+  sender_id: string
+  is_anonymous: boolean
+  color: string | null
+  profiles: Profile | Profile[] | null
+}
+
 interface FamilyMember {
   id: string
   user_name: string
@@ -75,31 +86,50 @@ const Page = () => {
 
         if (error) throw error
 
-        // Transform the data to match our Message interface
-        // Define the structure for raw message data from Supabase
-        interface RawMessage {
-          id: number;
-          content: string;
-          created_at: string;
-          sender_id: string;
-          is_anonymous: boolean;
-          color: string | null;
-          profiles: Profile | Profile[] | null;
+        // Process the data to ensure it matches our Message type
+        const processedMessages: Message[] = [];
+
+        if (data) {
+          for (const msg of data) {
+            // Safe handling of profiles data
+            let profileData: Profile | null = null;
+            
+            if (msg.profiles) {
+              if (Array.isArray(msg.profiles) && msg.profiles.length > 0) {
+                // If profiles is an array, take the first element
+                profileData = {
+                  id: msg.profiles[0].id,
+                  user_name: msg.profiles[0].user_name,
+                  profile_img: msg.profiles[0].profile_img,
+                  year: msg.profiles[0].year,
+                  province: msg.profiles[0].province
+                };
+              } else if (typeof msg.profiles === 'object') {
+                // If profiles is a single object
+                profileData = {
+                  id: msg.profiles.id,
+                  user_name: msg.profiles.user_name,
+                  profile_img: msg.profiles.profile_img,
+                  year: msg.profiles.year,
+                  province: msg.profiles.province
+                };
+              }
+            }
+            
+            // Create a properly typed message object
+            processedMessages.push({
+              id: msg.id,
+              content: msg.content,
+              created_at: msg.created_at,
+              sender_id: msg.sender_id,
+              is_anonymous: msg.is_anonymous,
+              color: msg.color,
+              profiles: profileData
+            });
+          }
         }
 
-        const typedMessages: Message[] = data?.map((msg: RawMessage) => ({
-          id: msg.id,
-          content: msg.content,
-          created_at: msg.created_at,
-          sender_id: msg.sender_id,
-          is_anonymous: msg.is_anonymous,
-          color: msg.color,
-          profiles: Array.isArray(msg.profiles) && msg.profiles.length > 0 
-            ? msg.profiles[0] // Take the first element if it's an array
-            : msg.profiles // Otherwise use as is
-        })) || []
-
-        setMessages(typedMessages)
+        setMessages(processedMessages);
       } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
         setError(errorMessage)
