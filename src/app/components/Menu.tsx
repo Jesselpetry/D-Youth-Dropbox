@@ -32,18 +32,18 @@ const navItems = [
 export default function Menu() {
   const pathname = usePathname();
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ id: string } | null>(null);
 
   useEffect(() => {
     const handleRedirect = async () => {
-      const { data: sessionData } = await supabase.auth.getSession();
+      await supabase.auth.getSession();
       const { data: userData } = await supabase.auth.getUser();
 
       const currentUser = userData?.user;
       setUser(currentUser);
 
       if (currentUser) {
-        const { data: profile, error } = await supabase
+        const { data: profile } = await supabase
           .from("profiles")
           .select("user_name")
           .eq("id", currentUser.id)
