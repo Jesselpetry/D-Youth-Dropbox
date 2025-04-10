@@ -92,7 +92,10 @@ const Page = () => {
                 'id' in profile &&
                 'user_name' in profile &&
                 typeof profile.id === 'string' &&
-                typeof profile.user_name === 'string'
+                typeof profile.user_name === 'string' &&
+                typeof profile.profile_img === 'string' &&
+                typeof profile.year === 'string' &&
+                typeof profile.province === 'string'
               ) {
                 profileData = {
                   id: profile.id,
