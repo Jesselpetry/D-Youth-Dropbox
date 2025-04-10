@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { FaSearch } from "react-icons/fa";
+
 import Image from "next/image";
 import ProfileModal from "../components/ProfileModal";
 import { useRouter } from "next/navigation";

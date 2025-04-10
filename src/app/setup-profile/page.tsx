@@ -5,7 +5,7 @@ import { supabase } from "../../lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import ProvinceSelector from "./components/provinceSelector";
 import YearSelector from "./components/yearSelector";
-import Image from "next/image";
+
 import { FiUser, FiCalendar, FiMapPin, FiImage, FiLogOut } from "react-icons/fi";
 
 export default function SetupProfile() {
