@@ -15,13 +15,13 @@ interface Profile {
 }
 
 interface Message {
-  id: number
-  content: string
-  created_at: string
-  sender_id: string
-  is_anonymous: boolean
-  color: string | null
-  profiles: Profile | null
+  id: number;
+  content: string;
+  created_at: string;
+  sender_id: string;
+  is_anonymous: boolean;
+  color: string | null;
+  profiles: Profile | Profile[] | null; // Allow profiles to be an array or null
 }
 
 interface FamilyMember {
@@ -84,18 +84,14 @@ const Page = () => {
             let profileData: Profile | null = null;
             
             if (typeof msg.profiles === 'object') {
-              // If profiles is a single object
-              const profile = msg.profiles;
+              const profile = Array.isArray(msg.profiles) ? msg.profiles[0] : msg.profiles;
             
-              // Type guard to ensure the object has the expected shape
               if (
                 'id' in profile &&
                 'user_name' in profile &&
-                typeof profile.id === 'string' &&
-                typeof profile.user_name === 'string' &&
-                typeof profile.profile_img === 'string' &&
-                typeof profile.year === 'string' &&
-                typeof profile.province === 'string'
+                (typeof profile.profile_img === 'string' || profile.profile_img === undefined) &&
+                (typeof profile.year === 'string' || profile.year === undefined) &&
+                (typeof profile.province === 'string' || profile.province === undefined)
               ) {
                 profileData = {
                   id: profile.id,
