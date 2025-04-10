@@ -32,6 +32,7 @@ const Page = () => {
         const { data, error } = await supabase
           .from('walls')
           .select('id, content, created_at, sender_id, color, profiles(user_name, profile_img, year, province)')  // ตรวจสอบว่า `profiles` มี `user_name` และ `profile_img`
+          .order('created_at', { ascending: false }); // Sort by `created_at` in descending order (newest first)
 
         if (error) throw error;
 
