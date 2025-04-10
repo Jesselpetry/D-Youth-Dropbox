@@ -69,13 +69,14 @@ export default function SendToWall() {
         }
   
         const senderId = session?.user?.id;
-        if (!senderId) {
+        if (!senderId && !isAnonymous) {
           setError('กรุณาล็อกอินเพื่อส่งข้อความ');
           return;
         }
 
         let submitError;
 
+        // Insert message into the database
         if (!isAnonymous) {
           const { error } = await supabase
             .from('walls')
@@ -97,15 +98,15 @@ export default function SendToWall() {
             });
           submitError = error;
         }
-        
 
         if (submitError) {
           console.error('Supabase error details:', submitError);
           throw submitError;
         } 
-        // Clear the input after sending
-        setMessage('');
-        alert('ส่งข้อความสำเร็จ!');
+        
+        // Redirect to /walls and then show success alert
+        window.location.href = '/walls';
+        setTimeout(() => alert('ส่งข้อความสำเร็จ!'), 100); // Show success alert after redirection
       } catch (err: any) {
         console.error('Error sending message:', err);
         setError(err.message || 'ไม่สามารถส่งข้อความได้ โปรดลองอีกครั้ง');
