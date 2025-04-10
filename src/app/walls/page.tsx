@@ -8,7 +8,7 @@ const Page = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const paperColor = '#f5f5f5' // Define paperColor here (example: light gray color)
-
+  
   useEffect(() => {
     const fetchWalls = async () => {
       const { data: { session } } = await supabase.auth.getSession()
@@ -40,8 +40,8 @@ const Page = () => {
   }, [])
 
   const handleAddMessage = () => {
-    // Logic for adding a new message (e.g., opening a modal or redirecting)
-    alert('เปิดฟอร์มสำหรับเพิ่มข้อความใหม่');
+    // Redirect to the send message page
+    window.location.href = '/walls/send'
   }
 
   if (loading) return <div>กำลังโหลด...</div>
@@ -70,7 +70,7 @@ const Page = () => {
       </div>
 
       {walls.length === 0 ? (
-        <p className="text-white mt-4">ยังไม่มีข้อความ</p>
+        <p className="text-white mt-6">ยังไม่มีข้อความ</p>
       ) : (
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {walls.map((wall) => (
