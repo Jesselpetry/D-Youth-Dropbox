@@ -205,17 +205,23 @@ const Page = () => {
                   <h3 className="font-medium text-gray-900 text-base">
                     {message.is_anonymous
                       ? "ไม่ระบุตัวตน"
-                      : message.profiles?.user_name || "ไม่ระบุตัวตน"}
+                      : (Array.isArray(message.profiles) 
+                          ? message.profiles[0]?.user_name 
+                          : message.profiles?.user_name) || "ไม่ระบุตัวตน"}
                   </h3>
                   <p className="text-xs font-light text-gray-900 mb-1">
                     {message.is_anonymous
                       ? "ไม่ระบุจังหวัด"
-                      : message.profiles?.province || "ไม่ระบุจังหวัด"}
+                      : (Array.isArray(message.profiles) 
+                          ? message.profiles[0]?.province 
+                          : message.profiles?.province) || "ไม่ระบุจังหวัด"}
                   </p>
                   <span className="bg-gray-900 text-white text-xs px-4 py-1 rounded-lg">
                     {message.is_anonymous
                       ? "ไม่ระบุปี"
-                      : message.profiles?.year || "ไม่ระบุปี"}
+                      : (Array.isArray(message.profiles) 
+                          ? message.profiles[0]?.year 
+                          : message.profiles?.year) || "ไม่ระบุปี"}
                   </span>
                 </div>
               </div>
