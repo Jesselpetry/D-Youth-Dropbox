@@ -2,18 +2,45 @@
 
 import React, { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
-import ProfileModal from "@/app/components/ProfileModal" // Adjust the import path as needed
+import ProfileModal from "@/app/components/ProfileModal"
+
+// Define interfaces for our data types
+interface Profile {
+  id: string
+  user_name: string
+  profile_img?: string
+  year?: string
+  province?: string
+}
+
+interface Message {
+  id: number
+  content: string
+  created_at: string
+  sender_id: string
+  is_anonymous: boolean
+  color: string | null
+  profiles: Profile | null
+}
+
+interface FamilyMember {
+  id: string
+  user_name: string
+  province?: string
+  year?: string
+  profile_img?: string
+}
 
 const Page = () => {
-  const [messages, setMessages] = useState<any[]>([])
+  const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedProfile, setSelectedProfile] = useState<any>(null)
+  const [selectedProfile, setSelectedProfile] = useState<FamilyMember | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   // Function to get paper color
   const getPaperColor = (color: string | null) => {
-    return color || '#f5f5f5'; // Default color
+    return color || '#f5f5f5' // Default color
   }
 
   useEffect(() => {
@@ -49,8 +76,9 @@ const Page = () => {
         if (error) throw error
 
         setMessages(data || [])
-      } catch (err: any) {
-        setError(err.message)
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
+        setError(errorMessage)
       } finally {
         setLoading(false)
       }
@@ -60,32 +88,32 @@ const Page = () => {
   }, [])
 
   // Handle profile click function from the wall component
-  const handleProfileClick = (profile: any) => {
-    if (!profile || profile.is_anonymous) return; // Don't open modal for anonymous profiles
+  const handleProfileClick = (profile: Profile | null) => {
+    if (!profile || profile.is_anonymous) return // Don't open modal for anonymous profiles
     
     // Convert profile data to the format expected by the ProfileModal
-    const familyMember = {
+    const familyMember: FamilyMember = {
       id: profile.id,
       user_name: profile.user_name,
       province: profile.province,
       year: profile.year,
       profile_img: profile.profile_img
-    };
+    }
     
-    setSelectedProfile(familyMember);
-    setIsModalOpen(true);
-  };
+    setSelectedProfile(familyMember)
+    setIsModalOpen(true)
+  }
   
   // Handle modal close function
   const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProfile(null);
-  };
+    setIsModalOpen(false)
+    setSelectedProfile(null)
+  }
   
   // Handle send message function
   const handleSendMessage = (memberId: number) => {
-    window.location.href = `/message/${memberId}`;
-  };
+    window.location.href = `/message/${memberId}`
+  }
 
   if (loading) return <div>กำลังโหลด...</div>
   if (error) return <div>{error}</div>
