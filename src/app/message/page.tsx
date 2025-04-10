@@ -23,6 +23,17 @@ interface MessageType {
   profiles?: ProfileType;
 }
 
+// Interface for the raw data coming from Supabase
+interface RawMessageType {
+  id: string;
+  content: string;
+  created_at: string;
+  sender_id: string;
+  is_anonymous: boolean;
+  color: string | null;
+  profiles: ProfileType[];
+}
+
 interface FamilyMemberType {
   id: string;
   user_name?: string;
@@ -64,7 +75,12 @@ const Page = () => {
           .select(`
           id,
           content,
-          created_at,
+        // Transform the data to match the MessageType interface
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred')
+          profiles: item.profiles?.[0] // Take the first profile from the array
+        }));
+        setMessages(transformedData);
           sender_id,
           is_anonymous,
           color,
