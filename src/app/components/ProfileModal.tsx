@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 import { FaTimes } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
-import { FaInstagramSquare } from "react-icons/fa";
 import { RiInstagramFill } from "react-icons/ri";
 
 interface FamilyMember {
@@ -19,7 +18,7 @@ interface ProfileModalProps {
   onSendMessage: (memberId: number) => void;
 }
 
-export default function ProfileModal({ member, onClose, onSendMessage }: ProfileModalProps) {
+export default function ProfileModal({ member, onClose }: ProfileModalProps) {
   if (!member) return null;
 
   return (

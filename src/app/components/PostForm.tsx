@@ -1,5 +1,4 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
-import Image from 'next/image';
 
 type PostFormProps = {
   onSubmitPost: (post: PostData) => void;

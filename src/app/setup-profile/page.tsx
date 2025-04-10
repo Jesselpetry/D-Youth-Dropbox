@@ -19,10 +19,6 @@ export default function SetupProfile() {
 
   // Create an array of Buddhist Era years from 2545 to 2568 (current year 2025 + 543)
   const currentBuddhistYear = 2568;
-  const buddhistYears = Array.from(
-    { length: currentBuddhistYear - 2545 + 1 },
-    (_, i) => currentBuddhistYear - i
-  );
 
   const router = useRouter();
 

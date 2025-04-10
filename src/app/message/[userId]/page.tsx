@@ -73,9 +73,9 @@ export default function MessageToUser() {
         if (error) throw error;
 
         setRecipientName(data?.user_name || "ไม่ระบุชื่อ");
-      } catch (err: any) {
+      } catch (err: Error | unknown) {
         console.error("Error fetching recipient:", err);
-        setError(err.message);
+        setError(err instanceof Error ? err.message : 'Unknown error occurred');
       } finally {
         setLoading(false);
       }
@@ -125,7 +125,7 @@ export default function MessageToUser() {
         // Clear the input after sending
         setMessage('');
         alert('ส่งข้อความสำเร็จ!');
-      } catch (err: any) {
+      } catch (err: Error | unknown) {
         console.error('Error sending message:', err);
         setError('ไม่สามารถส่งข้อความได้ โปรดลองอีกครั้ง');
       } finally {
@@ -139,10 +139,7 @@ export default function MessageToUser() {
     setIsAnonymous(!isAnonymous);
   };
 
-  // Handle paper color change
-  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPaperColor(e.target.value);
-  };
+  // Paper color is set directly through the color selection buttons
 
   // Calculate remaining characters
   const remainingChars = 160 - message.length;

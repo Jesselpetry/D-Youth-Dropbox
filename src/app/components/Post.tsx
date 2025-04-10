@@ -12,7 +12,6 @@ type PostProps = {
 }
 
 export default function Post({ 
-  id, 
   name, 
   dyouthYear, 
   province, 

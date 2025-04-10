@@ -4,11 +4,38 @@ import React, { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import ProfileModal from "@/app/components/ProfileModal" // Adjust the import path as needed
 
+// Define interfaces for type safety
+interface ProfileType {
+  id: string;
+  user_name?: string;
+  profile_img?: string;
+  year?: string;
+  province?: string;
+}
+
+interface MessageType {
+  id: string;
+  content: string;
+  created_at: string;
+  sender_id: string;
+  is_anonymous: boolean;
+  color: string | null;
+  profiles?: ProfileType;
+}
+
+interface FamilyMemberType {
+  id: string;
+  user_name?: string;
+  province?: string;
+  year?: string;
+  profile_img?: string;
+}
+
 const Page = () => {
-  const [messages, setMessages] = useState<any[]>([])
+  const [messages, setMessages] = useState<MessageType[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedProfile, setSelectedProfile] = useState<any>(null)
+  const [selectedProfile, setSelectedProfile] = useState<FamilyMemberType | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   // Function to get paper color
@@ -60,11 +87,11 @@ const Page = () => {
   }, [])
 
   // Handle profile click function from the wall component
-  const handleProfileClick = (profile: any) => {
-    if (!profile || profile.is_anonymous) return; // Don't open modal for anonymous profiles
+  const handleProfileClick = (profile: ProfileType | undefined) => {
+    if (!profile || !profile.id) return; // Don't open modal for anonymous profiles
     
     // Convert profile data to the format expected by the ProfileModal
-    const familyMember = {
+    const familyMember: FamilyMemberType = {
       id: profile.id,
       user_name: profile.user_name,
       province: profile.province,
@@ -83,7 +110,7 @@ const Page = () => {
   };
   
   // Handle send message function
-  const handleSendMessage = (memberId: number) => {
+  const handleSendMessage = (memberId: string) => {
     window.location.href = `/message/${memberId}`;
   };
 
