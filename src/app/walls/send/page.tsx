@@ -107,9 +107,10 @@ export default function SendToWall() {
         // Redirect to /walls and then show success alert
         window.location.href = '/walls';
         setTimeout(() => alert('ส่งข้อความสำเร็จ!'), 100); // Show success alert after redirection
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'ไม่สามารถส่งข้อความได้ โปรดลองอีกครั้ง';
         console.error('Error sending message:', err);
-        setError(err.message || 'ไม่สามารถส่งข้อความได้ โปรดลองอีกครั้ง');
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
