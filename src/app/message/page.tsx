@@ -83,32 +83,24 @@ const Page = () => {
             // Safe handling of profiles data
             let profileData: Profile | null = null;
             
-            if (msg.profiles) {
-              // Check what type of data we're dealing with
-              // In Supabase joins, the data can come in different formats
-              if (Array.isArray(msg.profiles) && msg.profiles.length > 0) {
-                // If profiles is an array, take the first element
-                const profile = msg.profiles[0];
+            if (typeof msg.profiles === 'object') {
+              // If profiles is a single object
+              const profile = msg.profiles;
+            
+              // Type guard to ensure the object has the expected shape
+              if (
+                'id' in profile &&
+                'user_name' in profile &&
+                typeof profile.id === 'string' &&
+                typeof profile.user_name === 'string'
+              ) {
                 profileData = {
-                  id: (profile as Profile).id,
-                  user_name: (profile as Profile).user_name,
-                  profile_img: (profile as Profile).profile_img,
-                  year: (profile as Profile).year,
-                  province: (profile as Profile).province
+                  id: profile.id,
+                  user_name: profile.user_name,
+                  profile_img: profile.profile_img,
+                  year: profile.year,
+                  province: profile.province,
                 };
-              } else if (typeof msg.profiles === 'object') {
-                // If profiles is a single object
-                const profile = msg.profiles;
-                // Type guard to ensure the object has the expected shape
-                if ('id' in profile && 'user_name' in profile) {
-                  profileData = {
-                    id: profile.id,
-                    user_name: profile.user_name,
-                    profile_img: profile.profile_img,
-                    year: profile.year,
-                    province: profile.province
-                  };
-                }
               }
             }
             
