@@ -193,7 +193,7 @@ const Page = () => {
                     src={
                       message.is_anonymous
                         ? "/anonymous-avatar.png"
-                        : message.profiles?.profile_img || "/anonymous-avatar.png"
+                        : (Array.isArray(message.profiles) ? message.profiles[0]?.profile_img : message.profiles?.profile_img) || "/anonymous-avatar.png"
                     }
                     alt={message.is_anonymous ? "Anonymous" : "Profile"}
                     className="w-full h-full object-cover"
