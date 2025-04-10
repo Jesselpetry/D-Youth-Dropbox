@@ -98,7 +98,7 @@ const Page = () => {
                   user_name: profile.user_name,
                   profile_img: profile.profile_img,
                   year: profile.year,
-                  province: profile.province || '',
+                  province: profile.province ?? '',
                 };
               }
             }
