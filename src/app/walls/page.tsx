@@ -5,12 +5,39 @@ import { supabase } from "@/lib/supabaseClient";
 import ProfileModal from "@/app/components/ProfileModal"; // Adjust the import path as needed
 import { useRouter } from "next/navigation";
 
+// Define interfaces for your data structures
+interface Profile {
+  id: number;
+  user_name: string;
+  profile_img: string | null;
+  year: string | null;
+  province: string | null;
+}
+
+interface Wall {
+  id: number;
+  content: string;
+  created_at: string;
+  sender_id: number;
+  color: string | null;
+  profiles: Profile;
+  isAnonymous?: boolean;
+}
+
+interface FamilyMember {
+  id: number;
+  user_name: string;
+  province: string | null;
+  year: string | null;
+  profile_img: string | null;
+}
+
 const Page = () => {
   const router = useRouter();
-  const [walls, setWalls] = useState<any[]>([]);
+  const [walls, setWalls] = useState<Wall[]>([]); // Using Wall interface instead of any
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedProfile, setSelectedProfile] = useState<any>(null);
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null); // Using Profile interface
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Get the paper color from the wall.color field in the database
@@ -21,7 +48,6 @@ const Page = () => {
   
   useEffect(() => {
     const fetchWalls = async () => {
-  
       try {
         // ดึงข้อมูลทั้งหมดจากตาราง walls โดยการ JOIN กับ profiles เพื่อดึงชื่อผู้ส่งและรูปโปรไฟล์
         const { data, error } = await supabase
@@ -32,8 +58,12 @@ const Page = () => {
         if (error) throw error;
 
         setWalls(data || []);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) { // Using unknown instead of any
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }
@@ -47,11 +77,11 @@ const Page = () => {
     router.push('/walls/send')
   };
 
-  const handleProfileClick = (profile: any) => {
+  const handleProfileClick = (profile: Profile) => { // Using Profile interface
     if (!profile || profile.isAnonymous) return; // Don't open modal for anonymous profiles
     
     // Convert profile data to the format expected by the ProfileModal
-    const familyMember = {
+    const familyMember: FamilyMember = {
       id: profile.id,
       user_name: profile.user_name,
       province: profile.province,
@@ -59,7 +89,7 @@ const Page = () => {
       profile_img: profile.profile_img
     };
     
-    setSelectedProfile(familyMember);
+    setSelectedProfile(familyMember as Profile);
     setIsModalOpen(true);
   };
   
