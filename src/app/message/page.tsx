@@ -90,11 +90,11 @@ const Page = () => {
                 // If profiles is an array, take the first element
                 const profile = msg.profiles[0];
                 profileData = {
-                  id: profile.id,
-                  user_name: profile.user_name,
-                  profile_img: profile.profile_img,
-                  year: profile.year,
-                  province: profile.province
+                  id: (profile as Profile).id,
+                  user_name: (profile as Profile).user_name,
+                  profile_img: (profile as Profile).profile_img,
+                  year: (profile as Profile).year,
+                  province: (profile as Profile).province
                 };
               } else if (typeof msg.profiles === 'object') {
                 // If profiles is a single object
