@@ -7,7 +7,12 @@ const Page = () => {
   const [walls, setWalls] = useState<any[]>([]) // เปลี่ยนจาก messages เป็น walls
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const paperColor = '#f5f5f5' // Define paperColor here (example: light gray color)
+  
+  // Get the paper color from the wall.color field in the database
+  const getPaperColor = (wallColor: string | null) => {
+    // Default color if the color is not available
+    return wallColor || '#f5f5f5';
+  }
   
   useEffect(() => {
     const fetchWalls = async () => {
@@ -24,7 +29,7 @@ const Page = () => {
         // ดึงข้อมูลทั้งหมดจากตาราง walls โดยการ JOIN กับ profiles เพื่อดึงชื่อผู้ส่งและรูปโปรไฟล์
         const { data, error } = await supabase
           .from('walls')
-          .select('id, content, created_at, sender_id, profiles(user_name, profile_img, year, province)')  // ตรวจสอบว่า `profiles` มี `user_name` และ `profile_img`
+          .select('id, content, created_at, sender_id, color, profiles(user_name, profile_img, year, province)')  // ตรวจสอบว่า `profiles` มี `user_name` และ `profile_img`
 
         if (error) throw error
 
@@ -74,7 +79,11 @@ const Page = () => {
       ) : (
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {walls.map((wall) => (
-            <div key={wall.id} className="rounded-lg p-4 h-full" style={{ backgroundColor: paperColor }}>
+            <div
+              key={wall.id}
+              className="rounded-lg p-4 h-full"
+              style={{ backgroundColor: getPaperColor(wall.color) }} // Fixed this line
+            >
               {/* User Profile Section */}
               <div className={`flex items-center justify-left h-auto ${wall.isAnonymous ? 'opacity-50' : ''}`}>
                 {/* Profile Image */}

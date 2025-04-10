@@ -55,41 +55,46 @@ export default function SendToWall() {
     }
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
       try {
         setLoading(true);
+        setError(null); // Reset error state
+  
         // Get current user ID
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) {
+          throw new Error('Unable to retrieve user session.');
+        }
+  
         const senderId = session?.user?.id;
-
         if (!senderId) {
           setError('กรุณาล็อกอินเพื่อส่งข้อความ');
           return;
         }
-
+  
         // Save message to the walls database table
         const { error: submitError } = await supabase
-          .from('walls') // Using 'walls' table
+          .from('walls')
           .insert({
             sender_id: senderId,
             content: message,
-            is_anonymous: isAnonymous,
-            color: paperColor
+            created_at: new Date(), // Add timestamp
+            color: paperColor,
           });
-
+  
         if (submitError) {
+          console.error('Supabase error details:', submitError);
           throw submitError;
         }
-
+  
         // Clear the input after sending
         setMessage('');
         alert('ส่งข้อความสำเร็จ!');
       } catch (err: any) {
         console.error('Error sending message:', err);
-        setError('ไม่สามารถส่งข้อความได้ โปรดลองอีกครั้ง');
+        setError(err.message || 'ไม่สามารถส่งข้อความได้ โปรดลองอีกครั้ง');
       } finally {
         setLoading(false);
       }
@@ -101,15 +106,10 @@ export default function SendToWall() {
     setIsAnonymous(!isAnonymous);
   };
 
-  // Handle paper color change
-  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPaperColor(e.target.value);
-  };
-
   const handleBack = () => {
     // Redirect to the send message page
-    window.location.href = '/walls'
-  }
+    window.location.href = '/walls';
+  };
 
   // Calculate remaining characters
   const remainingChars = 160 - message.length;
@@ -192,15 +192,15 @@ export default function SendToWall() {
           className="absolute bottom-4 right-4 bg-white p-3 rounded-full shadow-md"
           disabled={!message.trim() || loading}
         >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512"
-              fill="currentColor"
-              className={`w-6 h-6 ${message.trim() && !loading ? '' : 'text-gray-400'}`}
-              style={{ color: message.trim() && !loading ? paperColor : undefined }}
-            >
-              <path d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480l0-83.6c0-4 1.5-7.8 4.2-10.8L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z" />
-            </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            fill="currentColor"
+            className={`w-6 h-6 ${message.trim() && !loading ? '' : 'text-gray-400'}`}
+            style={{ color: message.trim() && !loading ? paperColor : undefined }}
+          >
+            <path d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480l0-83.6c0-4 1.5-7.8 4.2-10.8L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z" />
+          </svg>
         </button>
       </form>
 
