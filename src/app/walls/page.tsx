@@ -85,7 +85,7 @@ const Page = () => {
           {walls.map((wall) => (
             <div
               key={wall.id}
-              className="rounded-lg p-4 h-full"
+              className="rounded-lg p-4 h-full shadow-xl"
               style={{ backgroundColor: getPaperColor(wall.color) }} // Fixed this line
             >
               {/* User Profile Section */}
@@ -100,7 +100,7 @@ const Page = () => {
                     src={
                       wall.isAnonymous
                         ? "/anonymous-avatar.png"
-                        : wall.profiles?.profile_img || "/person.png"
+                        : wall.profiles?.profile_img || "/anonymous-avatar.png"
                     }
                     alt={wall.isAnonymous ? "Anonymous" : "Profile"}
                     className="w-full h-full object-cover"
@@ -112,7 +112,7 @@ const Page = () => {
                   <h3 className="font-medium text-gray-900 text-lg">
                     {wall.isAnonymous
                       ? "ไม่ระบุตัวตน"
-                      : wall.profiles?.user_name || "ไม่ระบุชื่อ"}
+                      : wall.profiles?.user_name || "ไม่ระบุตัวตน"}
                   </h3>
                   <p className="text-xs font-light text-gray-900 mb-1">
                     {wall.isAnonymous
