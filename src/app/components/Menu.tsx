@@ -36,11 +36,9 @@ export default function Menu() {
 
   useEffect(() => {
     const handleRedirect = async () => {
-<<<<<<< Updated upstream
-      await supabase.auth.getSession();
-=======
 
->>>>>>> Stashed changes
+      await supabase.auth.getSession();
+
       const { data: userData } = await supabase.auth.getUser();
 
       const currentUser = userData?.user;
