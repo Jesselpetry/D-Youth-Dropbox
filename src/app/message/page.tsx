@@ -180,7 +180,12 @@ const Page = () => {
                 className={`flex items-center justify-left h-auto ${
                   message.is_anonymous ? "opacity-100" : "cursor-pointer hover:opacity-80"
                 }`}
-                onClick={() => !message.is_anonymous && handleProfileClick(message.profiles)}
+                onClick={() => {
+                  if (!message.is_anonymous) {
+                    const profile = Array.isArray(message.profiles) ? message.profiles[0] : message.profiles;
+                    handleProfileClick(profile);
+                  }
+                }}
               >
                 {/* Profile Image */}
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
