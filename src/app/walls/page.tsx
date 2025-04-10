@@ -21,11 +21,11 @@ const Page = () => {
       } = await supabase.auth.getSession();
 
       // ถ้าไม่มี session หรือผู้ใช้ไม่ได้ล็อกอิน
-      if (!session || !session.user) {
-        setError("กรุณาล็อกอินเพื่อดูข้อความ");
-        setLoading(false);
-        return;
-      }
+      // if (!session || !session.user) {
+      //   setError("กรุณาล็อกอินเพื่อดูข้อความ");
+      //   setLoading(false);
+      //   return;
+      // }
 
       try {
         // ดึงข้อมูลทั้งหมดจากตาราง walls โดยการ JOIN กับ profiles เพื่อดึงชื่อผู้ส่งและรูปโปรไฟล์
