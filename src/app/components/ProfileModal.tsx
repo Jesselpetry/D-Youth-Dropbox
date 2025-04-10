@@ -64,7 +64,7 @@ export default function ProfileModal({ member, onClose, onSendMessage }: Profile
 
           <button 
             onClick={() => window.open(`https://www.instagram.com/${member.user_name}`, '_blank')}
-            className="mb-4 w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] hover:opacity-90 text-white py-3 px-4 rounded-lg transition-colors"
+            className="cursor-pointer mb-4 w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] hover:opacity-90 text-white py-3 px-4 rounded-lg transition-colors"
           >
             <RiInstagramFill size={20} />
             <span>Instagram</span>
@@ -72,7 +72,7 @@ export default function ProfileModal({ member, onClose, onSendMessage }: Profile
 
           <button 
             onClick={() => window.location.href = `/message/${member.id}`}
-            className="w-full flex items-center justify-center space-x-2 bg-green-600 hover:bg-green-500 text-white py-3 px-4 rounded-lg transition-colors"
+            className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-green-600 hover:bg-green-500 text-white py-3 px-4 rounded-lg transition-colors"
           >
             <IoMdSend size={20} />
             <span>ส่งข้อความ</span>

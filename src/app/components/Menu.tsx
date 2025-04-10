@@ -1,16 +1,20 @@
-// components/Menu.tsx
 "use client";
 import * as FaIcons from "react-icons/fa";
 import { FaMessage } from "react-icons/fa6";
 import { BsFillGrid3X3GapFill } from "react-icons/bs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
-import { use } from "react";
 
 const navItems = [
+  {
+    icon: <BsFillGrid3X3GapFill size={32} />,
+    label: "กำแพง",
+    sublabel: "Walls",
+    path: "",
+  },
   {
     icon: <FaIcons.FaUsers size={32} />,
     label: "ครอบครัว",
@@ -23,53 +27,37 @@ const navItems = [
     sublabel: "Message",
     path: "message",
   },
-  {
-    icon: <BsFillGrid3X3GapFill size={32} />,
-    label: "กำแพง",
-    sublabel: "Walls",
-    path: "walls",
-  },
-  {
-    icon: <FaIcons.FaUser size={32} />,
-    label: "โปรไฟล์",
-    sublabel: "Profile",
-    path: "profile",
-  },
 ];
 
 export default function Menu() {
   const pathname = usePathname();
   const router = useRouter();
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const handleRedirect = async () => {
       const { data: sessionData } = await supabase.auth.getSession();
       const { data: userData } = await supabase.auth.getUser();
-  
-      const user = userData?.user;
-  
 
- 
-  
-      // ✅ ถ้ามี user แล้ว เช็คว่าตั้งชื่อ profile หรือยัง
-      if (user) {
+      const currentUser = userData?.user;
+      setUser(currentUser);
+
+      if (currentUser) {
         const { data: profile, error } = await supabase
           .from("profiles")
           .select("user_name")
-          .eq("id", user.id)
+          .eq("id", currentUser.id)
           .single();
-  
+
         if (!profile?.user_name && pathname !== "/setup-profile") {
           router.push("/setup-profile");
         }
       }
     };
-  
+
     handleRedirect();
   }, [pathname, router]);
-  
 
-  // ถ้า path เป็น /profile ให้ไม่ render เมนูเลย
   if (
     pathname === "/login" ||
     pathname === "/setup-profile" ||
@@ -80,7 +68,7 @@ export default function Menu() {
 
   return (
     <div className="fixed bottom-5 left-0 right-0 w-full flex justify-center px-4 pb-2 z-10 max-w-screen mx-auto">
-      <div className="w-full max-w-sm p-5 rounded-3xl bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light shadow-lg shadow-black/20">
+      <div className="w-full max-w-sm p-4 rounded-3xl bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light shadow-lg shadow-black/20">
         <div className="flex items-center justify-between w-full">
           {navItems.map((item, index) => {
             const isActive = pathname === `/${item.path}`;
@@ -102,6 +90,32 @@ export default function Menu() {
               </Link>
             );
           })}
+
+          {/* ปุ่ม Profile หรือ Login */}
+          <Link
+            href={user ? "/profile" : "/login"}
+            className={`flex flex-col items-center transition-all duration-200 hover:scale-110 group ${
+              !user ? "bg-green-600 p-1 rounded-2xl" : ""
+            }`}
+          >
+            <div
+              className={`text-sm flex flex-col items-center justify-center text-center   
+                ${pathname === "/profile" ? "drop-shadow-lg" : "opacity-50"}
+                    ${!user ? "opacity-100" : ""}
+              } transition-all duration-200 group-hover:opacity-100 group-hover:drop-shadow-md space-y-2`}
+            >
+              <div className={`drop-shadow-md `}>
+                <FaIcons.FaUser size={32} />
+              </div>
+              <span
+                className={`drop-shadow-sm font-medium ${
+                  !user ? "drop-shadow-none opacity-100 " : ""
+                }`}
+              >
+                {user ? "โปรไฟล์" : "เข้าสู่ระบบ"}
+              </span>
+            </div>
+          </Link>
         </div>
       </div>
     </div>

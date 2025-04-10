@@ -257,7 +257,7 @@ export default function ProfilePage() {
           <div className="pt-6 space-y-4">
             <button
               onClick={handleSubmit}
-              className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white text-lg py-3 rounded-xl font-medium transition-colors flex items-center justify-center"
+              className="cursor-pointer w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white text-lg py-3 rounded-xl font-medium transition-colors flex items-center justify-center"
             >
               <FiSave className="mr-2" />
               บันทึกการเปลี่ยนแปลง
@@ -265,7 +265,7 @@ export default function ProfilePage() {
 
             <button
               onClick={handleLogout}
-              className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-lg py-3 rounded-xl font-medium transition-colors flex items-center justify-center"
+              className="cursor-pointer w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-lg py-3 rounded-xl font-medium transition-colors flex items-center justify-center"
             >
               <FiLogOut className="mr-2" />
               ออกจากระบบ

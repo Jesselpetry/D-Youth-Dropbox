@@ -3,8 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import ProfileModal from "@/app/components/ProfileModal"; // Adjust the import path as needed
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+  const router = useRouter();
   const [walls, setWalls] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +47,7 @@ const Page = () => {
 
   const handleAddMessage = () => {
     // Redirect to the send message page
-    window.location.href = "/walls/send";
+    router.push('/walls/send')
   };
 
   const handleProfileClick = (profile: any) => {
@@ -87,7 +89,7 @@ const Page = () => {
         </div>
         <button
           onClick={handleAddMessage}
-          className="bg-white text-left text-green-900 font-medium py-2 px-4 rounded-lg flex items-center"
+          className="bg-white text-left text-green-900 font-medium py-2 px-4 rounded-lg flex items-center cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -107,9 +109,10 @@ const Page = () => {
           {walls.map((wall) => (
             <div
               key={wall.id}
-              className="rounded-lg p-4 h-full shadow-xl"
+              className="rounded-lg p-4 h-full shadow-xl flex-col flex justify-between"
               style={{ backgroundColor: getPaperColor(wall.color) }}
             >
+              <div>
               {/* User Profile Section - Now Clickable */}
               <div
                 className={`flex items-center justify-left h-auto ${
@@ -122,8 +125,8 @@ const Page = () => {
                   <img
                     src={
                       wall.isAnonymous
-                        ? "/anonymous-avatar.png"
-                        : wall.profiles?.profile_img || "/anonymous-avatar.png"
+                        ? "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png"
+                        : wall.profiles?.profile_img || "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png"
                     }
                     alt={wall.isAnonymous ? "Anonymous" : "Profile"}
                     className="w-full h-full object-cover"
@@ -132,7 +135,7 @@ const Page = () => {
 
                 {/* User Info */}
                 <div className="ml-4">
-                  <h3 className="font-medium text-gray-900 text-lg">
+                  <h3 className="font-medium text-gray-900 text-base">
                     {wall.isAnonymous
                       ? "ไม่ระบุตัวตน"
                       : wall.profiles?.user_name || "ไม่ระบุตัวตน"}
@@ -152,7 +155,8 @@ const Page = () => {
 
               {/* Message Content */}
               <div className="mt-4">
-                <p className="text-gray-900 break-words">{wall.content}</p>
+                <p className="text-blue-950 break-words font-medium">{wall.content}</p>
+              </div>
               </div>
 
               {/* Timestamp */}

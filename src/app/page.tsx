@@ -1,9 +1,9 @@
 import React from 'react'
-
-function Test() {
+import Page from './walls/page'
+function Home() {
   return (
-    <div>Test</div>
+    <div><Page /></div>
   )
 }
 
-export default Test
+export default Home

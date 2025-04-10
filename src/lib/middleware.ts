@@ -42,7 +42,7 @@ export const updateSession = async (request: NextRequest) => {
     
  
         // protected routes
-        const publicPaths = ["/login", "/setup-profile", "/auth", "/auth/callback"];
+        const publicPaths = ["/login", "/setup-profile", "/auth", "/auth/callback", '/family'];
         
         // Check if current path is in public paths
         const isPublicPath = publicPaths.some(path => 
@@ -53,7 +53,7 @@ export const updateSession = async (request: NextRequest) => {
         if (user.error && !isPublicPath &&   request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls") {
             return NextResponse.redirect(new URL("/login", request.url));
         }
-        console.log('test')
+
 
         return response;
     } catch (e) {

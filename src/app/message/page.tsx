@@ -102,9 +102,10 @@ const Page = () => {
           {messages.map((message) => (
             <div
               key={message.id}
-              className="rounded-lg p-4 h-full shadow-xl"
+              className="rounded-lg p-4 h-full shadow-xl flex-col flex justify-between"
               style={{ backgroundColor: getPaperColor(message.color) }}
             >
+              <div>
               {/* User Profile Section - Now Clickable */}
               <div
                 className={`flex items-center justify-left h-auto ${
@@ -127,7 +128,7 @@ const Page = () => {
 
                 {/* User Info */}
                 <div className="ml-4">
-                  <h3 className="font-medium text-gray-900 text-lg">
+                  <h3 className="font-medium text-gray-900 text-base">
                     {message.is_anonymous
                       ? "ไม่ระบุตัวตน"
                       : message.profiles?.user_name || "ไม่ระบุตัวตน"}
@@ -147,9 +148,9 @@ const Page = () => {
 
               {/* Message Content */}
               <div className="mt-4">
-                <p className="text-gray-900 break-words">{message.content}</p>
+                <p className="text-blue-950 break-words font-medium">{message.content}</p>
               </div>
-
+              </div>
               {/* Timestamp */}
               <div className="mt-4">
                 <span className="text-gray-600 font-light text-xs">
