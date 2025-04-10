@@ -2,11 +2,14 @@
 
 import React, { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
+import ProfileModal from "@/app/components/ProfileModal" // Adjust the import path as needed
 
 const Page = () => {
   const [messages, setMessages] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [selectedProfile, setSelectedProfile] = useState<any>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   // Function to get paper color
   const getPaperColor = (color: string | null) => {
@@ -28,6 +31,7 @@ const Page = () => {
         const userId = session.user.id // ใช้ user.id จาก session
 
         // ดึงข้อความที่ receiver_id ตรงกับ id ของผู้ใช้
+        // Added order by created_at in descending order to display latest messages first
         const { data, error } = await supabase
           .from('messages')
           .select(`
@@ -37,9 +41,10 @@ const Page = () => {
           sender_id,
           is_anonymous,
           color,
-          profiles:sender_id(user_name, profile_img, year, province)
+          profiles:sender_id(id, user_name, profile_img, year, province)
         `)
           .eq('receiver_id', userId)
+          .order('created_at', { ascending: false }) // Sort by created_at in descending order (newest first)
 
         if (error) throw error
 
@@ -53,6 +58,34 @@ const Page = () => {
 
     fetchMessages()
   }, [])
+
+  // Handle profile click function from the wall component
+  const handleProfileClick = (profile: any) => {
+    if (!profile || profile.is_anonymous) return; // Don't open modal for anonymous profiles
+    
+    // Convert profile data to the format expected by the ProfileModal
+    const familyMember = {
+      id: profile.id,
+      user_name: profile.user_name,
+      province: profile.province,
+      year: profile.year,
+      profile_img: profile.profile_img
+    };
+    
+    setSelectedProfile(familyMember);
+    setIsModalOpen(true);
+  };
+  
+  // Handle modal close function
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProfile(null);
+  };
+  
+  // Handle send message function
+  const handleSendMessage = (memberId: number) => {
+    window.location.href = `/message/${memberId}`;
+  };
 
   if (loading) return <div>กำลังโหลด...</div>
   if (error) return <div>{error}</div>
@@ -72,10 +105,12 @@ const Page = () => {
               className="rounded-lg p-4 h-full shadow-xl"
               style={{ backgroundColor: getPaperColor(message.color) }}
             >
-              {/* User Profile Section */}
+              {/* User Profile Section - Now Clickable */}
               <div
-                className={`flex items-center justify-left h-auto ${message.is_anonymous ? "opacity-50" : ""
-                  }`}
+                className={`flex items-center justify-left h-auto ${
+                  message.is_anonymous ? "opacity-100" : "cursor-pointer hover:opacity-80"
+                }`}
+                onClick={() => !message.is_anonymous && handleProfileClick(message.profiles)}
               >
                 {/* Profile Image */}
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
@@ -104,7 +139,7 @@ const Page = () => {
                   </p>
                   <span className="bg-gray-900 text-white text-xs px-4 py-1 rounded-lg">
                     {message.is_anonymous
-                      ? "---"
+                      ? "ไม่ระบุปี"
                       : message.profiles?.year || "ไม่ระบุปี"}
                   </span>
                 </div>
@@ -124,6 +159,15 @@ const Page = () => {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Profile Modal */}
+      {isModalOpen && selectedProfile && (
+        <ProfileModal 
+          member={selectedProfile} 
+          onClose={handleCloseModal}
+          onSendMessage={handleSendMessage}
+        />
       )}
     </div>
   )
