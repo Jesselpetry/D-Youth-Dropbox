@@ -24,16 +24,6 @@ interface Message {
   profiles: Profile | null
 }
 
-// Define a separate interface for raw data from Supabase
-interface RawMessage {
-  id: number
-  content: string
-  created_at: string
-  sender_id: string
-  is_anonymous: boolean
-  color: string | null
-  profiles: Profile | Profile[] | null
-}
 
 interface FamilyMember {
   id: string
