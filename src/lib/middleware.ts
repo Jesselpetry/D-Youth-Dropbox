@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
+import path from "path";
 
 export const updateSession = async (request: NextRequest) => {
     // This `try/catch` block is only here for the interactive tutorial.
@@ -38,13 +39,22 @@ export const updateSession = async (request: NextRequest) => {
         // This will refresh session if expired - required for Server Components
         // https://supabase.com/docs/guides/auth/server-side/nextjs
         const user = await supabase.auth.getUser();
-
+    
+ 
         // protected routes
-        if (!(request.nextUrl.pathname.startsWith("/login")) && !(request.nextUrl.pathname.startsWith("/")) && user.error) {
+        const publicPaths = ["/login", "/setup-profile", "/auth", "/auth/callback"];
+        
+        // Check if current path is in public paths
+        const isPublicPath = publicPaths.some(path => 
+            request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith(path)
+        );
+        
+        // Redirect to login if user has error and not on a public path
+        if (user.error && !isPublicPath &&   request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls") {
             return NextResponse.redirect(new URL("/login", request.url));
         }
-        
-      
+        console.log('test')
+
         return response;
     } catch (e) {
         // If you are here, a Supabase client could not be created!
