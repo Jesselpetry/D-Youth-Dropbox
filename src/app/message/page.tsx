@@ -11,6 +11,7 @@ interface Profile {
   profile_img?: string
   year?: string
   province?: string
+  is_anonymous?: boolean
 }
 
 interface Message {
@@ -58,7 +59,6 @@ const Page = () => {
         const userId = session.user.id // ใช้ user.id จาก session
 
         // ดึงข้อความที่ receiver_id ตรงกับ id ของผู้ใช้
-        // Added order by created_at in descending order to display latest messages first
         const { data, error } = await supabase
           .from('messages')
           .select(`
@@ -75,7 +75,20 @@ const Page = () => {
 
         if (error) throw error
 
-        setMessages(data || [])
+        // Transform the data to match our Message interface
+        const typedMessages: Message[] = data?.map((msg: any) => ({
+          id: msg.id,
+          content: msg.content,
+          created_at: msg.created_at,
+          sender_id: msg.sender_id,
+          is_anonymous: msg.is_anonymous,
+          color: msg.color,
+          profiles: Array.isArray(msg.profiles) && msg.profiles.length > 0 
+            ? msg.profiles[0] // Take the first element if it's an array
+            : msg.profiles // Otherwise use as is
+        })) || []
+
+        setMessages(typedMessages)
       } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
         setError(errorMessage)
@@ -111,7 +124,7 @@ const Page = () => {
   }
   
   // Handle send message function
-  const handleSendMessage = (memberId: number) => {
+  const handleSendMessage = (memberId: string | number) => {
     window.location.href = `/message/${memberId}`
   }
 
