@@ -2,11 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import ProfileModal from "@/app/components/ProfileModal"; // Adjust the import path as needed
 
 const Page = () => {
-  const [walls, setWalls] = useState<any[]>([]) // เปลี่ยนจาก messages เป็น walls
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [walls, setWalls] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Get the paper color from the wall.color field in the database
   const getPaperColor = (wallColor: string | null) => {
@@ -20,18 +23,11 @@ const Page = () => {
         data: { session },
       } = await supabase.auth.getSession();
 
-      // ถ้าไม่มี session หรือผู้ใช้ไม่ได้ล็อกอิน
-      // if (!session || !session.user) {
-      //   setError("กรุณาล็อกอินเพื่อดูข้อความ");
-      //   setLoading(false);
-      //   return;
-      // }
-
       try {
         // ดึงข้อมูลทั้งหมดจากตาราง walls โดยการ JOIN กับ profiles เพื่อดึงชื่อผู้ส่งและรูปโปรไฟล์
         const { data, error } = await supabase
           .from('walls')
-          .select('id, content, created_at, sender_id, color, profiles(user_name, profile_img, year, province)')  // ตรวจสอบว่า `profiles` มี `user_name` และ `profile_img`
+          .select('id, content, created_at, sender_id, color, profiles(id, user_name, profile_img, year, province)')  // Added id to profiles
           .order('created_at', { ascending: false }); // Sort by `created_at` in descending order (newest first)
 
         if (error) throw error;
@@ -50,6 +46,31 @@ const Page = () => {
   const handleAddMessage = () => {
     // Redirect to the send message page
     window.location.href = "/walls/send";
+  };
+
+  const handleProfileClick = (profile: any) => {
+    if (!profile || profile.isAnonymous) return; // Don't open modal for anonymous profiles
+    
+    // Convert profile data to the format expected by the ProfileModal
+    const familyMember = {
+      id: profile.id,
+      user_name: profile.user_name,
+      province: profile.province,
+      year: profile.year,
+      profile_img: profile.profile_img
+    };
+    
+    setSelectedProfile(familyMember);
+    setIsModalOpen(true);
+  };
+  
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProfile(null);
+  };
+  
+  const handleSendMessage = (memberId: number) => {
+    window.location.href = `/message/${memberId}`;
   };
 
   if (loading) return <div>กำลังโหลด...</div>;
@@ -87,13 +108,14 @@ const Page = () => {
             <div
               key={wall.id}
               className="rounded-lg p-4 h-full shadow-xl"
-              style={{ backgroundColor: getPaperColor(wall.color) }} // Fixed this line
+              style={{ backgroundColor: getPaperColor(wall.color) }}
             >
-              {/* User Profile Section */}
+              {/* User Profile Section - Now Clickable */}
               <div
                 className={`flex items-center justify-left h-auto ${
-                  wall.isAnonymous ? "opacity-50" : ""
+                  wall.isAnonymous ? "opacity-50" : "cursor-pointer hover:opacity-80"
                 }`}
+                onClick={() => !wall.isAnonymous && handleProfileClick(wall.profiles)}
               >
                 {/* Profile Image */}
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
@@ -142,6 +164,15 @@ const Page = () => {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Profile Modal */}
+      {isModalOpen && selectedProfile && (
+        <ProfileModal 
+          member={selectedProfile} 
+          onClose={handleCloseModal}
+          onSendMessage={handleSendMessage}
+        />
       )}
     </div>
   );
