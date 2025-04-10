@@ -73,22 +73,36 @@ export default function SendToWall() {
           setError('กรุณาล็อกอินเพื่อส่งข้อความ');
           return;
         }
-  
-        // Save message to the walls database table
-        const { error: submitError } = await supabase
-          .from('walls')
-          .insert({
-            sender_id: senderId,
-            content: message,
-            created_at: new Date(), // Add timestamp
-            color: paperColor,
-          });
-  
+
+        let submitError;
+
+        if (!isAnonymous) {
+          const { error } = await supabase
+            .from('walls')
+            .insert({
+              sender_id: senderId,
+              content: message,
+              is_anonymous: isAnonymous,
+              color: paperColor,
+            });
+          submitError = error;
+        } else {
+          const { error } = await supabase
+            .from('walls')
+            .insert({
+              sender_id: null,
+              content: message,
+              is_anonymous: isAnonymous,
+              color: paperColor,
+            });
+          submitError = error;
+        }
+        
+
         if (submitError) {
           console.error('Supabase error details:', submitError);
           throw submitError;
-        }
-  
+        } 
         // Clear the input after sending
         setMessage('');
         alert('ส่งข้อความสำเร็จ!');

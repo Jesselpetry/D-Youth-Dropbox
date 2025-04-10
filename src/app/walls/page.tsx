@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabaseClient'
+import React, { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 const Page = () => {
   const [walls, setWalls] = useState<any[]>([]) // เปลี่ยนจาก messages เป็น walls
@@ -16,13 +16,15 @@ const Page = () => {
   
   useEffect(() => {
     const fetchWalls = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
       // ถ้าไม่มี session หรือผู้ใช้ไม่ได้ล็อกอิน
       if (!session || !session.user) {
-        setError('กรุณาล็อกอินเพื่อดูข้อความ')
-        setLoading(false)
-        return
+        setError("กรุณาล็อกอินเพื่อดูข้อความ");
+        setLoading(false);
+        return;
       }
 
       try {
@@ -31,33 +33,35 @@ const Page = () => {
           .from('walls')
           .select('id, content, created_at, sender_id, color, profiles(user_name, profile_img, year, province)')  // ตรวจสอบว่า `profiles` มี `user_name` และ `profile_img`
 
-        if (error) throw error
+        if (error) throw error;
 
-        setWalls(data || [])
+        setWalls(data || []);
       } catch (err: any) {
-        setError(err.message)
+        setError(err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchWalls()
-  }, [])
+    fetchWalls();
+  }, []);
 
   const handleAddMessage = () => {
     // Redirect to the send message page
-    window.location.href = '/walls/send'
-  }
+    window.location.href = "/walls/send";
+  };
 
-  if (loading) return <div>กำลังโหลด...</div>
-  if (error) return <div>{error}</div>
+  if (loading) return <div>กำลังโหลด...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="text-left my-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-white">กำแพง</h1>
-          <h2 className="text-xl font-light text-white mt-2 opacity-60">Walls</h2>
+          <h2 className="text-xl font-light text-white mt-2 opacity-60">
+            Walls
+          </h2>
         </div>
         <button
           onClick={handleAddMessage}
@@ -85,11 +89,19 @@ const Page = () => {
               style={{ backgroundColor: getPaperColor(wall.color) }} // Fixed this line
             >
               {/* User Profile Section */}
-              <div className={`flex items-center justify-left h-auto ${wall.isAnonymous ? 'opacity-50' : ''}`}>
+              <div
+                className={`flex items-center justify-left h-auto ${
+                  wall.isAnonymous ? "opacity-50" : ""
+                }`}
+              >
                 {/* Profile Image */}
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
                   <img
-                    src={wall.isAnonymous ? "/anonymous-avatar.png" : wall.profiles.profile_img || "/person.png"}
+                    src={
+                      wall.isAnonymous
+                        ? "/anonymous-avatar.png"
+                        : wall.profiles?.profile_img || "/person.png"
+                    }
                     alt={wall.isAnonymous ? "Anonymous" : "Profile"}
                     className="w-full h-full object-cover"
                   />
@@ -98,22 +110,26 @@ const Page = () => {
                 {/* User Info */}
                 <div className="ml-4">
                   <h3 className="font-medium text-gray-900 text-lg">
-                    {wall.isAnonymous ? "ไม่ระบุตัวตน" : wall.profiles.user_name || "คุณ"}
+                    {wall.isAnonymous
+                      ? "ไม่ระบุตัวตน"
+                      : wall.profiles?.user_name || "ไม่ระบุชื่อ"}
                   </h3>
                   <p className="text-xs font-light text-gray-900 mb-1">
-                    {wall.isAnonymous ? "ไม่ระบุจังหวัด" : wall.profiles.province || "ไม่ระบุจังหวัด"}
+                    {wall.isAnonymous
+                      ? "ไม่ระบุจังหวัด"
+                      : wall.profiles?.province || "ไม่ระบุจังหวัด"}
                   </p>
                   <span className="bg-gray-900 text-white text-xs px-4 py-1 rounded-lg">
-                    {wall.isAnonymous ? "---" : wall.profiles.year || "ไม่ระบุปี"}
+                    {wall.isAnonymous
+                      ? "---"
+                      : wall.profiles?.year || "ไม่ระบุปี"}
                   </span>
                 </div>
               </div>
 
               {/* Message Content */}
               <div className="mt-4">
-                <p className="text-gray-900 break-words">
-                  {wall.content}
-                </p>
+                <p className="text-gray-900 break-words">{wall.content}</p>
               </div>
 
               {/* Timestamp */}
@@ -127,7 +143,7 @@ const Page = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
