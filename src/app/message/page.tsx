@@ -25,7 +25,7 @@ interface Message {
 }
 
 interface FamilyMember {
-  id: string
+  id: number
   user_name: string
   province?: string
   year?: string
@@ -98,7 +98,7 @@ const Page = () => {
                   user_name: profile.user_name,
                   profile_img: profile.profile_img,
                   year: profile.year,
-                  province: profile.province,
+                  province: profile.province || '',
                 };
               }
             }
@@ -134,9 +134,9 @@ const Page = () => {
     
     // Convert profile data to the format expected by the ProfileModal
     const familyMember: FamilyMember = {
-      id: profile.id,
+      id: parseInt(profile.id, 10), // Convert string to number
       user_name: profile.user_name,
-      province: profile.province,
+      province: profile.province || '',
       year: profile.year,
       profile_img: profile.profile_img
     }
