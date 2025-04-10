@@ -24,7 +24,6 @@ interface Message {
   profiles: Profile | null
 }
 
-
 interface FamilyMember {
   id: string
   user_name: string
@@ -85,24 +84,31 @@ const Page = () => {
             let profileData: Profile | null = null;
             
             if (msg.profiles) {
+              // Check what type of data we're dealing with
+              // In Supabase joins, the data can come in different formats
               if (Array.isArray(msg.profiles) && msg.profiles.length > 0) {
                 // If profiles is an array, take the first element
+                const profile = msg.profiles[0];
                 profileData = {
-                  id: msg.profiles[0].id,
-                  user_name: msg.profiles[0].user_name,
-                  profile_img: msg.profiles[0].profile_img,
-                  year: msg.profiles[0].year,
-                  province: msg.profiles[0].province
+                  id: profile.id,
+                  user_name: profile.user_name,
+                  profile_img: profile.profile_img,
+                  year: profile.year,
+                  province: profile.province
                 };
               } else if (typeof msg.profiles === 'object') {
                 // If profiles is a single object
-                profileData = {
-                  id: msg.profiles.id,
-                  user_name: msg.profiles.user_name,
-                  profile_img: msg.profiles.profile_img,
-                  year: msg.profiles.year,
-                  province: msg.profiles.province
-                };
+                const profile = msg.profiles;
+                // Type guard to ensure the object has the expected shape
+                if ('id' in profile && 'user_name' in profile) {
+                  profileData = {
+                    id: profile.id,
+                    user_name: profile.user_name,
+                    profile_img: profile.profile_img,
+                    year: profile.year,
+                    province: profile.province
+                  };
+                }
               }
             }
             
