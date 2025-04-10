@@ -21,10 +21,7 @@ const Page = () => {
   
   useEffect(() => {
     const fetchWalls = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
+  
       try {
         // ดึงข้อมูลทั้งหมดจากตาราง walls โดยการ JOIN กับ profiles เพื่อดึงชื่อผู้ส่งและรูปโปรไฟล์
         const { data, error } = await supabase

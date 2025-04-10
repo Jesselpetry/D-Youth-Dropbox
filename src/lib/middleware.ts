@@ -56,7 +56,7 @@ export const updateSession = async (request: NextRequest) => {
 
 
         return response;
-    } catch (error) {
+    } catch {
         // If you are here, a Supabase client could not be created!
         // This is likely because you have not set up environment variables.
         // Check out http://:3000 for Next Steps.

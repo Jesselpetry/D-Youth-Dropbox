@@ -4,6 +4,7 @@ const nextConfig = {
     domains: [
       'axdoxguzojpdpopmflfu.supabase.co',
       'picsum.photos',
+      'i.ibb.co'
     ],
   },
 }
