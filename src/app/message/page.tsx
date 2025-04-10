@@ -31,16 +31,16 @@ const Page = () => {
         const { data, error } = await supabase
           .from('messages')
           .select(`
-            id,
-            content,
-            created_at,
-            sender_id,
-            is_anonymous,
-            color,
-            profiles:user_id(user_name, profile_img, year, province)
-          `)
+          id,
+          content,
+          created_at,
+          sender_id,
+          is_anonymous,
+          color,
+          profiles:sender_id(user_name, profile_img, year, province)
+        `)
           .eq('receiver_id', userId)
-        
+
         if (error) throw error
 
         setMessages(data || [])
@@ -74,9 +74,8 @@ const Page = () => {
             >
               {/* User Profile Section */}
               <div
-                className={`flex items-center justify-left h-auto ${
-                  message.is_anonymous ? "opacity-50" : ""
-                }`}
+                className={`flex items-center justify-left h-auto ${message.is_anonymous ? "opacity-50" : ""
+                  }`}
               >
                 {/* Profile Image */}
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
