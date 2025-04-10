@@ -127,23 +127,6 @@ const Page = () => {
 
     fetchMessages()
   }, [])
-
-  // Handle profile click function from the wall component
-  const handleProfileClick = (profile: Profile | null) => {
-    if (!profile || profile.is_anonymous) return // Don't open modal for anonymous profiles
-    
-    // Convert profile data to the format expected by the ProfileModal
-    const familyMember: FamilyMember = {
-      id: parseInt(profile.id, 10), // Convert string to number
-      user_name: profile.user_name,
-      province: profile.province || '',
-      year: profile.year,
-      profile_img: profile.profile_img
-    }
-    
-    setSelectedProfile(familyMember)
-    setIsModalOpen(true)
-  }
   
   // Handle modal close function
   const handleCloseModal = () => {
@@ -180,12 +163,6 @@ const Page = () => {
                 className={`flex items-center justify-left h-auto ${
                   message.is_anonymous ? "opacity-100" : "cursor-pointer hover:opacity-80"
                 }`}
-                onClick={() => {
-                  if (!message.is_anonymous) {
-                    const profile = Array.isArray(message.profiles) ? message.profiles[0] : message.profiles;
-                    handleProfileClick(profile);
-                  }
-                }}
               >
                 {/* Profile Image */}
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
@@ -240,15 +217,6 @@ const Page = () => {
             </div>
           ))}
         </div>
-      )}
-
-      {/* Profile Modal */}
-      {isModalOpen && selectedProfile && (
-        <ProfileModal 
-          member={selectedProfile} 
-          onClose={handleCloseModal}
-          onSendMessage={handleSendMessage}
-        />
       )}
     </div>
   )
