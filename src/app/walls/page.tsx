@@ -39,24 +39,46 @@ const Page = () => {
     fetchWalls()
   }, [])
 
+  const handleAddMessage = () => {
+    // Logic for adding a new message (e.g., opening a modal or redirecting)
+    alert('เปิดฟอร์มสำหรับเพิ่มข้อความใหม่');
+  }
+
   if (loading) return <div>กำลังโหลด...</div>
   if (error) return <div>{error}</div>
 
   return (
     <div className="text-left my-6">
-      <h1 className="text-3xl font-bold text-white">กำแพง</h1>
-      <h2 className="text-xl font-light text-white mt-2 opacity-60">Walls</h2>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-white">กำแพง</h1>
+          <h2 className="text-xl font-light text-white mt-2 opacity-60">Walls</h2>
+        </div>
+        <button
+          onClick={handleAddMessage}
+          className="bg-white text-left text-green-900 font-medium py-2 px-4 rounded-lg flex items-center"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+            className="h-4 w-4 mr-2 fill-current"
+          >
+            <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" />
+          </svg>
+          ข้อความ
+        </button>
+      </div>
 
       {walls.length === 0 ? (
         <p className="text-white mt-4">ยังไม่มีข้อความ</p>
       ) : (
-        <div className="mt-4 space-y-4">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {walls.map((wall) => (
-            <div key={wall.id} className="rounded-lg p-4 mt-6 relative" style={{ backgroundColor: paperColor }}>
+            <div key={wall.id} className="rounded-lg p-4 h-full" style={{ backgroundColor: paperColor }}>
               {/* User Profile Section */}
               <div className={`flex items-center justify-left h-auto ${wall.isAnonymous ? 'opacity-50' : ''}`}>
                 {/* Profile Image */}
-                <div className="w-18 h-18 rounded-full overflow-hidden bg-gray-500">
+                <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
                   <img
                     src={wall.isAnonymous ? "/anonymous-avatar.png" : wall.profiles.profile_img || "/person.png"}
                     alt={wall.isAnonymous ? "Anonymous" : "Profile"}
@@ -80,7 +102,9 @@ const Page = () => {
 
               {/* Message Content */}
               <div className="mt-4">
-                <p className="text-gray-900">{wall.content}</p>
+                <p className="text-gray-900 break-words">
+                  {wall.content}
+                </p>
               </div>
 
               {/* Timestamp */}
