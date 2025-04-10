@@ -76,7 +76,18 @@ const Page = () => {
         if (error) throw error
 
         // Transform the data to match our Message interface
-        const typedMessages: Message[] = data?.map((msg: any) => ({
+        // Define the structure for raw message data from Supabase
+        interface RawMessage {
+          id: number;
+          content: string;
+          created_at: string;
+          sender_id: string;
+          is_anonymous: boolean;
+          color: string | null;
+          profiles: Profile | Profile[] | null;
+        }
+
+        const typedMessages: Message[] = data?.map((msg: RawMessage) => ({
           id: msg.id,
           content: msg.content,
           created_at: msg.created_at,
