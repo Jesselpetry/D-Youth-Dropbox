@@ -98,11 +98,11 @@ export default function Menu() {
           <Link
             href={user ? "/profile" : "/login"}
             className={`flex flex-col items-center transition-all duration-200 hover:scale-110 group ${
-              !user ? "bg-green-600 p-1 rounded-2xl" : ""
+              !user ? "bg-white p-2 rounded-xl" : ""
             }`}
           >
             <div
-              className={`text-sm flex flex-col items-center justify-center text-center   
+              className={`text-sm text-green-900 flex flex-col items-center justify-center text-center   
                 ${pathname === "/profile" ? "drop-shadow-lg" : "opacity-50"}
                     ${!user ? "opacity-100" : ""}
               } transition-all duration-200 group-hover:opacity-100 group-hover:drop-shadow-md space-y-2`}
