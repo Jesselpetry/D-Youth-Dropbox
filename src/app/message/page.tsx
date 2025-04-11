@@ -20,7 +20,7 @@ const MessagesPage = () => {
         const { error: sessionError } = await supabase.auth.getSession();
         
         if (sessionError) {
-          throw new Error('Failed to get user session');
+          throw new Error('Failed to get user session // Please Login');
         }
         
       } catch (err) {
