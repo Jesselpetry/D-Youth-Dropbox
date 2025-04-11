@@ -14,18 +14,17 @@ export default function AuthCallback() {
       const user = userData?.user;
       if (!user) return;
 
-      // ดึงข้อมูลจาก table profiles (หรือชื่อที่คุณใช้จริง)
+      // Get profile data
       const { data: profile, error } = await supabase
-        .from("profiles") // 👈 เปลี่ยนถ้า table ไม่ชื่อ profiles
+        .from("profiles")
         .select("user_name")
         .eq("id", user.id)
         .single();
 
       if (!error && profile?.user_name) {
-        // มี user_name แล้ว → ไปหน้า home
+        // Use the router's push method which will respect the deployment environment
         router.push("/");
       } else {
-        // ยังไม่มี user_name → ไป setup profile
         router.push("/setup-profile");
       }
     };
