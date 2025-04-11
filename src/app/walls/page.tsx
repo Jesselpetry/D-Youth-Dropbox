@@ -19,7 +19,7 @@ interface Wall {
   created_at: string;
   sender_id: number;
   color: string | null;
-  profiles: Profile;
+  profiles: Profile | Profile[];  // Updated to accept either a single Profile or an array
   isAnonymous?: boolean;
 }
 
@@ -46,7 +46,13 @@ const Page = () => {
 
         if (error) throw error;
 
-        setWalls(data || []);
+        // Transform the data to ensure profiles is handled correctly
+        const transformedData = data?.map(wall => ({
+          ...wall,
+          profiles: Array.isArray(wall.profiles) && wall.profiles.length > 0 ? wall.profiles[0] : wall.profiles
+        })) || [];
+
+        setWalls(transformedData);
       } catch (err: unknown) { // Using unknown instead of any
         if (err instanceof Error) {
           setError(err.message);
@@ -67,7 +73,7 @@ const Page = () => {
   };
 
   const handleProfileClick = (profile: Profile) => { // Using Profile interface
-    if (!profile || profile.isAnonymous) return; // Don't open modal for anonymous profiles
+    if (!profile || (profile as any).isAnonymous) return; // Don't open modal for anonymous profiles
     
     // Redirect to the profile page instead of opening a modal
     router.push(`/profile/${profile.id}`);
@@ -116,7 +122,7 @@ const Page = () => {
                 className={`flex items-center justify-left h-auto ${
                   wall.isAnonymous ? "opacity-50" : "cursor-pointer hover:opacity-80"
                 }`}
-                onClick={() => !wall.isAnonymous && handleProfileClick(wall.profiles)}
+                onClick={() => !wall.isAnonymous && handleProfileClick(wall.profiles as Profile)}
               >
                 {/* Profile Image */}
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
@@ -124,7 +130,7 @@ const Page = () => {
                     src={
                       wall.isAnonymous
                         ? "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png"
-                        : wall.profiles?.profile_img || "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png"
+                        : (wall.profiles as Profile)?.profile_img || "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png"
                     }
                     alt={wall.isAnonymous ? "Anonymous" : "Profile"}
                     className="w-full h-full object-cover"
@@ -136,17 +142,17 @@ const Page = () => {
                   <h3 className="font-medium text-gray-900 text-base">
                     {wall.isAnonymous
                       ? "ไม่ระบุตัวตน"
-                      : wall.profiles?.user_name || "ไม่ระบุตัวตน"}
+                      : (wall.profiles as Profile)?.user_name || "ไม่ระบุตัวตน"}
                   </h3>
                   <p className="text-xs font-light text-gray-900 mb-1">
                     {wall.isAnonymous
                       ? "ไม่ระบุจังหวัด"
-                      : wall.profiles?.province || "ไม่ระบุจังหวัด"}
+                      : (wall.profiles as Profile)?.province || "ไม่ระบุจังหวัด"}
                   </p>
                   <span className="bg-gray-900 text-white text-xs px-4 py-1 rounded-lg">
                     {wall.isAnonymous
                       ? "---"
-                      : wall.profiles?.year || "ไม่ระบุปี"}
+                      : (wall.profiles as Profile)?.year || "ไม่ระบุปี"}
                   </span>
                 </div>
               </div>
