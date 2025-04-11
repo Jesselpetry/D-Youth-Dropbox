@@ -31,6 +31,7 @@ interface PaperWallProps {
   showButton?: boolean;
   customFilter?: (wall: Wall) => boolean;
   headerRight?: ReactNode;
+  currentDate?: string;
 }
 
 // Helper function to get time elapsed since a date
