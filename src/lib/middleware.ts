@@ -57,7 +57,7 @@ export const updateSession = async (request: NextRequest) => {
             return NextResponse.redirect(new URL("/login", request.url));
      
         }
-        if (!isPublicPath && request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls" && request.nextUrl.pathname !== "/profile") {
+        if (!isPublicPath && request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls" && request.nextUrl.pathname !== "/profile" && request.nextUrl.pathname !== "/message" ) {
          
             return NextResponse.redirect(new URL("/", request.url));
         }
