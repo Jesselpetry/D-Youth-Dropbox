@@ -44,7 +44,7 @@ export const updateSession = async (request: NextRequest) => {
      
  
         // protected routes
-        const publicPaths = ["/login", "/setup-profile", "/auth", "/auth/callback", "/family" ,'/message'];
+        const publicPaths = ["/login", "/setup-profile", "/auth", "/auth/callback", "/family"];
 
         const isPublicPath = publicPaths.some(path => 
           request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith(path + "/")
@@ -52,8 +52,8 @@ export const updateSession = async (request: NextRequest) => {
         
 
         // Redirect to login if user has error and not on a public path
-        if ((user.error !== null) && ( !isPublicPath && request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls" )) {
-          
+        if ((!user.data.user) && ( !isPublicPath && request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls"  )) {
+            
             return NextResponse.redirect(new URL("/login", request.url));
      
         }
