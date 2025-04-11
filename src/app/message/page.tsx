@@ -17,7 +17,7 @@ const MessagesPage = () => {
     // Get the current user ID on component mount
     const fetchCurrentUser = async () => {
       try {
-        const { error: sessionError } = await supabase.auth.getSession();
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
         if (sessionError) {
           throw new Error('Failed to get user session');
