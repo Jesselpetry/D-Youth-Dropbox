@@ -8,6 +8,7 @@ module.exports = {
     theme: {
       extend: {
         fontFamily: {
+          sans: ['Anakotmai', 'sans-serif'],
           itim: ['Itim', 'cursive'],
         },
       },
