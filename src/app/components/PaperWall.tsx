@@ -224,7 +224,7 @@ const PaperWall: React.FC<PaperWallProps> = ({
 
   const handleProfileClick = (profile: Profile) => {
     if (!profile) return;
-    // Instead of router.push, set the selected profile
+    // Instead of router.push, set the selected profile DEPLOYMENT
     setSelectedProfile(profile);
   };
 
