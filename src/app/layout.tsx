@@ -12,7 +12,8 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="th">
-      <body className="bg-gray-50 text-gray-900">
+      <body className="bg-gray-50 text-gray-900 font-anakotmai">
+        
         <Menu /> 
         <main className="max-w-2xl mx-auto px-4 py-6 pb-32">{children}</main>
         <div className="fixed inset-0 -z-20">
