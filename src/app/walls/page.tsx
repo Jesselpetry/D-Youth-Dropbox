@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import ProfileModal from "@/app/components/ProfileModal"; // Adjust the import path as needed
 import { useRouter } from "next/navigation";
 
 // Define interfaces for your data structures
@@ -24,21 +23,11 @@ interface Wall {
   isAnonymous?: boolean;
 }
 
-interface FamilyMember {
-  id: number;
-  user_name: string;
-  province: string | null;
-  year: string | null;
-  profile_img: string | null;
-}
-
 const Page = () => {
   const router = useRouter();
   const [walls, setWalls] = useState<Wall[]>([]); // Using Wall interface instead of any
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null); // Using Profile interface
-  const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Get the paper color from the wall.color field in the database
   const getPaperColor = (wallColor: string | null) => {
@@ -80,26 +69,8 @@ const Page = () => {
   const handleProfileClick = (profile: Profile) => { // Using Profile interface
     if (!profile || profile.isAnonymous) return; // Don't open modal for anonymous profiles
     
-    // Convert profile data to the format expected by the ProfileModal
-    const familyMember: FamilyMember = {
-      id: profile.id,
-      user_name: profile.user_name,
-      province: profile.province,
-      year: profile.year,
-      profile_img: profile.profile_img
-    };
-    
-    setSelectedProfile(familyMember as Profile);
-    setIsModalOpen(true);
-  };
-  
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProfile(null);
-  };
-  
-  const handleSendMessage = (memberId: number) => {
-    window.location.href = `/message/${memberId}`;
+    // Redirect to the profile page instead of opening a modal
+    router.push(`/profile/${profile.id}`);
   };
 
   if (loading) return <div>กำลังโหลด...</div>;
@@ -195,15 +166,6 @@ const Page = () => {
             </div>
           ))}
         </div>
-      )}
-
-      {/* Profile Modal */}
-      {isModalOpen && selectedProfile && (
-        <ProfileModal 
-          member={selectedProfile} 
-          onClose={handleCloseModal}
-          onSendMessage={handleSendMessage}
-        />
       )}
     </div>
   );
