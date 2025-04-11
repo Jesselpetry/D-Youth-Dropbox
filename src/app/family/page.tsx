@@ -67,7 +67,7 @@ export default function FamilyPage() {
   return (
     <section className="">
       <header className="text-left py-6">
-        <h1 className="text-3xl font-bold">ครอบครัวยุวชน</h1>
+        <h1 className="text-3xl font-medium">ครอบครัวยุวชน</h1>
         <h2 className="text-xl font-light mt-2 opacity-60">
           Democratic Youth Family
         </h2>

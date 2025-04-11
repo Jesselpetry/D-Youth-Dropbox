@@ -239,7 +239,7 @@ const PaperWall: React.FC<PaperWallProps> = ({
     <div className="text-left my-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-white">{title}</h1>
+          <h1 className="text-3xl font-medium text-white">{title}</h1>
           {subtitle && (
             <h2 className="text-xl font-light text-white mt-2 opacity-60">
               {subtitle}
