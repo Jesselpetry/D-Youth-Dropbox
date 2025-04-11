@@ -11,6 +11,7 @@ interface Profile {
   profile_img: string | null;
   year: string | null;
   province: string | null;
+  isAnonymous?: boolean; // Add isAnonymous as an optional property to the Profile interface
 }
 
 interface Wall {
@@ -73,7 +74,7 @@ const Page = () => {
   };
 
   const handleProfileClick = (profile: Profile) => { // Using Profile interface
-    if (!profile || (profile as any).isAnonymous) return; // Don't open modal for anonymous profiles
+    if (!profile || profile.isAnonymous) return; // Now isAnonymous is part of the Profile interface
     
     // Redirect to the profile page instead of opening a modal
     router.push(`/profile/${profile.id}`);
