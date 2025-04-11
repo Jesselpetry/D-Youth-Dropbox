@@ -53,12 +53,12 @@ export const updateSession = async (request: NextRequest) => {
         console
         // Redirect to login if user has error and not on a public path
         if ((user.error !== null) && ( !isPublicPath && request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls" )) {
-          
+            
             return NextResponse.redirect(new URL("/login", request.url));
      
         }
         if (!isPublicPath && request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls" && request.nextUrl.pathname !== "/profile") {
-      
+         
             return NextResponse.redirect(new URL("/", request.url));
         }
 
