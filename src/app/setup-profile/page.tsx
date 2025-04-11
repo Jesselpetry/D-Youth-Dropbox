@@ -24,7 +24,7 @@ export default function SetupProfile() {
       if (user) {
         setUserId(user.id);
       } else {
-        router.push("/login"); // หากไม่ได้ล็อกอินจะรีไดเรคไปหน้าแรก
+        router.push("/login"); // หากไม่ได้ล็อกอินจะรีไดเรคไปหน้าแรก ดำ
       }
     });
   }, []);
