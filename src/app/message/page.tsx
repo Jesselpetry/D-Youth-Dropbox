@@ -14,13 +14,13 @@ const MessagesPage = () => {
   const currentDate = "2025-04-11 14:00:57";
 
   useEffect(() => {
-    // Get the current user ID on component mount DEPLOY
+    // Get the current user ID on component mount Deployy
     const fetchCurrentUser = async () => {
       try {
         const { error: sessionError } = await supabase.auth.getSession();
         
         if (sessionError) {
-          throw new Error('Failed to get user session');
+          throw new Error('Failed to get user session // Please Login');
         }
         
       } catch (err) {
