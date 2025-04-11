@@ -87,7 +87,7 @@ body {
        url("/fonts/anakotmai-light.svg#anakotmai-light") format("svg"); /* Legacy iOS */
   font-weight: 300;
   font-style: normal;
-  font-display: swap;
+  font-display: swap
 }
 
 @font-face {
@@ -100,7 +100,7 @@ body {
        url("/fonts/anakotmai-medium.svg#anakotmai-medium") format("svg"); /* Legacy iOS */
   font-weight: 500;
   font-style: normal;
-  font-display: swap;
+  font-display: swap
 }
 
 @font-face {
@@ -113,5 +113,5 @@ body {
        url("/fonts/anakotmai-bold.svg#anakotmai-bold") format("svg"); /* Legacy iOS */
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
+  font-display: swap
 }
