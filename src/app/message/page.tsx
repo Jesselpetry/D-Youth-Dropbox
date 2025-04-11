@@ -2,17 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient'; // Make sure this path is correct
-import PaperWall from '@/app/components/PaperWall';
+import { supabase } from '@/lib/supabaseClient';
+import MessageWall from '@/app/components/MessageWall';
 
 const MessagesPage = () => {
   const router = useRouter();
-  const [, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   
   // Current date and username as specified
-  const currentDate = "2025-04-11 11:38:32";
+  const currentDate = "2025-04-11 14:00:57";
 
   useEffect(() => {
     // Get the current user ID on component mount
@@ -24,9 +23,7 @@ const MessagesPage = () => {
           throw new Error('Failed to get user session');
         }
         
-        if (session?.user) {
-          setUserId(session.user.id);
-        } else {
+        if (!session?.user) {
           // If no user is logged in, redirect to login page
           router.push('/login');
         }
@@ -62,7 +59,6 @@ const MessagesPage = () => {
         </svg>
         ส่งข้อความใหม่
       </button>
-      
     </div>
   );
 
@@ -83,7 +79,7 @@ const MessagesPage = () => {
   }
 
   return (
-    <PaperWall
+    <MessageWall
       title="ข้อความ"
       subtitle="Messages"
       showButton={false} // We use custom header instead
