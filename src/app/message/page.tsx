@@ -14,7 +14,7 @@ const MessagesPage = () => {
   const currentDate = "2025-04-11 14:00:57";
 
   useEffect(() => {
-    // Get the current user ID on component mount
+    // Get the current user ID on component mount DEPLOY
     const fetchCurrentUser = async () => {
       try {
         const { error: sessionError } = await supabase.auth.getSession();
