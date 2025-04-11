@@ -110,13 +110,13 @@ const WallPaper: React.FC<{
           {/* User Info */}
           <div className="ml-4">
             <h3 className="font-medium text-gray-900 text-base">
-              {isAnonymous ? "ไม่ระบุตัวตน" : (profile?.user_name || "ไม่ระบุตัวตน")}
+              {isAnonymous ? "ไม่ระบุตัวตน" : (Array.isArray(profile) ? profile[0]?.user_name : profile?.user_name || "ไม่ระบุตัวตน")}
             </h3>
             <p className="text-xs font-light text-gray-900 mb-1">
-              {isAnonymous ? "ไม่ระบุจังหวัด" : (profile?.province || "ไม่ระบุจังหวัด")}
+              {isAnonymous ? "ไม่ระบุจังหวัด" : (Array.isArray(profile) ? profile[0]?.province : profile?.province || "ไม่ระบุจังหวัด")}
             </p>
             <span className="bg-gray-900 text-white text-xs px-4 py-1 rounded-lg">
-              {isAnonymous ? "---" : (profile?.year || "ไม่ระบุปี")}
+              {isAnonymous ? "---" : (Array.isArray(profile) ? profile[0]?.year : profile?.year || "ไม่ระบุปี")}
             </span>
           </div>
         </div>
