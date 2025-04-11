@@ -2,46 +2,18 @@
 
 import React, { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
-import ProfileModal from "@/app/components/ProfileModal"
-
-// Define interfaces for our data types
-interface Profile {
-  id: string
-  user_name: string
-  profile_img?: string
-  year?: string
-  province?: string
-  is_anonymous?: boolean
-}
-
-interface Message {
-  id: number;
-  content: string;
-  created_at: string;
-  sender_id: string;
-  is_anonymous: boolean;
-  color: string | null;
-  profiles: Profile | Profile[] | null; // Allow profiles to be an array or null
-}
-
-interface FamilyMember {
-  id: number
-  user_name: string
-  province?: string
-  year?: string
-  profile_img?: string
-}
+import ProfileModal from "@/app/components/ProfileModal" // Adjust the import path as needed
 
 const Page = () => {
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<Messages[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedProfile, setSelectedProfile] = useState<FamilyMember | null>(null)
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   // Function to get paper color
   const getPaperColor = (color: string | null) => {
-    return color || '#f5f5f5' // Default color
+    return color || '#f5f5f5'; // Default color
   }
 
   useEffect(() => {
@@ -59,6 +31,7 @@ const Page = () => {
         const userId = session.user.id // ใช้ user.id จาก session
 
         // ดึงข้อความที่ receiver_id ตรงกับ id ของผู้ใช้
+        // Added order by created_at in descending order to display latest messages first
         const { data, error } = await supabase
           .from('messages')
           .select(`
@@ -75,51 +48,9 @@ const Page = () => {
 
         if (error) throw error
 
-        // Process the data to ensure it matches our Message type
-        const processedMessages: Message[] = [];
-
-        if (data) {
-          for (const msg of data) {
-            // Safe handling of profiles data
-            let profileData: Profile | null = null;
-            
-            if (typeof msg.profiles === 'object') {
-              const profile = Array.isArray(msg.profiles) ? msg.profiles[0] : msg.profiles;
-            
-              if (
-                'id' in profile &&
-                'user_name' in profile &&
-                (typeof profile.profile_img === 'string' || profile.profile_img === undefined) &&
-                (typeof profile.year === 'string' || profile.year === undefined) &&
-                (typeof profile.province === 'string' || profile.province === undefined)
-              ) {
-                profileData = {
-                  id: profile.id,
-                  user_name: profile.user_name,
-                  profile_img: profile.profile_img,
-                  year: profile.year,
-                  province: profile.province ?? '',
-                };
-              }
-            }
-            
-            // Create a properly typed message object
-            processedMessages.push({
-              id: msg.id,
-              content: msg.content,
-              created_at: msg.created_at,
-              sender_id: msg.sender_id,
-              is_anonymous: msg.is_anonymous,
-              color: msg.color,
-              profiles: profileData
-            });
-          }
-        }
-
-        setMessages(processedMessages);
+        setMessages(data || [])
       } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
-        setError(errorMessage)
+        setError(err instanceof Error ? err.message : 'An unknown error occurred')
       } finally {
         setLoading(false)
       }
@@ -127,17 +58,52 @@ const Page = () => {
 
     fetchMessages()
   }, [])
+
+  interface Messages {
+    id: number;
+    content: string;
+    created_at: string;
+    sender_id: number;
+    color: string | null;
+    profiles: Profile[];
+    is_anonymous?: boolean;
+  }
+  // Handle profile click function from the wall component
+  interface Profile {
+    id: number;
+    user_name: string;
+    province: string;
+    year: string;
+    profile_img: string;
+    is_anonymous?: boolean;
+  }
+  
+  const handleProfileClick = (profile: Profile | null) => {
+    if (!profile || profile.is_anonymous) return; // Don't open modal for anonymous profiles
+    
+    // Convert profile data to the format expected by the ProfileModal
+    const familyMember = {
+      id: profile.id,
+      user_name: profile.user_name,
+      province: profile.province,
+      year: profile.year,
+      profile_img: profile.profile_img
+    };
+    
+    setSelectedProfile(familyMember);
+    setIsModalOpen(true);
+  };
   
   // Handle modal close function
   const handleCloseModal = () => {
-    setIsModalOpen(false)
-    setSelectedProfile(null)
-  }
+    setIsModalOpen(false);
+    setSelectedProfile(null);
+  };
   
   // Handle send message function
-  const handleSendMessage = (memberId: string | number) => {
-    window.location.href = `/message/${memberId}`
-  }
+  const handleSendMessage = (memberId: number) => {
+    window.location.href = `/message/${memberId}`;
+  };
 
   if (loading) return <div>กำลังโหลด...</div>
   if (error) return <div>{error}</div>
@@ -163,42 +129,37 @@ const Page = () => {
                 className={`flex items-center justify-left h-auto ${
                   message.is_anonymous ? "opacity-100" : "cursor-pointer hover:opacity-80"
                 }`}
+                onClick={() => !message.is_anonymous && handleProfileClick(message.profiles[0])}
               >
                 {/* Profile Image */}
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
                   <img
-                    src={
-                      message.is_anonymous
-                        ? "/anonymous-avatar.png"
-                        : (Array.isArray(message.profiles) ? message.profiles[0]?.profile_img : message.profiles?.profile_img) || "/anonymous-avatar.png"
-                    }
-                    alt={message.is_anonymous ? "Anonymous" : "Profile"}
-                    className="w-full h-full object-cover"
+                  src={
+                    message.is_anonymous
+                    ? "/anonymous-avatar.png"
+                    : message.profiles[0]?.profile_img || "/anonymous-avatar.png"
+                  }
+                  alt={message.is_anonymous ? "Anonymous" : "Profile"}
+                  className="w-full h-full object-cover"
                   />
                 </div>
 
                 {/* User Info */}
                 <div className="ml-4">
-                  <h3 className="font-medium text-gray-900 text-base">
+                    <h3 className="font-medium text-gray-900 text-base">
                     {message.is_anonymous
                       ? "ไม่ระบุตัวตน"
-                      : (Array.isArray(message.profiles) 
-                          ? message.profiles[0]?.user_name 
-                          : message.profiles?.user_name) || "ไม่ระบุตัวตน"}
-                  </h3>
-                  <p className="text-xs font-light text-gray-900 mb-1">
+                      : message.profiles[0]?.user_name || "ไม่ระบุตัวตน"}
+                    </h3>
+                    <p className="text-xs font-light text-gray-900 mb-1">
                     {message.is_anonymous
                       ? "ไม่ระบุจังหวัด"
-                      : (Array.isArray(message.profiles) 
-                          ? message.profiles[0]?.province 
-                          : message.profiles?.province) || "ไม่ระบุจังหวัด"}
+                      : message.profiles[0]?.province || "ไม่ระบุจังหวัด"}
                   </p>
                   <span className="bg-gray-900 text-white text-xs px-4 py-1 rounded-lg">
                     {message.is_anonymous
                       ? "ไม่ระบุปี"
-                      : (Array.isArray(message.profiles) 
-                          ? message.profiles[0]?.year 
-                          : message.profiles?.year) || "ไม่ระบุปี"}
+                      : message.profiles[0]?.year || "ไม่ระบุปี"}
                   </span>
                 </div>
               </div>
@@ -217,6 +178,15 @@ const Page = () => {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Profile Modal */}
+      {isModalOpen && selectedProfile && (
+        <ProfileModal 
+          member={selectedProfile} 
+          onClose={handleCloseModal}
+          onSendMessage={handleSendMessage}
+        />
       )}
     </div>
   )
