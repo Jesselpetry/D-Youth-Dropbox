@@ -152,7 +152,6 @@ const PaperWall: React.FC<PaperWallProps> = ({
   const [walls, setWalls] = useState<Wall[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentUser, setCurrentUser] = useState<string>("Jesselpetry"); // Your specified username
 
   // Get the paper color from the wall.color field in the database
   const getPaperColor = (wallColor: string | null) => {

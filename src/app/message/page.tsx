@@ -5,18 +5,6 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient'; // Make sure this path is correct
 import PaperWall from '@/app/components/PaperWall';
 
-// Define typing for the messages we'll fetch
-interface Message {
-  id: number;
-  content: string;
-  created_at: string;
-  sender_id: string;
-  recipient_id: string;
-  color: string | null;
-  is_anonymous?: boolean;
-  profiles?: any;
-}
-
 const MessagesPage = () => {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
@@ -25,7 +13,6 @@ const MessagesPage = () => {
   
   // Current date and username as specified
   const currentDate = "2025-04-11 11:38:32";
-  const currentUser = "Jesselpetrynow";
 
   useEffect(() => {
     // Get the current user ID on component mount
