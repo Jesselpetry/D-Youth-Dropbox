@@ -1,195 +1,118 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabaseClient'
-import ProfileModal from "@/app/components/ProfileModal" // Adjust the import path as needed
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient'; // Make sure this path is correct
+import PaperWall from '@/app/components/PaperWall';
 
-const Page = () => {
-  const [messages, setMessages] = useState<Messages[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
-  // Function to get paper color
-  const getPaperColor = (color: string | null) => {
-    return color || '#f5f5f5'; // Default color
-  }
-
-  useEffect(() => {
-    const fetchMessages = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-
-      // ถ้าไม่มี session หรือผู้ใช้ไม่ได้ล็อกอิน
-      if (!session || !session.user) {
-        setError('กรุณาล็อกอินเพื่อดูข้อความ')
-        setLoading(false)
-        return
-      }
-
-      try {
-        const userId = session.user.id // ใช้ user.id จาก session
-
-        // ดึงข้อความที่ receiver_id ตรงกับ id ของผู้ใช้
-        // Added order by created_at in descending order to display latest messages first
-        const { data, error } = await supabase
-          .from('messages')
-          .select(`
-          id,
-          content,
-          created_at,
-          sender_id,
-          is_anonymous,
-          color,
-          profiles:sender_id(id, user_name, profile_img, year, province)
-        `)
-          .eq('receiver_id', userId)
-          .order('created_at', { ascending: false }) // Sort by created_at in descending order (newest first)
-
-        if (error) throw error
-
-        setMessages(data || [])
-      } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'An unknown error occurred')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchMessages()
-  }, [])
-
-  interface Messages {
-    id: number;
-    content: string;
-    created_at: string;
-    sender_id: number;
-    color: string | null;
-    profiles: Profile[];
-    is_anonymous?: boolean;
-  }
-  // Handle profile click function from the wall component
-  interface Profile {
-    id: number;
-    user_name: string;
-    province: string;
-    year: string;
-    profile_img: string;
-    is_anonymous?: boolean;
-  }
-  
-  const handleProfileClick = (profile: Profile | null) => {
-    if (!profile || profile.is_anonymous) return; // Don't open modal for anonymous profiles
-    
-    // Convert profile data to the format expected by the ProfileModal
-    const familyMember = {
-      id: profile.id,
-      user_name: profile.user_name,
-      province: profile.province,
-      year: profile.year,
-      profile_img: profile.profile_img
-    };
-    
-    setSelectedProfile(familyMember);
-    setIsModalOpen(true);
-  };
-  
-  // Handle modal close function
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProfile(null);
-  };
-  
-  // Handle send message function
-  const handleSendMessage = (memberId: number) => {
-    window.location.href = `/message/${memberId}`;
-  };
-
-  if (loading) return <div>กำลังโหลด...</div>
-  if (error) return <div>{error}</div>
-
-  return (
-    <div className="text-left my-6">
-      <h1 className="text-3xl font-bold text-white">ข้อความ</h1>
-      <h2 className="text-xl font-light text-white mt-2 opacity-60">Messages</h2>
-
-      {messages.length === 0 ? (
-        <p className="text-white mt-4">ยังไม่มีข้อความ</p>
-      ) : (
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className="rounded-lg p-4 h-full shadow-xl flex-col flex justify-between"
-              style={{ backgroundColor: getPaperColor(message.color) }}
-            >
-              <div>
-              {/* User Profile Section - Now Clickable */}
-              <div
-                className={`flex items-center justify-left h-auto ${
-                  message.is_anonymous ? "opacity-100" : "cursor-pointer hover:opacity-80"
-                }`}
-                onClick={() => !message.is_anonymous && handleProfileClick(message.profiles[0])}
-              >
-                {/* Profile Image */}
-                <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
-                  <img
-                  src={
-                    message.is_anonymous
-                    ? "/anonymous-avatar.png"
-                    : message.profiles[0]?.profile_img || "/anonymous-avatar.png"
-                  }
-                  alt={message.is_anonymous ? "Anonymous" : "Profile"}
-                  className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* User Info */}
-                <div className="ml-4">
-                    <h3 className="font-medium text-gray-900 text-base">
-                    {message.is_anonymous
-                      ? "ไม่ระบุตัวตน"
-                      : message.profiles[0]?.user_name || "ไม่ระบุตัวตน"}
-                    </h3>
-                    <p className="text-xs font-light text-gray-900 mb-1">
-                    {message.is_anonymous
-                      ? "ไม่ระบุจังหวัด"
-                      : message.profiles[0]?.province || "ไม่ระบุจังหวัด"}
-                  </p>
-                  <span className="bg-gray-900 text-white text-xs px-4 py-1 rounded-lg">
-                    {message.is_anonymous
-                      ? "ไม่ระบุปี"
-                      : message.profiles[0]?.year || "ไม่ระบุปี"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Message Content */}
-              <div className="mt-4">
-                <p className="text-blue-950 break-words font-medium">{message.content}</p>
-              </div>
-              </div>
-              {/* Timestamp */}
-              <div className="mt-4">
-                <span className="text-gray-600 font-light text-xs">
-                  {new Date(message.created_at).toLocaleString()}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Profile Modal */}
-      {isModalOpen && selectedProfile && (
-        <ProfileModal 
-          member={selectedProfile} 
-          onClose={handleCloseModal}
-          onSendMessage={handleSendMessage}
-        />
-      )}
-    </div>
-  )
+// Define typing for the messages we'll fetch
+interface Message {
+  id: number;
+  content: string;
+  created_at: string;
+  sender_id: string;
+  recipient_id: string;
+  color: string | null;
+  is_anonymous?: boolean;
+  profiles?: any;
 }
 
-export default Page
+const MessagesPage = () => {
+  const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Current date and username as specified
+  const currentDate = "2025-04-11 11:38:32";
+  const currentUser = "Jesselpetrynow";
+
+  useEffect(() => {
+    // Get the current user ID on component mount
+    const fetchCurrentUser = async () => {
+      try {
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+          throw new Error('Failed to get user session');
+        }
+        
+        if (session?.user) {
+          setUserId(session.user.id);
+        } else {
+          // If no user is logged in, redirect to login page
+          router.push('/login');
+        }
+      } catch (err) {
+        console.error('Error getting user:', err);
+        setError(err instanceof Error ? err.message : 'An error occurred fetching user data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCurrentUser();
+  }, [router]);
+
+  // Custom filter for messages - only show messages where the current user is sender or recipient
+  const messageFilter = (wall: any) => {
+    if (!userId) return false;
+    
+    // For messages, we filter by both sender and recipient
+    return wall.sender_id === userId || wall.recipient_id === userId;
+  };
+
+  // Handle click on "New Message" button
+  const handleNewMessage = () => {
+    router.push('/family');
+  };
+
+  // Custom header for the messages page
+  const messageHeader = (
+    <div className="flex space-x-4">
+      <button
+        onClick={handleNewMessage}
+        className="bg-white text-green-900 font-medium py-2 px-4 rounded-lg flex items-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512"
+          className="h-4 w-4 mr-2 fill-current"
+        >
+          <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
+        </svg>
+        ส่งข้อความใหม่
+      </button>
+      
+    </div>
+  );
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-white text-xl">กำลังโหลด...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-red-500 text-xl">{error}</div>
+      </div>
+    );
+  }
+
+  return (
+    <PaperWall
+      title="ข้อความ"
+      subtitle="Messages"
+      showButton={false} // We use custom header instead
+      headerRight={messageHeader}
+      currentDate={currentDate}
+      customFilter={messageFilter}
+    />
+  );
+};
+
+export default MessagesPage;
