@@ -7,7 +7,7 @@ import PaperWall from '@/app/components/PaperWall';
 
 const MessagesPage = () => {
   const router = useRouter();
-  const [userId, setUserId] = useState<string | null>(null);
+  const [, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   
