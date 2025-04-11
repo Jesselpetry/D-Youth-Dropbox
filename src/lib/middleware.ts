@@ -3,9 +3,11 @@ import { type NextRequest, NextResponse } from "next/server";
 
 
 export const updateSession = async (request: NextRequest) => {
+    console.log('🔥 updateSession called') // You should see this if it's called
     // This `try/catch` block is only here for the interactive tutorial.
     // Feel free to remove once you have Supabase connected.
     try {
+
         // Create an unmodified response
         let response = NextResponse.next({
             request: {
@@ -39,7 +41,7 @@ export const updateSession = async (request: NextRequest) => {
         // This will refresh session if expired - required for Server Components
         // https://supabase.com/docs/guides/auth/server-side/nextjs
         const user = await supabase.auth.getUser();
-    
+     
  
         // protected routes
         const publicPaths = ["/login", "/setup-profile", "/auth", "/auth/callback", '/family'];
@@ -48,10 +50,16 @@ export const updateSession = async (request: NextRequest) => {
         const isPublicPath = publicPaths.some(path => 
             request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith(path)
         );
-        
+        console
         // Redirect to login if user has error and not on a public path
-        if (user.error && !isPublicPath &&   request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls") {
+        if ((user.error !== null) && ( !isPublicPath && request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls" )) {
+          
             return NextResponse.redirect(new URL("/login", request.url));
+     
+        }
+        if (!isPublicPath && request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls" && request.nextUrl.pathname !== "/profile") {
+      
+            return NextResponse.redirect(new URL("/", request.url));
         }
 
 
