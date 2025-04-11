@@ -166,6 +166,10 @@ const MessageWall: React.FC<MessageWallProps> = ({
   useEffect(() => {
     const getCurrentUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.push('/login')
+      }
       if (session?.user?.id) {
         setUserId(session.user.id);
       }
@@ -240,7 +244,7 @@ const MessageWall: React.FC<MessageWallProps> = ({
   const handleDefaultButtonAction = () => {
     router.push('/family');
   };
-
+  
   if (loading) return <div className="text-center py-8 text-white">กำลังโหลด...</div>;
   if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
 
