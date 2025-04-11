@@ -44,12 +44,12 @@ export const updateSession = async (request: NextRequest) => {
      
  
         // protected routes
-        const publicPaths = ["/login", "/setup-profile", "/auth", "/auth/callback", '/family'];
-        
-        // Check if current path is in public paths
+        const publicPaths = ["/login", "/setup-profile", "/auth", "/auth/callback", "/family"];
+
         const isPublicPath = publicPaths.some(path => 
-            request.nextUrl.pathname === path
+          request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith(path + "/")
         );
+        
 
         // Redirect to login if user has error and not on a public path
         if ((user.error !== null) && ( !isPublicPath && request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls" )) {
@@ -57,7 +57,7 @@ export const updateSession = async (request: NextRequest) => {
             return NextResponse.redirect(new URL("/login", request.url));
      
         }
-        if (!isPublicPath && request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls" && request.nextUrl.pathname !== "/profile" && request.nextUrl.pathname !== "/message" ) {
+        if (!isPublicPath && request.nextUrl.pathname !== "/" && !request.nextUrl.pathname.startsWith('/walls') && request.nextUrl.pathname !== "/profile" && !request.nextUrl.pathname.startsWith('/message') ) {
          
             return NextResponse.redirect(new URL("/", request.url));
         }
