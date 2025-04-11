@@ -23,10 +23,6 @@ const MessagesPage = () => {
           throw new Error('Failed to get user session');
         }
         
-        if (!session?.user) {
-          // If no user is logged in, redirect to login page
-          router.push('/login');
-        }
       } catch (err) {
         console.error('Error getting user:', err);
         setError(err instanceof Error ? err.message : 'An error occurred fetching user data');
