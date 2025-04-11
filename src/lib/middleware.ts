@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 
 export const updateSession = async (request: NextRequest) => {
-    console.log('🔥 updateSession called') // You should see this if it's called
+
     // This `try/catch` block is only here for the interactive tutorial.
     // Feel free to remove once you have Supabase connected.
     try {
@@ -50,7 +50,7 @@ export const updateSession = async (request: NextRequest) => {
         const isPublicPath = publicPaths.some(path => 
             request.nextUrl.pathname === path
         );
-        console
+
         // Redirect to login if user has error and not on a public path
         if ((user.error !== null) && ( !isPublicPath && request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/walls" )) {
             
