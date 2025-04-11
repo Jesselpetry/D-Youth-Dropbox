@@ -31,9 +31,7 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: "Anakotmai", sans-serif;
+  font-family: 'anakotmai', Fallback, sans-serif;
 }
 
 .gradient-bg {
