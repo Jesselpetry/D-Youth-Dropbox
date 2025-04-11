@@ -231,7 +231,7 @@ const PaperWall: React.FC<PaperWallProps> = ({
   };
 
   if (loading) return <div className="text-center py-8 text-white">กำลังโหลด...</div>;
-  if (error) return <div className="text-center py-8 text-white text-red-500">{error}</div>;
+  if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
 
   return (
     <div className="text-left my-6">
