@@ -19,7 +19,7 @@ interface Wall {
   sender_id: number;
   color: string | null;
   is_anonymous?: boolean;
-  profiles: Profile | Profile[];
+  profiles: Profile | Profile[] | null;
   isAnonymous?: boolean;
 }
 
