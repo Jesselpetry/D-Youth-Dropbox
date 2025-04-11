@@ -1,6 +1,7 @@
 import React, { useEffect, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient'; // Make sure this path is correct
+import ProfileModal from "./ProfileModal";
 
 // Define interfaces for type safety
 interface Profile {
@@ -39,16 +40,16 @@ const getTimeElapsed = (dateString: string): string => {
   try {
     const now = new Date();
     const past = new Date(dateString);
-    
+
     // Calculate the difference in milliseconds
     const diff = now.getTime() - past.getTime();
-    
+
     // Convert to seconds, minutes, hours, days
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-    
+
     // Return appropriate string based on the time difference
     if (days > 30) {
       return new Date(dateString).toLocaleDateString(); // Return the full date for older posts
@@ -75,12 +76,12 @@ const WallPaper: React.FC<{
 }> = ({ wall, color, onProfileClick }) => {
   // Safely handle profiles property
   const isAnonymous = wall.isAnonymous || wall.is_anonymous || false;
-  
+
   // Safe access to profiles
-  const profile = !isAnonymous && wall.profiles ? 
-    (Array.isArray(wall.profiles) && wall.profiles.length > 0 ? wall.profiles[0] : wall.profiles) 
+  const profile = !isAnonymous && wall.profiles ?
+    (Array.isArray(wall.profiles) && wall.profiles.length > 0 ? wall.profiles[0] : wall.profiles)
     : null;
-  
+
   return (
     <div
       className="rounded-lg p-4 h-full shadow-xl flex-col flex justify-between"
@@ -89,9 +90,8 @@ const WallPaper: React.FC<{
       <div>
         {/* User Profile Section - Now Clickable */}
         <div
-          className={`flex items-center justify-left h-auto ${
-            isAnonymous ? "opacity-50" : "cursor-pointer hover:opacity-80"
-          }`}
+          className={`flex items-center justify-left h-auto ${isAnonymous ? "opacity-50" : "cursor-pointer hover:opacity-80"
+            }`}
           onClick={() => !isAnonymous && profile && onProfileClick(Array.isArray(profile) ? profile[0] : profile)}
         >
           {/* Profile Image */}
@@ -151,6 +151,8 @@ const PaperWall: React.FC<PaperWallProps> = ({
   const [walls, setWalls] = useState<Wall[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Add this state for the selected profile
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
 
   // Get the paper color from the wall.color field in the database
   const getPaperColor = (wallColor: string | null) => {
@@ -180,17 +182,17 @@ const PaperWall: React.FC<PaperWallProps> = ({
         // Transform the data with better error handling
         let transformedData = data?.map(wall => {
           const isAnonymous = wall.is_anonymous || false;
-          
+
           // If anonymous or no profiles, provide default/empty values
           let profileData = null;
-          
+
           if (!isAnonymous && wall.profiles) {
             // Handle both array and single object cases
-            profileData = Array.isArray(wall.profiles) ? 
-              (wall.profiles.length > 0 ? wall.profiles[0] : null) : 
+            profileData = Array.isArray(wall.profiles) ?
+              (wall.profiles.length > 0 ? wall.profiles[0] : null) :
               wall.profiles;
           }
-          
+
           return {
             ...wall,
             isAnonymous,
@@ -222,7 +224,8 @@ const PaperWall: React.FC<PaperWallProps> = ({
 
   const handleProfileClick = (profile: Profile) => {
     if (!profile) return;
-    router.push(`/profile/${profile.id}`);
+    // Instead of router.push, set the selected profile
+    setSelectedProfile(profile);
   };
 
   const handleDefaultButtonAction = () => {
@@ -243,7 +246,7 @@ const PaperWall: React.FC<PaperWallProps> = ({
             </h2>
           )}
         </div>
-        
+
         {headerRight || (
           showButton && (
             <button
@@ -277,7 +280,22 @@ const PaperWall: React.FC<PaperWallProps> = ({
           ))}
         </div>
       )}
+      {/* Add the ProfileModal component here */}
+      {selectedProfile && (
+        <ProfileModal
+          member={{
+            id: selectedProfile.id,
+            user_name: selectedProfile.user_name || "",
+            province: selectedProfile.province || "",
+            year: selectedProfile.year || "",
+            profile_img: selectedProfile.profile_img || ""
+          }}
+          onClose={() => setSelectedProfile(null)}
+          onSendMessage={(id) => router.push(`/message/${id}`)}
+        />
+      )}
     </div>
+
   );
 };
 

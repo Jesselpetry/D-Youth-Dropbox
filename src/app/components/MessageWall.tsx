@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import React, { ReactNode } from 'react';
+import ProfileModal from "./ProfileModal";
 
 // Interfaces for TypeScript typing
 interface Profile {
@@ -154,6 +155,7 @@ const MessageWall: React.FC<MessageWallProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
 
   // Get the paper color from the message.color field in the database
   const getPaperColor = (messageColor: string | null) => {
@@ -231,7 +233,8 @@ const MessageWall: React.FC<MessageWallProps> = ({
 
   const handleProfileClick = (profile: Profile) => {
     if (!profile || !profile.id) return;
-    router.push(`/profile/${profile.id}`);
+    // Instead of router.push, set the selected profile
+    setSelectedProfile(profile);
   };
 
   const handleDefaultButtonAction = () => {
@@ -289,6 +292,21 @@ const MessageWall: React.FC<MessageWallProps> = ({
           ))
         )}
       </div>
+      
+      {/* Add the ProfileModal component here */}
+      {selectedProfile && (
+        <ProfileModal 
+          member={{
+            id: parseInt(selectedProfile.id || "0"),
+            user_name: selectedProfile.user_name || "",
+            province: selectedProfile.province || "",
+            year: selectedProfile.year || "",
+            profile_img: selectedProfile.profile_img || ""
+          }}
+          onClose={() => setSelectedProfile(null)}
+          onSendMessage={(id) => router.push(`/message/${id}`)}
+        />
+      )}
     </div>
   );
 };
