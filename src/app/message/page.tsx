@@ -41,13 +41,6 @@ const MessagesPage = () => {
     fetchCurrentUser();
   }, [router]);
 
-  const messageFilter = (wall: Wall) => {
-    if (!userId) return false;
-    
-    // For messages, we filter by both sender and recipient
-    return wall.sender_id === userId || wall.recipient_id === userId;
-  };
-
   // Handle click on "New Message" button
   const handleNewMessage = () => {
     router.push('/family');
@@ -96,7 +89,6 @@ const MessagesPage = () => {
       showButton={false} // We use custom header instead
       headerRight={messageHeader}
       currentDate={currentDate}
-      customFilter={messageFilter}
     />
   );
 };
