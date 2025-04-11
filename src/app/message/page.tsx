@@ -41,13 +41,6 @@ const MessagesPage = () => {
     fetchCurrentUser();
   }, [router]);
 
-  // Define the type for the wall object
-  interface Wall {
-    sender_id: string;
-    recipient_id: string;
-  }
-
-  // Custom filter for messages - only show messages where the current user is sender or recipient
   const messageFilter = (wall: Wall) => {
     if (!userId) return false;
     
