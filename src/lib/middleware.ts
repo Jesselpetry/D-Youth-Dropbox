@@ -44,7 +44,7 @@ export const updateSession = async (request: NextRequest) => {
      
  
         // protected routes
-        const publicPaths = ["/login", "/setup-profile", "/auth", "/auth/callback", "/family"];
+        const publicPaths = ["/login", "/setup-profile", "/auth", "/auth/callback", "/family", '/message'];
 
         const isPublicPath = publicPaths.some(path => 
           request.nextUrl.pathname === path
