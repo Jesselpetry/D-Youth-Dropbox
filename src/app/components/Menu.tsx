@@ -103,8 +103,8 @@ export default function Menu() {
           >
             <div
               className={`text-sm flex flex-col items-center justify-center text-center   
-              ${pathname === "/profile" ? "drop-shadow-lg" : "opacity-100"}
-              ${user ? "text-white" : "text-green-900"}
+              ${pathname === "/profile" ? "drop-shadow-lg" : ""}
+              ${user ? "opacity-50 text-white" : "opacity-100 text-green-900"}
               } transition-all duration-200 group-hover:opacity-100 group-hover:drop-shadow-md space-y-2`}
             >
               <div className={`drop-shadow-md`}>
