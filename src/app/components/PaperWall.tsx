@@ -92,7 +92,7 @@ const WallPaper: React.FC<{
           className={`flex items-center justify-left h-auto ${
             isAnonymous ? "opacity-50" : "cursor-pointer hover:opacity-80"
           }`}
-          onClick={() => !isAnonymous && profile && onProfileClick(profile)}
+          onClick={() => !isAnonymous && profile && onProfileClick(Array.isArray(profile) ? profile[0] : profile)}
         >
           {/* Profile Image */}
           <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
