@@ -6,7 +6,10 @@ import { supabase } from '@/lib/supabaseClient';
 export default function MessageToUser() {
   // Get the userId from the URL
   const params = useParams();
-  const userId = params.userId as string;
+  const userId = params?.userId as string | undefined;
+  if (!userId) {
+    throw new Error("User ID not found in the URL parameters.");
+  }
 
   // State variables
   const [message, setMessage] = useState('');

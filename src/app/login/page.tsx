@@ -9,8 +9,6 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [showCredits, setShowCredits] = useState<boolean>(false)
 
-
-
   const handleGoogleLogin = async () => {
     setIsLoading(true)
     setLoginError(null)
