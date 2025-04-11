@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import Image from 'next/image'
+const redirectUrl = process.env.NEXT_PUBLIC_SITE_URL || `${location.origin}`;
 
 export default function LoginPage() {
   const [loginError, setLoginError] = useState<string | null>(null)
@@ -17,7 +18,7 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${location.origin}/auth/callback`,
+          redirectTo: `${redirectUrl}/auth/callback`,
         },
       })
       if (error) throw error
