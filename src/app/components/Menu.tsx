@@ -102,20 +102,20 @@ export default function Menu() {
             }`}
           >
             <div
-              className={`text-sm text-green-900 flex flex-col items-center justify-center text-center   
-                ${pathname === "/profile" ? "drop-shadow-lg" : "opacity-50"}
-                    ${!user ? "opacity-100" : ""}
+              className={`text-sm flex flex-col items-center justify-center text-center   
+              ${pathname === "/profile" ? "drop-shadow-lg" : "opacity-100"}
+              ${user ? "text-white" : "text-green-900"}
               } transition-all duration-200 group-hover:opacity-100 group-hover:drop-shadow-md space-y-2`}
             >
-              <div className={`drop-shadow-md `}>
-                <FaIcons.FaUser size={32} />
+              <div className={`drop-shadow-md`}>
+              <FaIcons.FaUser size={32} />
               </div>
               <span
-                className={`drop-shadow-sm font-medium ${
-                  !user ? "drop-shadow-none opacity-100 " : ""
-                }`}
+              className={`drop-shadow-sm font-medium ${
+                !user ? "drop-shadow-none opacity-100" : ""
+              }`}
               >
-                {user ? "โปรไฟล์" : "เข้าสู่ระบบ"}
+              {user ? "โปรไฟล์" : "เข้าสู่ระบบ"}
               </span>
             </div>
           </Link>
