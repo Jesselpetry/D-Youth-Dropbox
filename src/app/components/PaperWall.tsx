@@ -100,7 +100,7 @@ const WallPaper: React.FC<{
               src={
                 isAnonymous
                   ? "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png"
-                  : (profile?.profile_img || "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png")
+                  : (!Array.isArray(profile) && profile?.profile_img || "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png")
               }
               alt={isAnonymous ? "Anonymous" : "Profile"}
               className="w-full h-full object-cover"
