@@ -31,7 +31,6 @@ interface PaperWallProps {
   showButton?: boolean;
   customFilter?: (wall: Wall) => boolean;
   headerRight?: ReactNode;
-  currentDate?: string;
 }
 
 // Helper function to get time elapsed since a date
@@ -146,7 +145,6 @@ const PaperWall: React.FC<PaperWallProps> = ({
   showButton = true,
   customFilter,
   headerRight,
-  currentDate = "2025-04-11 11:33:04", // Your specified current date
 }) => {
   const router = useRouter();
   const [walls, setWalls] = useState<Wall[]>([]);
@@ -242,9 +240,6 @@ const PaperWall: React.FC<PaperWallProps> = ({
             <h2 className="text-xl font-light text-white mt-2 opacity-60">
               {subtitle}
             </h2>
-          )}
-          {currentDate && (
-            <div className="text-sm text-white mt-1 opacity-75">{currentDate}</div>
           )}
         </div>
         
