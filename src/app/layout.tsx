@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import localFont from "next/font/local";
 import Menu from "@/app/components/Menu";
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react"
 
 export const metadata: Metadata = {
   title: "D-Youth Dropbox",
