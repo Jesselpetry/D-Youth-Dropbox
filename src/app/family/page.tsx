@@ -94,22 +94,22 @@ export default function FamilyPage() {
 
           <div className="grid grid-cols-3 gap-2 mt-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {groupedData[year].map((member) => (
-              <div
+                <div
                 key={member.id}
                 className="bg-black/25 backdrop-blur-sm border border-white/25 rounded-2xl text-center py-4 cursor-pointer transition-all hover:scale-[1.02] hover:border-white/50"
                 onClick={() => setSelectedMember(member)}
-              >
+                >
                 <Image
                   width={80}
                   height={80}
                   src={
-                    imageError[member.id]
-                      ? "/person.png"
-                      : member.profile_img || "/person.png"
+                  imageError[member.id]
+                    ? "https://i.ibb.co/0pzL4NNT/person.png"
+                    : member.profile_img || "https://i.ibb.co/0pzL4NNT/person.png"
                   }
                   alt="PFP"
                   onError={() =>
-                    setImageError((prev) => ({ ...prev, [member.id]: true }))
+                  setImageError((prev) => ({ ...prev, [member.id]: true }))
                   }
                   className="w-20 h-20 mx-auto rounded-full aspect-square border border-white/25 mb-2 overflow-hidden object-cover"
                 />
@@ -120,7 +120,7 @@ export default function FamilyPage() {
                 <button className="font-medium text-sm mt-2 px-4 py-1 bg-white text-green-900 rounded-lg">
                   ปี {member.year}
                 </button>
-              </div>
+                </div>
             ))}
           </div>
         </div>
