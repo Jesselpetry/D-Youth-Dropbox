@@ -58,6 +58,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="th">
       <body className={`${myFont.className} bg-gray-50 text-white`}>
+        <Analytics />
         <Menu />
         <main className="max-w-2xl mx-auto px-4 py-6 pb-32">{children}</main>
         <div className="fixed inset-0 -z-20">
