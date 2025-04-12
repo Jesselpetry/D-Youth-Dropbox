@@ -8,7 +8,7 @@ import ProfileModal from "./ProfileModal";
 
 // Interfaces for TypeScript typing
 interface Profile {
-  id?: string;
+  id?: number;
   user_name?: string;
   profile_img?: string;
   year?: string;
@@ -21,8 +21,8 @@ interface Message {
   id: number;
   content: string;
   created_at: string;
-  sender_id: string | null;
-  receiver_id: string;
+  sender_id: number | null;
+  receiver_id: number;
   color: string | null;
   is_anonymous?: boolean;
   sender: Profile | null;
@@ -298,7 +298,7 @@ const MessageWall: React.FC<MessageWallProps> = ({
       {selectedProfile && (
         <ProfileModal
           member={{
-            id: selectedProfile.id,
+            id: selectedProfile.id ?? 0,
             user_name: selectedProfile.user_name || "",
             province: selectedProfile.province || "",
             year: selectedProfile.year || "",
