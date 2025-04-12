@@ -14,6 +14,7 @@ interface Profile {
   year?: string;
   province?: string;
   isAnonymous?: boolean;
+  ig?: string;
 }
 
 interface Message {
@@ -44,16 +45,16 @@ const getTimeElapsed = (dateString: string): string => {
   try {
     const now = new Date();
     const past = new Date(dateString);
-    
+
     // Calculate the difference in milliseconds
     const diff = now.getTime() - past.getTime();
-    
+
     // Convert to seconds, minutes, hours, days
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-    
+
     // Return appropriate string based on the time difference
     if (days > 30) {
       return new Date(dateString).toLocaleDateString(); // Return the full date for older posts
@@ -80,10 +81,10 @@ const MessagePaper: React.FC<{
 }> = ({ message, color, onProfileClick }) => {
   // Check if message is anonymous
   const isAnonymous = message.is_anonymous || false;
-  
+
   // Sender profile info
   const sender = !isAnonymous && message.sender ? message.sender : null;
-  
+
   return (
     <div
       className="rounded-lg p-4 h-full shadow-xl flex-col flex justify-between"
@@ -92,9 +93,8 @@ const MessagePaper: React.FC<{
       <div>
         {/* User Profile Section - Now Clickable */}
         <div
-          className={`flex items-center justify-left h-auto ${
-            isAnonymous ? "opacity-50" : "cursor-pointer hover:opacity-80"
-          }`}
+          className={`flex items-center justify-left h-auto ${isAnonymous ? "opacity-50" : "cursor-pointer hover:opacity-80"
+            }`}
           onClick={() => !isAnonymous && sender && onProfileClick(sender)}
         >
           {/* Profile Image */}
@@ -166,22 +166,18 @@ const MessageWall: React.FC<MessageWallProps> = ({
   useEffect(() => {
     const getCurrentUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        router.push('/login')
-      }
       if (session?.user?.id) {
         setUserId(session.user.id);
       }
     };
-    
+
     getCurrentUser();
   }, []);
 
   useEffect(() => {
     const fetchMessages = async () => {
       if (!userId) return;
-      
+
       try {
         // Fetch messages where current user is the receiver
         const { data, error } = await supabase
@@ -194,8 +190,8 @@ const MessageWall: React.FC<MessageWallProps> = ({
             receiver_id,
             color, 
             is_anonymous,
-            sender:sender_id (id, user_name, profile_img, year, province),
-            receiver:receiver_id (id, user_name, profile_img, year, province)
+            sender:sender_id (id, user_name, profile_img, year, province, ig),
+            receiver:receiver_id (id, user_name, profile_img, year, province, ig)
           `)
           .eq('receiver_id', userId)
           .order('created_at', { ascending: false });
@@ -244,8 +240,8 @@ const MessageWall: React.FC<MessageWallProps> = ({
   const handleDefaultButtonAction = () => {
     router.push('/family');
   };
-  
-  if (loading) return <div className="text-center py-8 text-white">กำลังโหลด...</div>;
+
+  if (loading) return <div className="text-center py-8 text-white">โปรดเข้าสู่ระบบ เพื่อใช้งาน</div>;
   if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
 
   return (
@@ -259,7 +255,7 @@ const MessageWall: React.FC<MessageWallProps> = ({
             </h2>
           )}
         </div>
-        
+
         {headerRight || (
           showButton && (
             <button
@@ -271,7 +267,7 @@ const MessageWall: React.FC<MessageWallProps> = ({
                 viewBox="0 0 448 512"
                 className="h-4 w-4 mr-2 fill-current"
               >
-                <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192v144c0 17.7 14.3 32 32 32s32-14.3 32-32V288h144c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
+                <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192v144c0 17.7 14.3 32 32 32s32-14.3 32-32V288h144c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
               </svg>
               {buttonText}
             </button>
@@ -296,16 +292,17 @@ const MessageWall: React.FC<MessageWallProps> = ({
           ))
         )}
       </div>
-      
+
       {/* Add the ProfileModal component here */}
       {selectedProfile && (
-        <ProfileModal 
+        <ProfileModal
           member={{
             id: parseInt(selectedProfile.id || "0"),
             user_name: selectedProfile.user_name || "",
             province: selectedProfile.province || "",
             year: selectedProfile.year || "",
-            profile_img: selectedProfile.profile_img || ""
+            profile_img: selectedProfile.profile_img || "",
+            ig: selectedProfile.ig || ""
           }}
           onClose={() => setSelectedProfile(null)}
           onSendMessage={(id) => router.push(`/message/${id}`)}
