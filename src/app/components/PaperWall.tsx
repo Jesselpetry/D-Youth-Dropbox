@@ -11,6 +11,7 @@ interface Profile {
   year?: string;
   province?: string;
   isAnonymous?: boolean;
+  ig?: string;
 }
 
 interface Wall {
@@ -22,6 +23,7 @@ interface Wall {
   is_anonymous?: boolean;
   profiles: Profile | Profile[] | null;
   isAnonymous?: boolean;
+  ig?: string;
 }
 
 interface PaperWallProps {
@@ -173,7 +175,7 @@ const PaperWall: React.FC<PaperWallProps> = ({
             sender_id, 
             color, 
             is_anonymous,
-            profiles:sender_id (id, user_name, profile_img, year, province)
+            profiles:sender_id (id, user_name, profile_img, year, province, ig)
           `)
           .order('created_at', { ascending: false });
 
@@ -288,7 +290,8 @@ const PaperWall: React.FC<PaperWallProps> = ({
             user_name: selectedProfile.user_name || "",
             province: selectedProfile.province || "",
             year: selectedProfile.year || "",
-            profile_img: selectedProfile.profile_img || ""
+            profile_img: selectedProfile.profile_img || "",
+            ig: selectedProfile.ig || "",
           }}
           onClose={() => setSelectedProfile(null)}
           onSendMessage={(id) => router.push(`/message/${id}`)}
