@@ -232,8 +232,9 @@ const MessageWall: React.FC<MessageWallProps> = ({
   }, [userId, customFilter]);
 
   const handleProfileClick = (profile: Profile) => {
-    if (!profile || !profile.id) return;
-    // Instead of router.push, set the selected profile
+    if (!profile) return;
+    // Instead of router.push, set the selected profile DEPLOYMENT
+    console.log("Profile clicked:", profile);
     setSelectedProfile(profile);
   };
 
@@ -297,17 +298,18 @@ const MessageWall: React.FC<MessageWallProps> = ({
       {selectedProfile && (
         <ProfileModal
           member={{
-            id: parseInt(selectedProfile.id || "0"),
+            id: selectedProfile.id,
             user_name: selectedProfile.user_name || "",
             province: selectedProfile.province || "",
             year: selectedProfile.year || "",
             profile_img: selectedProfile.profile_img || "",
-            ig: selectedProfile.ig || ""
+            ig: selectedProfile.ig || "",
           }}
           onClose={() => setSelectedProfile(null)}
           onSendMessage={(id) => router.push(`/message/${id}`)}
         />
       )}
+      
     </div>
   );
 };
