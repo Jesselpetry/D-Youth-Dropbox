@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import { User } from "@supabase/supabase-js";
 
 const navItems = [
   {
@@ -32,16 +33,17 @@ const navItems = [
 export default function Menu() {
   const pathname = usePathname();
   const router = useRouter();
-  const [user, setUser] = useState<{ id: string } | null>(null);
+  
+  const [user, setUser] = useState<User | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Set mounted to true once the component is mounted on the client
+    setMounted(true);
+    
     const handleRedirect = async () => {
-
-
       await supabase.auth.getSession();
-
       const { data: userData } = await supabase.auth.getUser();
-
       const currentUser = userData?.user;
       setUser(currentUser);
 
@@ -69,6 +71,47 @@ export default function Menu() {
     return null;
   }
 
+  const isProfileActive = pathname === "/profile";
+
+  // Don't render user-dependent content until client-side hydration is complete
+  const authButton = mounted ? (
+    <Link
+      href={user ? "/profile" : "/login"}
+      className={`flex flex-col items-center transition-all duration-200 hover:scale-110 group ${
+        !user ? "bg-white p-2 rounded-xl" : ""
+      }`}
+    >
+      <div
+        className={`text-sm flex flex-col items-center justify-center text-center   
+        ${isProfileActive ? "drop-shadow-lg" : ""}
+        ${user && !isProfileActive ? "opacity-50" : "opacity-100"} 
+        ${user ? "text-white" : "text-green-900 font-medium"}
+        transition-all duration-200 group-hover:opacity-100 group-hover:drop-shadow-md space-y-2`}
+      >
+        <div className={`drop-shadow-md`}>
+          <FaIcons.FaUser size={32} />
+        </div>
+        <span
+          className={`drop-shadow-sm ${isProfileActive ? "font-medium" : ""} ${
+            !user ? "drop-shadow-none opacity-100" : ""
+          }`}
+        >
+          {user ? "โปรไฟล์" : "เข้าสู่ระบบ"}
+        </span>
+      </div>
+    </Link>
+  ) : (
+    // Show a placeholder during server-side rendering
+    <div className="flex flex-col items-center">
+      <div className="text-sm flex flex-col items-center justify-center text-center opacity-50 space-y-2">
+        <div className="drop-shadow-md">
+          <FaIcons.FaUser size={32} />
+        </div>
+        <span className="drop-shadow-sm invisible">Placeholder</span>
+      </div>
+    </div>
+  );
+
   return (
     <div className="fixed bottom-5 left-0 right-0 w-full flex justify-center px-4 pb-2 z-10 max-w-screen mx-auto">
       <div className="w-full max-w-sm p-4 rounded-3xl bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light shadow-lg shadow-black/20">
@@ -84,41 +127,20 @@ export default function Menu() {
               >
                 <div
                   className={`text-sm flex flex-col items-center justify-center text-center ${
-                    isActive ? "drop-shadow-lg" : "opacity-50"
+                    isActive ? "drop-shadow-lg opacity-100" : "opacity-50"
                   } transition-all duration-200 group-hover:opacity-100 group-hover:drop-shadow-md space-y-2`}
                 >
                   <div className="drop-shadow-md">{item.icon}</div>
-                  <span className="drop-shadow-sm">{item.label}</span>
+                  <span className={`drop-shadow-sm ${isActive ? "font-medium" : ""}`}>
+                    {item.label}
+                  </span>
                 </div>
               </Link>
             );
           })}
 
-          {/* ปุ่ม Profile หรือ Login */}
-          <Link
-            href={user ? "/profile" : "/login"}
-            className={`flex flex-col items-center transition-all duration-200 hover:scale-110 group ${
-              !user ? "bg-white p-2 rounded-xl" : ""
-            }`}
-          >
-            <div
-              className={`text-sm flex flex-col items-center justify-center text-center   
-              ${pathname === "/profile" ? "drop-shadow-lg" : ""}
-              ${user ? "opacity-50 text-white" : "opacity-100 text-green-900"}
-              } transition-all duration-200 group-hover:opacity-100 group-hover:drop-shadow-md space-y-2`}
-            >
-              <div className={`drop-shadow-md`}>
-              <FaIcons.FaUser size={32} />
-              </div>
-              <span
-              className={`drop-shadow-sm font-medium ${
-                !user ? "drop-shadow-none opacity-100" : ""
-              }`}
-              >
-              {user ? "โปรไฟล์" : "เข้าสู่ระบบ"}
-              </span>
-            </div>
-          </Link>
+          {/* Authentication button with client-side only rendering */}
+          {authButton}
         </div>
       </div>
     </div>

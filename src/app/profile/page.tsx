@@ -6,13 +6,14 @@ import { useRouter } from "next/navigation";
 import ProvinceSelector from "./components/provinceSelector";
 import YearSelector from "./components/yearSelector";
 import { RiLoaderFill } from "react-icons/ri";
-import { FiLogOut, FiSave, FiUser, FiCalendar, FiMapPin } from "react-icons/fi";
+import { FiLogOut, FiSave, FiUser, FiCalendar, FiMapPin, FiInstagram } from "react-icons/fi";
 
 export default function ProfilePage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [userName, setUserName] = useState("");
   const [year, setYear] = useState("");
   const [province, setProvince] = useState("");
+  const [ig, setIg] = useState(""); // Added Instagram state
   const [profileImg, setProfileImg] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -48,6 +49,7 @@ export default function ProfilePage() {
       setUserName(data.user_name || "");
       setYear(data.year || "");
       setProvince(data.province || "");
+      setIg(data.ig || ""); // Set Instagram value from database
       setPreviewUrl(data.profile_img || null);
       setLoading(false);
     };
@@ -137,6 +139,7 @@ export default function ProfilePage() {
       year,
       province,
       profile_img: imageUrl,
+      ig, // Include Instagram field in the update
     });
 
     if (error) {
@@ -221,7 +224,8 @@ export default function ProfilePage() {
             )}
           </div>
 
-          <div className="relative">
+          {/* Username - Row 1 */}
+          <div className="space-y-2">
             <div className="flex items-center mb-2">
               <FiUser className="text-white/70 mr-2" />
               <label className="text-white text-lg font-medium">
@@ -237,19 +241,41 @@ export default function ProfilePage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="relative">
-              <div className="flex items-center mb-2">
-                <FiCalendar className="text-white/70 mr-2" />
-                <label className="text-white text-lg font-medium">ปี</label>
-              </div>
+          {/* Instagram - Row 2 */}
+          <div className="space-y-2">
+            <div className="flex items-center mb-2">
+              <FiInstagram className="text-white/70 mr-2" />
+              <label className="text-white text-lg font-medium">
+                Instagram
+              </label>
+            </div>
+            <input
+              type="text"
+              placeholder="@username"
+              className="w-full p-4 rounded-xl bg-black/25 backdrop-blur-sm border border-white/25 text-white text-lg font-light focus:border-white/50 focus:outline-none transition-colors"
+              value={ig}
+              onChange={(e) => setIg(e.target.value)}
+            />
+          </div>
+
+          {/* Year - Row 3 */}
+          <div className="space-y-2 relative z-30">
+            <div className="flex items-center mb-2">
+              <FiCalendar className="text-white/70 mr-2" />
+              <label className="text-white text-lg font-medium">ปี</label>
+            </div>
+            <div className="relative z-30">
               <YearSelector year={year} setYear={setYear} />
             </div>
-            <div className="relative">
-              <div className="flex items-center mb-2">
-                <FiMapPin className="text-white/70 mr-2" />
-                <label className="text-white text-lg font-medium">จังหวัด</label>
-              </div>
+          </div>
+
+          {/* Province - Row 4 */}
+          <div className="space-y-2 relative z-20">
+            <div className="flex items-center mb-2">
+              <FiMapPin className="text-white/70 mr-2" />
+              <label className="text-white text-lg font-medium">จังหวัด</label>
+            </div>
+            <div className="relative z-20">
               <ProvinceSelector province={province} setProvince={setProvince} />
             </div>
           </div>

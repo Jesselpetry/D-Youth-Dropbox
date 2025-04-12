@@ -6,15 +6,16 @@ import { useRouter } from "next/navigation";
 import ProvinceSelector from "./components/provinceSelector";
 import YearSelector from "./components/yearSelector";
 
-import { FiUser, FiCalendar, FiMapPin, FiImage, FiLogOut } from "react-icons/fi";
+import { FiUser, FiCalendar, FiMapPin, FiImage, FiLogOut, FiInstagram } from "react-icons/fi";
 
 export default function SetupProfile() {
   const [userId, setUserId] = useState<string | null>(null);
   const [userName, setUserName] = useState("");
   const [year, setYear] = useState("");
   const [province, setProvince] = useState("");
+  const [ig, setIg] = useState("");
   const [profileImg, setProfileImg] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null); // Add preview state
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function SetupProfile() {
       if (user) {
         setUserId(user.id);
       } else {
-        router.push("/login"); // หากไม่ได้ล็อกอินจะรีไดเรคไปหน้าแรก ดำ
+        router.push("/login");
       }
     });
   }, []);
@@ -114,6 +115,7 @@ export default function SetupProfile() {
         year,
         province,
         profile_img: imageUrl,
+        ig,
       });
 
       if (error) {
@@ -122,7 +124,7 @@ export default function SetupProfile() {
       } else {
         console.log("Profile saved successfully, attempting redirect...");
         router.push("/");
-        console.log("Redirect call completed"); // Check if this log appears
+        console.log("Redirect call completed");
       }
     } catch (err) {
       console.error("Exception during profile save:", err);
@@ -158,14 +160,14 @@ export default function SetupProfile() {
     if (error) {
       alert("ไม่สามารถออกจากระบบได้: " + error.message);
     } else {
-      router.push("/login"); // ไปที่หน้า Login หลัง logout
+      router.push("/login");
     }
   };
 
   return (
-    <div className="max-h-screen p-4 flex flex-col relative overflow-y-auto pb-10">
+    <div className="p-4 flex flex-col relative overflow-y-auto">
       {/* Content */}
-      <div className="relative z-10 flex-1">
+      <div className="max-w-2xl relative z-10 flex-1">
         {/* Exit Button */}         
         <div className="absolute top-2 left-2">
           <button
@@ -186,52 +188,8 @@ export default function SetupProfile() {
 
         <div className="w-full max-w-lg mx-auto p-5 rounded-3xl bg-black/25 backdrop-blur-sm border border-white/25 text-white text-lg font-light shadow-lg shadow-black/20">
           <div className="space-y-6 mt-2">
-            <div className="space-y-2">
-              <div className="flex items-center mb-2">
-                <FiUser className="text-white/70 mr-2" />
-                <label className="text-white text-xl font-medium">
-                  ชื่อผู้ใช้
-                </label>
-              </div>
-              <input
-                type="text"
-                placeholder="ชื่อผู้ใช้"
-                className="w-full p-4 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-              />
-            </div>
-
-            <div className="flex space-x-4">
-              <div className="flex-1 space-y-1">
-                <div className="flex items-center mb-2">
-                  <FiCalendar className="text-white/70 mr-2" />
-                  <label className="text-white text-xl font-medium">ยุวชน ปี</label>
-                </div>
-                <YearSelector year={year} setYear={setYear} />
-              </div>
-
-              <div className="flex-1 space-y-1">
-                <div className="flex items-center mb-2">
-                  <FiMapPin className="text-white/70 mr-2" />
-                  <label className="text-white text-xl font-medium">จังหวัด</label>
-                </div>
-                <ProvinceSelector province={province} setProvince={setProvince} />
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex items-center mb-2">
-                <FiImage className="text-white/70 mr-2" />
-                <label className="text-white text-xl font-medium">
-                  รูปโปรไฟล์{" "}
-                  <span className="text-sm font-light">
-                    *แนะนำให้ใช้รูปขนาด 1:1
-                  </span>
-                </label>
-              </div>
-
-              {/* Image preview area */}
+            {/* Profile Image - Now at the top */}
+            <div className="flex justify-center">
               {previewUrl ? (
                 <div className="mb-4 flex flex-col items-center">
                   <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-white/50">
@@ -253,26 +211,13 @@ export default function SetupProfile() {
                 </div>
               ) : (
                 <div
-                  className="w-full p-8 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light cursor-pointer"
+                  className="w-32 h-32 rounded-full bg-black/25 backdrop-blur-sm border border-white/30 text-white flex items-center justify-center cursor-pointer"
                   onClick={() => document.getElementById("file-upload")?.click()}
                 >
                   <div className="flex flex-col items-center">
-                    <svg
-                      className="w-12 h-12 text-white/70"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                      ></path>
-                    </svg>
-                    <span className="mt-2 text-white/70">
-                      คลิกเพื่อเลือกรูปภาพ
+                    <FiImage className="w-8 h-8 text-white/70" />
+                    <span className="mt-1 text-xs text-white/70">
+                      เลือกรูป
                     </span>
                   </div>
                   <input
@@ -286,6 +231,63 @@ export default function SetupProfile() {
               )}
             </div>
 
+            {/* Username - Row 1 */}
+            <div className="space-y-2">
+              <div className="flex items-center mb-2">
+                <FiUser className="text-white/70 mr-2" />
+                <label className="text-white text-xl font-medium">
+                  ชื่อผู้ใช้
+                </label>
+              </div>
+              <input
+                type="text"
+                placeholder="ชื่อผู้ใช้"
+                className="w-full p-4 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+              />
+            </div>
+
+            {/* Instagram - Row 2 */}
+            <div className="space-y-2">
+              <div className="flex items-center mb-2">
+                <FiInstagram className="text-white/70 mr-2" />
+                <label className="text-white text-xl font-medium">
+                  Instagram
+                </label>
+              </div>
+              <input
+                type="text"
+                placeholder="@username"
+                className="w-full p-4 rounded-lg bg-black/25 backdrop-blur-sm border border-white/30 text-white text-lg font-light"
+                value={ig}
+                onChange={(e) => setIg(e.target.value)}
+              />
+            </div>
+
+            {/* Year - Row 3 */}
+            <div className="space-y-2 relative z-30">
+              <div className="flex items-center mb-2">
+                <FiCalendar className="text-white/70 mr-2" />
+                <label className="text-white text-xl font-medium">ยุวชน ปี</label>
+              </div>
+              <div className="relative z-30">
+                <YearSelector year={year} setYear={setYear} />
+              </div>
+            </div>
+
+            {/* Province - Row 4 */}
+            <div className="space-y-2 relative z-20">
+              <div className="flex items-center mb-2">
+                <FiMapPin className="text-white/70 mr-2" />
+                <label className="text-white text-xl font-medium">จังหวัด</label>
+              </div>
+              <div className="relative z-20">
+                <ProvinceSelector province={province} setProvince={setProvince} />
+              </div>
+            </div>
+
+            {/* Submit Button */}
             <div className="mt-6">
               <button
                 onClick={handleSubmit}

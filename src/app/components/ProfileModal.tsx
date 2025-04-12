@@ -10,6 +10,7 @@ interface FamilyMember {
   province: string;
   year: string;
   profile_img: string;
+  ig: string;
 }
 
 interface ProfileModalProps {
@@ -62,7 +63,7 @@ export default function ProfileModal({ member, onClose }: ProfileModalProps) {
           </div>
 
           <button 
-            onClick={() => window.open(`https://www.instagram.com/${member.user_name}`, '_blank')}
+            onClick={() => window.open(`https://www.instagram.com/${member.ig}`, '_blank')}
             className="cursor-pointer mb-4 w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] hover:opacity-90 text-white py-3 px-4 rounded-lg transition-colors"
           >
             <RiInstagramFill size={20} />
