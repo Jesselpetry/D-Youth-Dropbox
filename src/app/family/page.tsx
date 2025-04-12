@@ -13,6 +13,7 @@ interface FamilyMember {
   province: string;
   year: string;
   profile_img: string;
+  ig: string; // Added the missing 'ig' property
 }
 
 export default function FamilyPage() {
