@@ -1,8 +1,8 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, FormEvent, ChangeEvent } from "react";
 
 type PostFormProps = {
   onSubmitPost: (post: PostData) => void;
-}
+};
 
 type PostData = {
   name: string;
@@ -12,37 +12,46 @@ type PostData = {
   text: string;
   image?: File | null;
   imagePreview?: string;
-}
+};
 
 const provinces = [
-  'Kinshasa', 'Nord-Kivu', 'Sud-Kivu', 'Équateur', 
-  'Haut-Katanga', 'Kasaï', 'Kasaï Central',
-  'Kwilu', 'Mai-Ndombe', 'Kongo Central', 
+  "Kinshasa",
+  "Nord-Kivu",
+  "Sud-Kivu",
+  "Équateur",
+  "Haut-Katanga",
+  "Kasaï",
+  "Kasaï Central",
+  "Kwilu",
+  "Mai-Ndombe",
+  "Kongo Central",
   // Add more provinces as needed
 ];
 
 export default function PostForm({ onSubmitPost }: PostFormProps) {
   const [formData, setFormData] = useState<PostData>({
-    name: '',
-    dyouthYear: '',
-    province: '',
+    name: "",
+    dyouthYear: "",
+    province: "",
     isAnonymous: false,
-    text: '',
+    text: "",
     image: null,
-    imagePreview: undefined
+    imagePreview: undefined,
   });
 
-  const handleTextChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleTextChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.checked
+      [e.target.name]: e.target.checked,
     });
   };
 
@@ -52,7 +61,7 @@ export default function PostForm({ onSubmitPost }: PostFormProps) {
       setFormData({
         ...formData,
         image: file,
-        imagePreview: URL.createObjectURL(file)
+        imagePreview: URL.createObjectURL(file),
       });
     }
   };
@@ -60,16 +69,16 @@ export default function PostForm({ onSubmitPost }: PostFormProps) {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     onSubmitPost(formData);
-    
+
     // Reset form
     setFormData({
-      name: '',
-      dyouthYear: '',
-      province: '',
+      name: "",
+      dyouthYear: "",
+      province: "",
       isAnonymous: false,
-      text: '',
+      text: "",
       image: null,
-      imagePreview: undefined
+      imagePreview: undefined,
     });
   };
 
@@ -82,53 +91,59 @@ export default function PostForm({ onSubmitPost }: PostFormProps) {
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-gray-700 mb-2">
-            {formData.isAnonymous ? 'Anonymous Post' : 'Your Name'}
+            {formData.isAnonymous ? "Anonymous Post" : "Your Name"}
           </label>
-          <input 
+          <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleTextChange}
             disabled={formData.isAnonymous}
             className="w-full p-2 border rounded-md"
-            placeholder={formData.isAnonymous ? 'Posting anonymously' : 'Enter your name'}
+            placeholder={
+              formData.isAnonymous ? "Posting anonymously" : "Enter your name"
+            }
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-gray-700 mb-2">D-Youth Year</label>
-            <select 
+            <select
               name="dyouthYear"
               value={formData.dyouthYear}
               onChange={handleTextChange}
               className="w-full p-2 border rounded-md"
             >
               <option value="">Select year</option>
-              {years.map(year => (
-                <option key={year} value={year}>{year}</option>
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
               ))}
             </select>
           </div>
-          
+
           <div>
             <label className="block text-gray-700 mb-2">Province</label>
-            <select 
+            <select
               name="province"
               value={formData.province}
               onChange={handleTextChange}
               className="w-full p-2 border rounded-md"
             >
               <option value="">Select province</option>
-              {provinces.map(province => (
-                <option key={province} value={province}>{province}</option>
+              {provinces.map((province) => (
+                <option key={province} value={province}>
+                  {province}
+                </option>
               ))}
             </select>
           </div>
         </div>
 
         <div className="flex items-center mb-4">
-          <input 
+          <input
             type="checkbox"
             name="isAnonymous"
             checked={formData.isAnonymous}
@@ -140,7 +155,7 @@ export default function PostForm({ onSubmitPost }: PostFormProps) {
 
         <div className="mb-4">
           <label className="block text-gray-700 mb-2">Your Message</label>
-          <textarea 
+          <textarea
             name="text"
             value={formData.text}
             onChange={handleTextChange}
@@ -151,8 +166,10 @@ export default function PostForm({ onSubmitPost }: PostFormProps) {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Add Image (optional)</label>
-          <input 
+          <label className="block text-gray-700 mb-2">
+            Add Image (optional)
+          </label>
+          <input
             type="file"
             name="image"
             accept="image/*"
@@ -161,12 +178,16 @@ export default function PostForm({ onSubmitPost }: PostFormProps) {
           />
           {formData.imagePreview && (
             <div className="mt-2">
-              <img src={formData.imagePreview} alt="Preview" className="max-h-40 rounded" />
+              <img
+                src={formData.imagePreview}
+                alt="Preview"
+                className="max-h-40 rounded"
+              />
             </div>
           )}
         </div>
 
-        <button 
+        <button
           type="submit"
           className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
         >

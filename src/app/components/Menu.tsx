@@ -33,14 +33,14 @@ const navItems = [
 export default function Menu() {
   const pathname = usePathname();
   const router = useRouter();
-  
+
   const [user, setUser] = useState<User | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     // Set mounted to true once the component is mounted on the client
     setMounted(true);
-    
+
     const handleRedirect = async () => {
       await supabase.auth.getSession();
       const { data: userData } = await supabase.auth.getUser();
@@ -131,7 +131,11 @@ export default function Menu() {
                   } transition-all duration-200 group-hover:opacity-100 group-hover:drop-shadow-md space-y-2`}
                 >
                   <div className="drop-shadow-md">{item.icon}</div>
-                  <span className={`drop-shadow-sm ${isActive ? "font-medium" : ""}`}>
+                  <span
+                    className={`drop-shadow-sm ${
+                      isActive ? "font-medium" : ""
+                    }`}
+                  >
                     {item.label}
                   </span>
                 </div>

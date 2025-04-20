@@ -4,8 +4,8 @@ import { ReactNode } from "react";
 import localFont from "next/font/local";
 import Menu from "@/app/components/Menu";
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "D-Youth Dropbox",
@@ -60,7 +60,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="th">
       <body className={`${myFont.className} bg-gray-50 text-white`}>
         <Analytics />
-        <SpeedInsights/>
+        <SpeedInsights />
         <Menu />
         <main className="max-w-2xl mx-auto px-4 py-6 pb-32">{children}</main>
         <div className="fixed inset-0 -z-20">

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';
-import React, { ReactNode } from 'react';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
+import React, { ReactNode } from "react";
 import ProfileModal from "./ProfileModal";
 
 // Interfaces for TypeScript typing
@@ -59,16 +59,16 @@ const getTimeElapsed = (dateString: string): string => {
     if (days > 30) {
       return new Date(dateString).toLocaleDateString(); // Return the full date for older posts
     } else if (days >= 1) {
-      return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+      return `${days} ${days === 1 ? "day" : "days"} ago`;
     } else if (hours >= 1) {
-      return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
+      return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
     } else if (minutes >= 1) {
-      return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
+      return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
     } else {
-      return 'Just now';
+      return "Just now";
     }
   } catch (error) {
-    console.error('Error calculating time elapsed:', error);
+    console.error("Error calculating time elapsed:", error);
     return dateString; // Return the original string if there's an error
   }
 };
@@ -93,8 +93,9 @@ const MessagePaper: React.FC<{
       <div>
         {/* User Profile Section - Now Clickable */}
         <div
-          className={`flex items-center justify-left h-auto ${isAnonymous ? "opacity-50" : "cursor-pointer hover:opacity-80"
-            }`}
+          className={`flex items-center justify-left h-auto ${
+            isAnonymous ? "opacity-50" : "cursor-pointer hover:opacity-80"
+          }`}
           onClick={() => !isAnonymous && sender && onProfileClick(sender)}
         >
           {/* Profile Image */}
@@ -103,7 +104,8 @@ const MessagePaper: React.FC<{
               src={
                 isAnonymous
                   ? "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png"
-                  : (sender?.profile_img || "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png")
+                  : sender?.profile_img ||
+                    "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png"
               }
               alt={isAnonymous ? "Anonymous" : "Profile"}
               className="w-full h-full object-cover"
@@ -113,27 +115,35 @@ const MessagePaper: React.FC<{
           {/* User Info */}
           <div className="ml-4">
             <h3 className="font-medium text-gray-900 text-base">
-              {isAnonymous ? "ไม่ระบุตัวตน" : (sender?.user_name || "ไม่ระบุตัวตน")}
+              {isAnonymous
+                ? "ไม่ระบุตัวตน"
+                : sender?.user_name || "ไม่ระบุตัวตน"}
             </h3>
             <p className="text-xs font-light text-gray-900 mb-1">
-              {isAnonymous ? "ไม่ระบุจังหวัด" : (sender?.province || "ไม่ระบุจังหวัด")}
+              {isAnonymous
+                ? "ไม่ระบุจังหวัด"
+                : sender?.province || "ไม่ระบุจังหวัด"}
             </p>
             <span className="bg-gray-900 text-white text-xs px-4 py-1 rounded-lg">
-              {isAnonymous ? "---" : (sender?.year || "ไม่ระบุปี")}
+              {isAnonymous ? "---" : sender?.year || "ไม่ระบุปี"}
             </span>
           </div>
         </div>
 
         {/* Message Content */}
         <div className="mt-4">
-          <p className="text-gray-900 break-words font-medium">{message.content}</p>
+          <p className="text-gray-900 break-words font-medium">
+            {message.content}
+          </p>
         </div>
       </div>
 
       {/* Timestamp */}
       <div className="mt-4">
         <span className="text-gray-600 font-light text-xs">
-          {message.created_at ? getTimeElapsed(message.created_at) : "No date available"}
+          {message.created_at
+            ? getTimeElapsed(message.created_at)
+            : "No date available"}
         </span>
       </div>
     </div>
@@ -144,7 +154,7 @@ const MessagePaper: React.FC<{
 const MessageWall: React.FC<MessageWallProps> = ({
   title,
   subtitle,
-  buttonText = 'เขียนข้อความ',
+  buttonText = "เขียนข้อความ",
   buttonAction,
   showButton = true,
   customFilter,
@@ -160,12 +170,14 @@ const MessageWall: React.FC<MessageWallProps> = ({
   // Get the paper color from the message.color field in the database
   const getPaperColor = (messageColor: string | null) => {
     // Default color if the color is not available
-    return messageColor || '#f5f5f5';
-  }
+    return messageColor || "#f5f5f5";
+  };
 
   useEffect(() => {
     const getCurrentUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session?.user?.id) {
         setUserId(session.user.id);
       }
@@ -181,8 +193,9 @@ const MessageWall: React.FC<MessageWallProps> = ({
       try {
         // Fetch messages where current user is the receiver
         const { data, error } = await supabase
-          .from('messages')
-          .select(`
+          .from("messages")
+          .select(
+            `
             id, 
             content, 
             created_at, 
@@ -192,20 +205,26 @@ const MessageWall: React.FC<MessageWallProps> = ({
             is_anonymous,
             sender:sender_id (id, user_name, profile_img, year, province, ig),
             receiver:receiver_id (id, user_name, profile_img, year, province, ig)
-          `)
-          .eq('receiver_id', userId)
-          .order('created_at', { ascending: false });
+          `
+          )
+          .eq("receiver_id", userId)
+          .order("created_at", { ascending: false });
 
         if (error) throw error;
 
         // Transform the data with better error handling
-        let transformedData = data?.map(message => {
-          return {
-            ...message,
-            sender: Array.isArray(message.sender) ? message.sender[0] : message.sender || null,
-            receiver: Array.isArray(message.receiver) ? message.receiver[0] : message.receiver || null
-          };
-        }) || [];
+        let transformedData =
+          data?.map((message) => {
+            return {
+              ...message,
+              sender: Array.isArray(message.sender)
+                ? message.sender[0]
+                : message.sender || null,
+              receiver: Array.isArray(message.receiver)
+                ? message.receiver[0]
+                : message.receiver || null,
+            };
+          }) || [];
 
         // Apply custom filter if provided
         if (customFilter) {
@@ -239,11 +258,17 @@ const MessageWall: React.FC<MessageWallProps> = ({
   };
 
   const handleDefaultButtonAction = () => {
-    router.push('/family');
+    router.push("/family");
   };
 
-  if (loading) return <div className="text-center py-8 text-white">โปรดเข้าสู่ระบบ เพื่อใช้งาน</div>;
-  if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
+  if (loading)
+    return (
+      <div className="text-center py-8 text-white">
+        โปรดเข้าสู่ระบบ เพื่อใช้งาน
+      </div>
+    );
+  if (error)
+    return <div className="text-center py-8 text-red-500">{error}</div>;
 
   return (
     <div className="text-left my-6">
@@ -257,8 +282,8 @@ const MessageWall: React.FC<MessageWallProps> = ({
           )}
         </div>
 
-        {headerRight || (
-          showButton && (
+        {headerRight ||
+          (showButton && (
             <button
               onClick={buttonAction || handleDefaultButtonAction}
               className="bg-white text-left text-green-900 font-medium py-2 px-4 rounded-lg flex items-center cursor-pointer"
@@ -272,8 +297,7 @@ const MessageWall: React.FC<MessageWallProps> = ({
               </svg>
               {buttonText}
             </button>
-          )
-        )}
+          ))}
       </div>
 
       {/* Messages Grid */}
@@ -309,7 +333,6 @@ const MessageWall: React.FC<MessageWallProps> = ({
           onSendMessage={(id) => router.push(`/message/${id}`)}
         />
       )}
-      
     </div>
   );
 };

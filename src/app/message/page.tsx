@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';
-import MessageWall from '@/app/components/MessageWall';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
+import MessageWall from "@/app/components/MessageWall";
 
 const MessagesPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Current date and username as specified
   const currentDate = "2025-04-11 14:00:57";
 
@@ -18,14 +18,17 @@ const MessagesPage = () => {
     const fetchCurrentUser = async () => {
       try {
         const { error: sessionError } = await supabase.auth.getSession();
-        
+
         if (sessionError) {
-          throw new Error('Failed to get user session // Please Login');
+          throw new Error("Failed to get user session // Please Login");
         }
-        
       } catch (err) {
-        console.error('Error getting user:', err);
-        setError(err instanceof Error ? err.message : 'An error occurred fetching user data');
+        console.error("Error getting user:", err);
+        setError(
+          err instanceof Error
+            ? err.message
+            : "An error occurred fetching user data"
+        );
       } finally {
         setLoading(false);
       }
@@ -36,7 +39,7 @@ const MessagesPage = () => {
 
   // Handle click on "New Message" button
   const handleNewMessage = () => {
-    router.push('/family');
+    router.push("/family");
   };
 
   // Custom header for the messages page

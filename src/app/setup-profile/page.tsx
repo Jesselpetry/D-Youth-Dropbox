@@ -6,7 +6,14 @@ import { useRouter } from "next/navigation";
 import ProvinceSelector from "./components/provinceSelector";
 import YearSelector from "./components/yearSelector";
 
-import { FiUser, FiCalendar, FiMapPin, FiImage, FiLogOut, FiInstagram } from "react-icons/fi";
+import {
+  FiUser,
+  FiCalendar,
+  FiMapPin,
+  FiImage,
+  FiLogOut,
+  FiInstagram,
+} from "react-icons/fi";
 
 export default function SetupProfile() {
   const [userId, setUserId] = useState<string | null>(null);
@@ -168,7 +175,7 @@ export default function SetupProfile() {
     <div className="p-4 flex flex-col relative overflow-y-auto">
       {/* Content */}
       <div className="max-w-2xl relative z-10 flex-1">
-        {/* Exit Button */}         
+        {/* Exit Button */}
         <div className="absolute top-2 left-2">
           <button
             onClick={handleExitButton}
@@ -212,13 +219,13 @@ export default function SetupProfile() {
               ) : (
                 <div
                   className="w-32 h-32 rounded-full bg-black/25 backdrop-blur-sm border border-white/30 text-white flex items-center justify-center cursor-pointer"
-                  onClick={() => document.getElementById("file-upload")?.click()}
+                  onClick={() =>
+                    document.getElementById("file-upload")?.click()
+                  }
                 >
                   <div className="flex flex-col items-center">
                     <FiImage className="w-8 h-8 text-white/70" />
-                    <span className="mt-1 text-xs text-white/70">
-                      เลือกรูป
-                    </span>
+                    <span className="mt-1 text-xs text-white/70">เลือกรูป</span>
                   </div>
                   <input
                     id="file-upload"
@@ -269,7 +276,9 @@ export default function SetupProfile() {
             <div className="space-y-2 relative z-30">
               <div className="flex items-center mb-2">
                 <FiCalendar className="text-white/70 mr-2" />
-                <label className="text-white text-xl font-medium">ยุวชน ปี</label>
+                <label className="text-white text-xl font-medium">
+                  ยุวชน ปี
+                </label>
               </div>
               <div className="relative z-30">
                 <YearSelector year={year} setYear={setYear} />
@@ -280,10 +289,15 @@ export default function SetupProfile() {
             <div className="space-y-2 relative z-20">
               <div className="flex items-center mb-2">
                 <FiMapPin className="text-white/70 mr-2" />
-                <label className="text-white text-xl font-medium">จังหวัด</label>
+                <label className="text-white text-xl font-medium">
+                  จังหวัด
+                </label>
               </div>
               <div className="relative z-20">
-                <ProvinceSelector province={province} setProvince={setProvince} />
+                <ProvinceSelector
+                  province={province}
+                  setProvince={setProvince}
+                />
               </div>
             </div>
 

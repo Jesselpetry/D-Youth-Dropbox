@@ -1,6 +1,6 @@
-import React, { useEffect, useState, ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient'; // Make sure this path is correct
+import React, { useEffect, useState, ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient"; // Make sure this path is correct
 import ProfileModal from "./ProfileModal";
 
 // Define interfaces for type safety
@@ -56,16 +56,16 @@ const getTimeElapsed = (dateString: string): string => {
     if (days > 30) {
       return new Date(dateString).toLocaleDateString(); // Return the full date for older posts
     } else if (days >= 1) {
-      return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+      return `${days} ${days === 1 ? "day" : "days"} ago`;
     } else if (hours >= 1) {
-      return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
+      return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
     } else if (minutes >= 1) {
-      return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
+      return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
     } else {
-      return 'Just now';
+      return "Just now";
     }
   } catch (error) {
-    console.error('Error calculating time elapsed:', error);
+    console.error("Error calculating time elapsed:", error);
     return dateString; // Return the original string if there's an error
   }
 };
@@ -80,9 +80,12 @@ const WallPaper: React.FC<{
   const isAnonymous = wall.isAnonymous || wall.is_anonymous || false;
 
   // Safe access to profiles
-  const profile = !isAnonymous && wall.profiles ?
-    (Array.isArray(wall.profiles) && wall.profiles.length > 0 ? wall.profiles[0] : wall.profiles)
-    : null;
+  const profile =
+    !isAnonymous && wall.profiles
+      ? Array.isArray(wall.profiles) && wall.profiles.length > 0
+        ? wall.profiles[0]
+        : wall.profiles
+      : null;
 
   return (
     <div
@@ -92,9 +95,14 @@ const WallPaper: React.FC<{
       <div>
         {/* User Profile Section - Now Clickable */}
         <div
-          className={`flex items-center justify-left h-auto ${isAnonymous ? "opacity-50" : "cursor-pointer hover:opacity-80"
-            }`}
-          onClick={() => !isAnonymous && profile && onProfileClick(Array.isArray(profile) ? profile[0] : profile)}
+          className={`flex items-center justify-left h-auto ${
+            isAnonymous ? "opacity-50" : "cursor-pointer hover:opacity-80"
+          }`}
+          onClick={() =>
+            !isAnonymous &&
+            profile &&
+            onProfileClick(Array.isArray(profile) ? profile[0] : profile)
+          }
         >
           {/* Profile Image */}
           <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
@@ -102,7 +110,8 @@ const WallPaper: React.FC<{
               src={
                 isAnonymous
                   ? "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png"
-                  : (!Array.isArray(profile) && profile?.profile_img || "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png")
+                  : (!Array.isArray(profile) && profile?.profile_img) ||
+                    "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png"
               }
               alt={isAnonymous ? "Anonymous" : "Profile"}
               className="w-full h-full object-cover"
@@ -112,27 +121,43 @@ const WallPaper: React.FC<{
           {/* User Info */}
           <div className="ml-4">
             <h3 className="font-medium text-gray-900 text-base">
-              {isAnonymous ? "ไม่ระบุตัวตน" : (Array.isArray(profile) ? profile[0]?.user_name : profile?.user_name || "ไม่ระบุตัวตน")}
+              {isAnonymous
+                ? "ไม่ระบุตัวตน"
+                : Array.isArray(profile)
+                ? profile[0]?.user_name
+                : profile?.user_name || "ไม่ระบุตัวตน"}
             </h3>
             <p className="text-xs font-light text-gray-900 mb-1">
-              {isAnonymous ? "ไม่ระบุจังหวัด" : (Array.isArray(profile) ? profile[0]?.province : profile?.province || "ไม่ระบุจังหวัด")}
+              {isAnonymous
+                ? "ไม่ระบุจังหวัด"
+                : Array.isArray(profile)
+                ? profile[0]?.province
+                : profile?.province || "ไม่ระบุจังหวัด"}
             </p>
             <span className="bg-gray-900 text-white text-xs px-4 py-1 rounded-lg">
-              {isAnonymous ? "---" : (Array.isArray(profile) ? profile[0]?.year : profile?.year || "ไม่ระบุปี")}
+              {isAnonymous
+                ? "---"
+                : Array.isArray(profile)
+                ? profile[0]?.year
+                : profile?.year || "ไม่ระบุปี"}
             </span>
           </div>
         </div>
 
         {/* Message Content */}
         <div className="mt-4">
-          <p className="text-gray-900 break-words font-medium">{wall.content}</p>
+          <p className="text-gray-900 break-words font-medium">
+            {wall.content}
+          </p>
         </div>
       </div>
 
       {/* Timestamp */}
       <div className="mt-4">
         <span className="text-gray-600 font-light text-xs">
-          {wall.created_at ? getTimeElapsed(wall.created_at) : "No date available"}
+          {wall.created_at
+            ? getTimeElapsed(wall.created_at)
+            : "No date available"}
         </span>
       </div>
     </div>
@@ -143,7 +168,7 @@ const WallPaper: React.FC<{
 const PaperWall: React.FC<PaperWallProps> = ({
   title,
   subtitle,
-  buttonText = 'เขียนข้อความ',
+  buttonText = "เขียนข้อความ",
   buttonAction,
   showButton = true,
   customFilter,
@@ -159,16 +184,17 @@ const PaperWall: React.FC<PaperWallProps> = ({
   // Get the paper color from the wall.color field in the database
   const getPaperColor = (wallColor: string | null) => {
     // Default color if the color is not available
-    return wallColor || '#f5f5f5';
-  }
+    return wallColor || "#f5f5f5";
+  };
 
   useEffect(() => {
     const fetchWalls = async () => {
       try {
         // Fetch data from walls table with JOIN to profiles
         const { data, error } = await supabase
-          .from('walls')
-          .select(`
+          .from("walls")
+          .select(
+            `
             id, 
             content, 
             created_at, 
@@ -176,31 +202,35 @@ const PaperWall: React.FC<PaperWallProps> = ({
             color, 
             is_anonymous,
             profiles:sender_id (id, user_name, profile_img, year, province, ig)
-          `)
-          .order('created_at', { ascending: false });
+          `
+          )
+          .order("created_at", { ascending: false });
 
         if (error) throw error;
 
         // Transform the data with better error handling
-        let transformedData = data?.map(wall => {
-          const isAnonymous = wall.is_anonymous || false;
+        let transformedData =
+          data?.map((wall) => {
+            const isAnonymous = wall.is_anonymous || false;
 
-          // If anonymous or no profiles, provide default/empty values
-          let profileData = null;
+            // If anonymous or no profiles, provide default/empty values
+            let profileData = null;
 
-          if (!isAnonymous && wall.profiles) {
-            // Handle both array and single object cases
-            profileData = Array.isArray(wall.profiles) ?
-              (wall.profiles.length > 0 ? wall.profiles[0] : null) :
-              wall.profiles;
-          }
+            if (!isAnonymous && wall.profiles) {
+              // Handle both array and single object cases
+              profileData = Array.isArray(wall.profiles)
+                ? wall.profiles.length > 0
+                  ? wall.profiles[0]
+                  : null
+                : wall.profiles;
+            }
 
-          return {
-            ...wall,
-            isAnonymous,
-            profiles: profileData,
-          };
-        }) || [];
+            return {
+              ...wall,
+              isAnonymous,
+              profiles: profileData,
+            };
+          }) || [];
 
         // Apply custom filter if provided
         if (customFilter) {
@@ -231,11 +261,13 @@ const PaperWall: React.FC<PaperWallProps> = ({
   };
 
   const handleDefaultButtonAction = () => {
-    router.push('/walls/send');
+    router.push("/walls/send");
   };
 
-  if (loading) return <div className="text-center py-8 text-white">กำลังโหลด...</div>;
-  if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
+  if (loading)
+    return <div className="text-center py-8 text-white">กำลังโหลด...</div>;
+  if (error)
+    return <div className="text-center py-8 text-red-500">{error}</div>;
 
   return (
     <div className="text-left my-6">
@@ -249,8 +281,8 @@ const PaperWall: React.FC<PaperWallProps> = ({
           )}
         </div>
 
-        {headerRight || (
-          showButton && (
+        {headerRight ||
+          (showButton && (
             <button
               onClick={buttonAction || handleDefaultButtonAction}
               className="bg-white text-left text-green-900 font-medium py-2 px-4 rounded-lg flex items-center cursor-pointer"
@@ -264,8 +296,7 @@ const PaperWall: React.FC<PaperWallProps> = ({
               </svg>
               {buttonText}
             </button>
-          )
-        )}
+          ))}
       </div>
 
       {walls.length === 0 ? (
@@ -298,7 +329,6 @@ const PaperWall: React.FC<PaperWallProps> = ({
         />
       )}
     </div>
-
   );
 };
 

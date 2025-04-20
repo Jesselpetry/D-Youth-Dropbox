@@ -6,7 +6,14 @@ import { useRouter } from "next/navigation";
 import ProvinceSelector from "./components/provinceSelector";
 import YearSelector from "./components/yearSelector";
 import { RiLoaderFill } from "react-icons/ri";
-import { FiLogOut, FiSave, FiUser, FiCalendar, FiMapPin, FiInstagram } from "react-icons/fi";
+import {
+  FiLogOut,
+  FiSave,
+  FiUser,
+  FiCalendar,
+  FiMapPin,
+  FiInstagram,
+} from "react-icons/fi";
 
 export default function ProfilePage() {
   const [userId, setUserId] = useState<string | null>(null);
@@ -150,24 +157,21 @@ export default function ProfilePage() {
     }
   };
 
-  if (loading) return (
-    <div className="h-screen flex items-center justify-center">
-      <RiLoaderFill className="animate-spin text-white" size={48} />
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <RiLoaderFill className="animate-spin text-white" size={48} />
+      </div>
+    );
 
   return (
     <div className="max-w-2xl mx-auto py-6">
-
       <h1 className="text-3xl font-bold text-white">โปรไฟล์</h1>
-      <h2 className="text-xl font-light text-white mt-2 opacity-60">
-        Profile
-      </h2>
+      <h2 className="text-xl font-light text-white mt-2 opacity-60">Profile</h2>
 
       <div className="mt-6 max-w-2xl mx-auto">
         {/* Form Fields */}
         <div className="space-y-6 w-full p-4 rounded-2xl bg-black/25 backdrop-blur-sm border border-white/25 text-white text-lg font-light">
-
           {/* Profile Image Section */}
           <div className="flex justify-center mt-4">
             {previewUrl ? (
@@ -181,7 +185,9 @@ export default function ProfilePage() {
                 </div>
                 <div
                   className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300"
-                  onClick={() => document.getElementById("file-upload")?.click()}
+                  onClick={() =>
+                    document.getElementById("file-upload")?.click()
+                  }
                 >
                   <span className="text-white text-sm">Change Photo</span>
                 </div>
