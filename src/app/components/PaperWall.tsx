@@ -125,7 +125,7 @@ const WallPaper: React.FC<{
 
         {/* Message Content */}
         <div className="mt-4">
-          <p className="text-blue-950 break-words font-medium">{wall.content}</p>
+          <p className="text-gray-900 break-words font-medium">{wall.content}</p>
         </div>
       </div>
 

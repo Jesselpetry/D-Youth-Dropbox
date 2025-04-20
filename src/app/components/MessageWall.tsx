@@ -126,7 +126,7 @@ const MessagePaper: React.FC<{
 
         {/* Message Content */}
         <div className="mt-4">
-          <p className="text-blue-950 break-words font-medium">{message.content}</p>
+          <p className="text-gray-900 break-words font-medium">{message.content}</p>
         </div>
       </div>
 
