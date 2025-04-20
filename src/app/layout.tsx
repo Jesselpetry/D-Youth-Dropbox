@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     siteName: "D-Youth Dropbox",
     images: [
       {
-        url: "https://i.ibb.co/LX7h2KCT/Frame-45.png", // ✅ Updated image URL
+        url: "https://i.ibb.co/HLHQJBbj/Web-Preview.png", // ✅ Updated image URL
         width: 1200,
         height: 630,
         alt: "D-Youth Dropbox Preview",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "D-Youth Dropbox",
     description: "โพสต์และดูข้อความของคุณแบบง่าย ๆ",
-    images: ["https://i.ibb.co/LX7h2KCT/Frame-45.png"], // ✅ Updated image URL
+    images: ["https://i.ibb.co/HLHQJBbj/Web-Preview.png"], // ✅ Updated image URL
   },
 };
 

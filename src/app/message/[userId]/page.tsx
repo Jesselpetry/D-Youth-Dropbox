@@ -245,7 +245,7 @@ export default function MessageToUser() {
 
       {/* Paper Color Selection */}
       <div className="flex mt-4 items-center justify-between">
-        <label className="text-white text-xl mr-2">
+        <label className="text-white text-lg mr-2">
           สีกระดาษ
         </label>
         <div className="flex space-x-2 justify-right">
