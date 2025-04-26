@@ -46,6 +46,7 @@ export const updateSession = async (request: NextRequest) => {
       "/auth",
       "/auth/callback",
       "/family",
+      "/shake",
     ];
 
     const isPublicPath = publicPaths.some(
