@@ -77,16 +77,15 @@ export default function Home() {
         };
 
         const requestMotionPermission = () => {
-            const deviceMotion = DeviceMotionEvent as any;
-            if (typeof deviceMotion.requestPermission === "function") {
-                deviceMotion
+            if (
+                typeof (DeviceMotionEvent as unknown as { requestPermission?: () => Promise<PermissionState> })
+                    .requestPermission === "function"
+            ) {
+                (DeviceMotionEvent as unknown as { requestPermission: () => Promise<PermissionState> })
                     .requestPermission()
-                    .then((permissionState: PermissionState) => {
+                    .then((permissionState) => {
                         if (permissionState === "granted") {
-                            window.addEventListener(
-                                "devicemotion",
-                                handleMotion
-                            );
+                            window.addEventListener("devicemotion", handleMotion);
                         }
                     })
                     .catch(console.error);
