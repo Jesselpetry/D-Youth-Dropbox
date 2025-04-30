@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import React, { ReactNode } from "react";
+import Image from "next/image";
 import ProfileModal from "./ProfileModal";
 
 // Interfaces for TypeScript typing
@@ -100,7 +101,7 @@ const MessagePaper: React.FC<{
         >
           {/* Profile Image */}
           <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
-            <img
+            <Image
               src={
                 isAnonymous
                   ? "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png"
@@ -109,6 +110,8 @@ const MessagePaper: React.FC<{
               }
               alt={isAnonymous ? "Anonymous" : "Profile"}
               className="w-full h-full object-cover"
+              width={64}
+              height={64}
             />
           </div>
 

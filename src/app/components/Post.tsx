@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type PostProps = {
   id: string;
   name: string;
@@ -36,10 +38,13 @@ export default function Post({
 
       {imageUrl && (
         <div className="mb-3">
-          <img
+          <Image
             src={imageUrl}
             alt="Post image"
-            className="rounded-md max-h-96 w-auto"
+            className="rounded-md"
+            width={500} // Adjust width as needed
+            height={500} // Adjust height as needed
+            objectFit="contain" // Optional: Adjust object fit
           />
         </div>
       )}

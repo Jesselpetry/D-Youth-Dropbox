@@ -1,4 +1,5 @@
 import React, { useEffect, useState, ReactNode } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient"; // Make sure this path is correct
 import ProfileModal from "./ProfileModal";
@@ -106,7 +107,7 @@ const WallPaper: React.FC<{
         >
           {/* Profile Image */}
           <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-500">
-            <img
+            <Image
               src={
                 isAnonymous
                   ? "https://i.ibb.co/4nzNv3vx/anonymous-avatar.png"
@@ -115,6 +116,8 @@ const WallPaper: React.FC<{
               }
               alt={isAnonymous ? "Anonymous" : "Profile"}
               className="w-full h-full object-cover"
+              width={64} // Adjust width as needed
+              height={64} // Adjust height as needed
             />
           </div>
 

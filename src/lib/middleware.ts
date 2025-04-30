@@ -2,8 +2,6 @@ import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const updateSession = async (request: NextRequest) => {
-  // This `try/catch` block is only here for the interactive tutorial.
-  // Feel free to remove once you have Supabase connected.
   try {
     // Create an unmodified response
     let response = NextResponse.next({
@@ -39,14 +37,14 @@ export const updateSession = async (request: NextRequest) => {
     // https://supabase.com/docs/guides/auth/server-side/nextjs
     const user = await supabase.auth.getUser();
 
-    // protected routes
+    // Define public paths that don't require authentication
     const publicPaths = [
       "/login",
       "/setup-profile",
       "/auth",
       "/auth/callback",
       "/family",
-      "/shake",
+      "/shake", // Add /shake as a public path if it doesn't require authentication
     ];
 
     const isPublicPath = publicPaths.some(
@@ -65,6 +63,8 @@ export const updateSession = async (request: NextRequest) => {
     ) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
+
+    // Additional logic for protected paths
     if (
       !isPublicPath &&
       request.nextUrl.pathname !== "/" &&
@@ -79,7 +79,6 @@ export const updateSession = async (request: NextRequest) => {
   } catch {
     // If you are here, a Supabase client could not be created!
     // This is likely because you have not set up environment variables.
-    // Check out http://:3000 for Next Steps.
     return NextResponse.next({
       request: {
         headers: request.headers,
