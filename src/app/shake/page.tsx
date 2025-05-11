@@ -69,11 +69,13 @@ export default function ShakePage() {
     };
 
     const requestMotionPermission = () => {
-      const deviceMotion = DeviceMotionEvent as any;
-      if (typeof deviceMotion.requestPermission === "function") {
+      const deviceMotion = DeviceMotionEvent as typeof DeviceMotionEvent & {
+        requestPermission?: () => Promise<PermissionState>;
+      };
+      if (deviceMotion.requestPermission) {
         deviceMotion
           .requestPermission()
-          .then((permissionState: PermissionState) => {
+          .then((permissionState) => {
             if (permissionState === "granted") {
               window.addEventListener("devicemotion", handleMotion);
             }
