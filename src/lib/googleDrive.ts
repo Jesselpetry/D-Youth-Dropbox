@@ -1,4 +1,5 @@
 import { google } from 'googleapis';
+import { Readable } from 'stream';
 
 interface GoogleDriveConfig {
   clientEmail: string;
@@ -75,7 +76,7 @@ export class GoogleDriveService {
 
       const media = {
         mimeType,
-        body: require('stream').Readable.from(fileBuffer),
+        body: Readable.from(fileBuffer),
       };
 
       const response = await this.drive.files.create({

@@ -17,6 +17,7 @@ export default function StaffDashboard() {
   useEffect(() => {
     checkAuth();
     fetchOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkAuth = async () => {

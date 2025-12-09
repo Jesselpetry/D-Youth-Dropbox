@@ -14,6 +14,7 @@ export default function QueueRestrictionGuard({
   const router = useRouter();
   const pathname = usePathname();
   const [checking, setChecking] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   // Pages that should not be restricted by queue
   const allowedPaths = [
@@ -26,8 +27,15 @@ export default function QueueRestrictionGuard({
   ];
 
   useEffect(() => {
-    checkQueueStatus();
-  }, [pathname]);
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      checkQueueStatus();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, mounted]);
 
   const checkQueueStatus = async () => {
     try {
@@ -77,6 +85,11 @@ export default function QueueRestrictionGuard({
       setChecking(false);
     }
   };
+
+  // Don't show loading during SSR
+  if (!mounted) {
+    return <>{children}</>;
+  }
 
   if (checking) {
     return (

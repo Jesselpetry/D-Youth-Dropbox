@@ -15,6 +15,7 @@ export default function HistoryPage() {
   useEffect(() => {
     checkAuth();
     fetchHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkAuth = async () => {
