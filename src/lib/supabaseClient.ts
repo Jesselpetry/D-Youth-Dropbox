@@ -9,6 +9,9 @@ export const supabase = createBrowserClient(
   supabaseUrl,
   supabaseAnonKey,
   {
+    auth: {
+      flowType: 'pkce',
+    },
     db: {
       schema: 'dyouth', // ระบุ Schema ชัดเจนเหมือนเดิม
     },
