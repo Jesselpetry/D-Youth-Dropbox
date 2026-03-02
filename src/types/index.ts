@@ -1,5 +1,5 @@
 export interface Profile {
-  id: number;
+  id: string;
   user_name: string;
   profile_img: string;
   year?: string;
@@ -11,7 +11,7 @@ export interface Wall {
   id: number;
   content: string;
   created_at: string;
-  sender_id: number;
+  sender_id: string | null;
   color: string | null;
   is_anonymous?: boolean;
   profiles: Profile | Profile[];

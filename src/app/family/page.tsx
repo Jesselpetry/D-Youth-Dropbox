@@ -8,16 +8,16 @@ import ProfileModal from "../components/ProfileModal";
 import { useRouter } from "next/navigation";
 
 interface FamilyMember {
-  id: number;
+  id: string;
   user_name: string;
   province: string;
   year: string;
   profile_img: string;
-  ig: string; // Added the missing 'ig' property
+  ig: string;
 }
 
 export default function FamilyPage() {
-  const [imageError, setImageError] = useState<Record<number, boolean>>({});
+  const [imageError, setImageError] = useState<Record<string, boolean>>({});
   const [familyData, setFamilyData] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(""); 
@@ -61,7 +61,7 @@ export default function FamilyPage() {
     (a, b) => parseInt(b) - parseInt(a)
   );
 
-  const handleSendMessage = (memberId: number) => {
+  const handleSendMessage = (memberId: string) => {
     router.push(`/message/${memberId}`);
   };
 

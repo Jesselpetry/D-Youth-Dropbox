@@ -1,8 +1,16 @@
-// src/lib/supabaseClient.ts
-import { createBrowserClient } from "@supabase/ssr";
+import { createBrowserClient } from '@supabase/ssr';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-// Use your own project values from .env.local
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-export const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
+// ใช้ createBrowserClient ของ @supabase/ssr แทน เพื่อให้รองรับ Next.js และ PKCE 100%
+export const supabase = createBrowserClient(
+  supabaseUrl,
+  supabaseAnonKey,
+  {
+    db: {
+      schema: 'dyouth', // ระบุ Schema ชัดเจนเหมือนเดิม
+    },
+  }
+) as SupabaseClient<any, 'dyouth'>;

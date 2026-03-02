@@ -10,11 +10,7 @@ const MessagesPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Current date and username as specified
-  const currentDate = "2025-04-11 14:00:57";
-
   useEffect(() => {
-    // Get the current user ID on component mount Deployy
     const fetchCurrentUser = async () => {
       try {
         const { error: sessionError } = await supabase.auth.getSession();
@@ -81,9 +77,8 @@ const MessagesPage = () => {
     <MessageWall
       title="ข้อความ"
       subtitle="Messages"
-      showButton={false} // We use custom header instead
+      showButton={false}
       headerRight={messageHeader}
-      currentDate={currentDate}
     />
   );
 };

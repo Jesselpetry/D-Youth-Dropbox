@@ -82,23 +82,13 @@ export default function SendToWall() {
         let submitError;
 
         // Insert message into the database
-        if (!isAnonymous) {
-          const { error } = await supabase.from("walls").insert({
-            sender_id: senderId,
-            content: message,
-            is_anonymous: isAnonymous,
-            color: paperColor,
-          });
-          submitError = error;
-        } else {
-          const { error } = await supabase.from("walls").insert({
-            sender_id: null,
-            content: message,
-            is_anonymous: isAnonymous,
-            color: paperColor,
-          });
-          submitError = error;
-        }
+        const { error } = await supabase.from("walls").insert({
+          sender_id: isAnonymous ? null : senderId,
+          content: message,
+          is_anonymous: isAnonymous,
+          color: paperColor,
+        });
+        submitError = error;
 
         if (submitError) {
           console.error("Supabase error details:", submitError);

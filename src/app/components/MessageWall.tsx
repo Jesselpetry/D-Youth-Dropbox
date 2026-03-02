@@ -6,10 +6,11 @@ import { supabase } from "@/lib/supabaseClient";
 import React, { ReactNode } from "react";
 import Image from "next/image";
 import ProfileModal from "./ProfileModal";
+import { getTimeElapsed } from "@/utils/dateHelpers";
 
 // Interfaces for TypeScript typing
 interface Profile {
-  id?: number;
+  id?: string;
   user_name?: string;
   profile_img?: string;
   year?: string;
@@ -22,8 +23,8 @@ interface Message {
   id: number;
   content: string;
   created_at: string;
-  sender_id: number | null;
-  receiver_id: number;
+  sender_id: string | null;
+  receiver_id: string;
   color: string | null;
   is_anonymous?: boolean;
   sender: Profile | null;
@@ -38,41 +39,7 @@ interface MessageWallProps {
   showButton?: boolean;
   customFilter?: (message: Message) => boolean;
   headerRight?: ReactNode;
-  currentDate?: string;
 }
-
-// Helper function to get time elapsed since a date
-const getTimeElapsed = (dateString: string): string => {
-  try {
-    const now = new Date();
-    const past = new Date(dateString);
-
-    // Calculate the difference in milliseconds
-    const diff = now.getTime() - past.getTime();
-
-    // Convert to seconds, minutes, hours, days
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    // Return appropriate string based on the time difference
-    if (days > 30) {
-      return new Date(dateString).toLocaleDateString(); // Return the full date for older posts
-    } else if (days >= 1) {
-      return `${days} ${days === 1 ? "day" : "days"} ago`;
-    } else if (hours >= 1) {
-      return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
-    } else if (minutes >= 1) {
-      return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
-    } else {
-      return "Just now";
-    }
-  } catch (error) {
-    console.error("Error calculating time elapsed:", error);
-    return dateString; // Return the original string if there's an error
-  }
-};
 
 // Message Paper component that displays an individual message
 const MessagePaper: React.FC<{
@@ -255,8 +222,6 @@ const MessageWall: React.FC<MessageWallProps> = ({
 
   const handleProfileClick = (profile: Profile) => {
     if (!profile) return;
-    // Instead of router.push, set the selected profile DEPLOYMENT
-    console.log("Profile clicked:", profile);
     setSelectedProfile(profile);
   };
 
@@ -325,7 +290,7 @@ const MessageWall: React.FC<MessageWallProps> = ({
       {selectedProfile && (
         <ProfileModal
           member={{
-            id: selectedProfile.id ?? 0,
+            id: selectedProfile.id ?? "",
             user_name: selectedProfile.user_name || "",
             province: selectedProfile.province || "",
             year: selectedProfile.year || "",

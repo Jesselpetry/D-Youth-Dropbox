@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
-const redirectUrl = process.env.NEXT_PUBLIC_SITE_URL || `${location.origin}`;
 
 export default function LoginPage() {
   const [loginError, setLoginError] = useState<string | null>(null);
@@ -13,6 +12,10 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     setLoginError(null);
+
+    // Build redirect URL safely inside the component (client-side only)
+    const redirectUrl =
+      process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
 
     try {
       const { error } = await supabase.auth.signInWithOAuth({
