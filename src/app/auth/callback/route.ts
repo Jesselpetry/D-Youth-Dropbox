@@ -5,13 +5,11 @@ import { NextResponse } from 'next/server'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  // ตัวแปร next เอาไว้เก็บ URL ปลายทางหลังจากล็อกอินเสร็จ (ค่าเริ่มต้นคือหน้า Home)
   const next = searchParams.get('next') ?? '/'
 
   if (code) {
     const cookieStore = await cookies()
-
-    // สร้าง Supabase Client โดยอย่าลืมระบุ Schema dyouth
+    
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -21,32 +19,43 @@ export async function GET(request: Request) {
           set(name: string, value: string, options: CookieOptions) { cookieStore.set({ name, value, ...options }) },
           remove(name: string, options: CookieOptions) { cookieStore.set({ name, value: '', ...options }) },
         },
-        db: { schema: 'dyouth' }, // ชี้เป้าไปที่ห้อง dyouth
+        db: { schema: 'dyouth' }
       }
     )
 
-    // 1. แลกเปลี่ยน Code จาก Google เพื่อสร้าง Session ในระบบ
-    const { data: { user }, error } = await supabase.auth.exchangeCodeForSession(code)
+    // 1. ลองแลกเปลี่ยน Code เป็น Session
+    const { data, error: authError } = await supabase.auth.exchangeCodeForSession(code)
 
-    if (!error && user) {
-      // 2. เช็คว่า User คนนี้มีข้อมูลในตาราง dyouth.profiles หรือยัง
-      //    ดู user_name ด้วย เพราะ upsert จาก setup-profile ถึงจะกรอกข้อมูลจริง
-      const { data: profile } = await supabase
+    // 🚨 ถ้า Auth พัง ให้ล็อก Error ออกมาดู
+    if (authError) {
+      console.error('🔥 Auth Error:', authError.message)
+      return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(authError.message)}`)
+    }
+
+    if (data.user) {
+      // 2. เช็ค Profile 
+      const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select('id, user_name')
-        .eq('id', user.id)
+        .select('id')
+        .eq('id', data.user.id)
         .single()
 
-      // 3. ถ้ายังไม่มี Profile หรือยังไม่ได้กรอก user_name → ไปหน้าตั้งค่าโปรไฟล์
-      if (!profile || !profile.user_name) {
-        return NextResponse.redirect(`${origin}/setup-profile`)
+      // 🚨 ถ้าเช็ค Profile พัง (ที่ไม่ใช่ Error โค้ด PGRST116 แปลว่าหาข้อมูลไม่เจอ) ให้ล็อกออกมา
+      if (profileError && profileError.code !== 'PGRST116') {
+        console.error('🔥 Profile Query Error:', profileError.message, profileError.details)
       }
 
-      // 4. มี Profile ครบแล้ว → ไปหน้าหลัก หรือหน้าที่ตั้งใจจะไปแต่แรก
+      // 3. ถ้าไม่มี Profile ให้เด้งไปหน้าสร้าง
+      if (!profile) {
+        return NextResponse.redirect(`${origin}/setup-profile`) 
+      }
+
+      // 4. ถ้ามี Profile แล้ว ให้เข้าเว็บปกติ
       return NextResponse.redirect(`${origin}${next}`)
     }
+  } else {
+    console.error('🔥 ไม่เจอค่า ?code= ใน URL ที่ส่งมาจาก Google')
   }
 
-  // ถ้ามี Error ตอนล็อกอิน ให้เด้งกลับไปหน้า login พร้อมส่งแจ้งเตือน
-  return NextResponse.redirect(`${origin}/login?error=true`)
+  return NextResponse.redirect(`${origin}/login?error=Missing_Code`)
 }
