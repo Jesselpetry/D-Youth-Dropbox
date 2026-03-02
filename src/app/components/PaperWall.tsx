@@ -7,7 +7,7 @@ import { getTimeElapsed } from "@/utils/dateHelpers";
 
 // Define interfaces for type safety
 interface Profile {
-  id: number;
+  id: string;
   user_name: string;
   profile_img: string;
   year?: string;
@@ -20,7 +20,7 @@ interface Wall {
   id: number;
   content: string;
   created_at: string;
-  sender_id: number;
+  sender_id: string | null;
   color: string | null;
   is_anonymous?: boolean;
   profiles: Profile | Profile[] | null;
@@ -213,9 +213,19 @@ const PaperWall: React.FC<PaperWallProps> = ({
         if (err instanceof Error) {
           setError(err.message);
           console.error("Error fetching walls:", err.message);
+        } else if (
+          err !== null &&
+          typeof err === "object" &&
+          "message" in err &&
+          typeof (err as { message: unknown }).message === "string"
+        ) {
+          // Handles Supabase PostgrestError and similar plain-object errors
+          const message = (err as { message: string }).message;
+          setError(message);
+          console.error("Error fetching walls:", message, err);
         } else {
           setError("An unknown error occurred");
-          console.error("Unknown error fetching walls:", err);
+          console.error("Unknown error fetching walls:", JSON.stringify(err), err);
         }
       } finally {
         setLoading(false);

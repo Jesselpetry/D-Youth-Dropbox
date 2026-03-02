@@ -14,6 +14,9 @@ export const updateSession = async (request: NextRequest) => {
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
+        db: {
+          schema: "dyouth", // Always query the dyouth schema
+        },
         cookies: {
           getAll() {
             return request.cookies.getAll();
@@ -33,52 +36,41 @@ export const updateSession = async (request: NextRequest) => {
       }
     );
 
-    // This will refresh session if expired - required for Server Components
+    // Refresh session if expired — required for Server Components
     // https://supabase.com/docs/guides/auth/server-side/nextjs
-    const user = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    // Define public paths that don't require authentication
+    const { pathname } = request.nextUrl;
+
+    // Paths that are always accessible without authentication
     const publicPaths = [
       "/login",
       "/setup-profile",
       "/auth",
       "/auth/callback",
       "/family",
-      "/shake", // Add /shake as a public path if it doesn't require authentication
     ];
 
     const isPublicPath = publicPaths.some(
-      (path) =>
-        request.nextUrl.pathname === path ||
-        request.nextUrl.pathname.startsWith(path + "/")
+      (path) => pathname === path || pathname.startsWith(path + "/")
     );
 
-    // Redirect to login if user has error and not on a public path
-    if (
-      !user.data.user &&
-      !isPublicPath &&
-      request.nextUrl.pathname !== "/" &&
-      request.nextUrl.pathname !== "/walls" &&
-      request.nextUrl.pathname !== "/message"
-    ) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
+    // Paths that are accessible whether or not the user is logged in
+    const openPaths = ["/", "/walls", "/message"];
+    const isOpenPath = openPaths.some(
+      (path) => pathname === path || pathname.startsWith(path + "/")
+    );
 
-    // Additional logic for protected paths
-    if (
-      !isPublicPath &&
-      request.nextUrl.pathname !== "/" &&
-      !request.nextUrl.pathname.startsWith("/walls") &&
-      request.nextUrl.pathname !== "/profile" &&
-      !request.nextUrl.pathname.startsWith("/message")
-    ) {
-      return NextResponse.redirect(new URL("/", request.url));
+    // Redirect unauthenticated users away from protected pages
+    if (!user && !isPublicPath && !isOpenPath) {
+      return NextResponse.redirect(new URL("/login", request.url));
     }
 
     return response;
   } catch {
-    // If you are here, a Supabase client could not be created!
-    // This is likely because you have not set up environment variables.
+    // Supabase client could not be created (e.g. missing env vars at build time)
     return NextResponse.next({
       request: {
         headers: request.headers,

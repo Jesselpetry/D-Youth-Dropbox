@@ -5,7 +5,7 @@ import { IoMdSend } from "react-icons/io";
 import { RiInstagramFill } from "react-icons/ri";
 
 interface FamilyMember {
-  id: number;
+  id: string;
   user_name: string;
   province: string;
   year: string;
@@ -16,7 +16,7 @@ interface FamilyMember {
 interface ProfileModalProps {
   member: FamilyMember | null;
   onClose: () => void;
-  onSendMessage: (memberId: number) => void;
+  onSendMessage: (memberId: string) => void;
 }
 
 export default function ProfileModal({ member, onClose }: ProfileModalProps) {
