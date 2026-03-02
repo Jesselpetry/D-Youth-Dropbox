@@ -13,7 +13,7 @@ export const supabase = createBrowserClient(
       flowType: 'pkce',
     },
     db: {
-      schema: 'dyouth', // ระบุ Schema ชัดเจนเหมือนเดิม
+      schema: 'dyouth',
     },
   }
-) as SupabaseClient<any, 'dyouth'>;
+) as SupabaseClient<Record<string, unknown>, 'dyouth'>;

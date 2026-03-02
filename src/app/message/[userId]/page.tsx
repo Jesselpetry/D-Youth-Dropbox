@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import Image from "next/image";
 
 export default function MessageToUser() {
   // Get the userId from the URL
@@ -174,13 +175,15 @@ export default function MessageToUser() {
         >
           {/* Profile Image */}
           <div className="w-18 h-18 rounded-full overflow-hidden bg-gray-500">
-            <img
+            <Image
               src={
                 isAnonymous
                   ? "/anonymous-avatar.png"
                   : sender?.profile_img || "/person.png"
               }
               alt={isAnonymous ? "Anonymous" : "Profile"}
+              width={72}
+              height={72}
               className="w-full h-full object-cover"
             />
           </div>

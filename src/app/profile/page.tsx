@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import ProvinceSelector from "./components/provinceSelector";
 import YearSelector from "./components/yearSelector";
 import { RiLoaderFill } from "react-icons/ri";
@@ -62,7 +63,7 @@ export default function ProfilePage() {
     };
 
     fetchProfile();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (profileImg) {
@@ -177,9 +178,11 @@ export default function ProfilePage() {
             {previewUrl ? (
               <div className="relative group">
                 <div className="w-36 h-36 rounded-full overflow-hidden border-2 border-white/20 hover:border-white/25 transition-all duration-300">
-                  <img
+                  <Image
                     src={previewUrl}
                     alt="Profile"
+                    width={144}
+                    height={144}
                     className="w-full h-full object-cover"
                   />
                 </div>

@@ -1,4 +1,5 @@
 import { useState, FormEvent, ChangeEvent } from "react";
+import Image from "next/image";
 
 type PostFormProps = {
   onSubmitPost: (post: PostData) => void;
@@ -178,10 +179,12 @@ export default function PostForm({ onSubmitPost }: PostFormProps) {
           />
           {formData.imagePreview && (
             <div className="mt-2">
-              <img
+              <Image
                 src={formData.imagePreview}
                 alt="Preview"
-                className="max-h-40 rounded"
+                width={160}
+                height={160}
+                className="max-h-40 rounded object-contain"
               />
             </div>
           )}

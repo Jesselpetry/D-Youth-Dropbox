@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import ProvinceSelector from "./components/provinceSelector";
+import Image from "next/image";
 import YearSelector from "./components/yearSelector";
 
 import {
@@ -35,7 +36,7 @@ export default function SetupProfile() {
         router.push("/login");
       }
     });
-  }, []);
+  }, [router]);
 
   // Preview image when selected
   useEffect(() => {
@@ -200,9 +201,11 @@ export default function SetupProfile() {
               {previewUrl ? (
                 <div className="mb-4 flex flex-col items-center">
                   <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-white/50">
-                    <img
+                    <Image
                       src={previewUrl}
                       alt="Preview"
+                      width={128}
+                      height={128}
                       className="w-full h-full object-cover"
                     />
                   </div>

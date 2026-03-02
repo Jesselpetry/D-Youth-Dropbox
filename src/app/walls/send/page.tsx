@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import Image from "next/image";
 
 export default function SendToWall() {
   // State variables
@@ -79,16 +80,12 @@ export default function SendToWall() {
           return;
         }
 
-        let submitError;
-
-        // Insert message into the database
-        const { error } = await supabase.from("walls").insert({
+        const { error: submitError } = await supabase.from("walls").insert({
           sender_id: isAnonymous ? null : senderId,
           content: message,
           is_anonymous: isAnonymous,
           color: paperColor,
         });
-        submitError = error;
 
         if (submitError) {
           console.error("Supabase error details:", submitError);
@@ -166,13 +163,15 @@ export default function SendToWall() {
         >
           {/* Profile Image */}
           <div className="w-18 h-18 rounded-full overflow-hidden bg-gray-500">
-            <img
+            <Image
               src={
                 isAnonymous
                   ? "/anonymous-avatar.png"
                   : sender?.profile_img || "/person.png"
               }
               alt={isAnonymous ? "Anonymous" : "Profile"}
+              width={72}
+              height={72}
               className="w-full h-full object-cover"
             />
           </div>
